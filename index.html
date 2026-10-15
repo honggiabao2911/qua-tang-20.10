@@ -11,10 +11,15 @@
   <title>Gửi người phụ nữ tôi yêu thương</title>
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='18' fill='%23fff3ec'/%3E%3Cg fill='%23b94c68'%3E%3Cellipse cx='32' cy='22' rx='8' ry='13'/%3E%3Cellipse cx='32' cy='22' rx='8' ry='13' transform='rotate(72 32 32)'/%3E%3Cellipse cx='32' cy='22' rx='8' ry='13' transform='rotate(144 32 32)'/%3E%3Cellipse cx='32' cy='22' rx='8' ry='13' transform='rotate(216 32 32)'/%3E%3Cellipse cx='32' cy='22' rx='8' ry='13' transform='rotate(288 32 32)'/%3E%3C/g%3E%3Ccircle cx='32' cy='32' r='5' fill='%23d6b68a'/%3E%3C/svg%3E">
   <style>
+    /* Phông tự lưu: đầy đủ dấu tiếng Việt và nét nghiêng thật, không phụ thuộc CDN. */
+    @font-face{font-family:'Lora';src:url('assets/fonts/lora.woff2') format('woff2');font-style:normal;font-weight:400 700;font-display:swap}
+    @font-face{font-family:'Lora';src:url('assets/fonts/lora-italic.woff2') format('woff2');font-style:italic;font-weight:400 700;font-display:swap}
+    @font-face{font-family:'Manrope';src:url('assets/fonts/manrope.woff2') format('woff2');font-style:normal;font-weight:200 800;font-display:swap}
+
     /* 01. Bảng màu & thông số thiết kế — đổi màu chủ đạo tại đây. */
-    :root{--cream:#fff9f4;--paper:#fffdf8;--blush:#f6ced8;--rose:#b94c68;--wine:#8c455c;--ink:#45353c;--muted:#847079;--gold:#d6b68a;--sage:#838d77;--line:#e9dcd5;--serif:Georgia,'Times New Roman',serif;--sans:system-ui,-apple-system,'Segoe UI',sans-serif;--radius:18px;--shadow:0 24px 70px #6b354515,0 5px 15px #6b35450b}
+    :root{--cream:#fff9f4;--paper:#fffdf8;--blush:#f6ced8;--rose:#b94c68;--wine:#8c455c;--ink:#45353c;--muted:#847079;--gold:#d6b68a;--sage:#838d77;--line:#e9dcd5;--serif:'Lora',Georgia,serif;--sans:'Manrope',system-ui,-apple-system,'Segoe UI',sans-serif;--radius:18px;--shadow:0 24px 70px #6b354515,0 5px 15px #6b35450b}
     /* 02. Nền, typography và khả năng tiếp cận. */
-    *,*::before,*::after{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:24px}body{margin:0;background:var(--cream);color:var(--ink);font-family:var(--sans);font-size:15px;line-height:1.65;min-width:0;min-height:100dvh}body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:-1;background:radial-gradient(ellipse at 93% 12%,#f5d9dc65,transparent 46%),radial-gradient(ellipse at 2% 60%,#f7e8dd66,transparent 45%)}[hidden]{display:none!important}button,input,textarea,select{font:inherit}button,a,input,textarea,select{-webkit-tap-highlight-color:transparent}button{cursor:pointer}button{color:inherit}button:disabled{cursor:default}button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible,summary:focus-visible,[tabindex]:focus-visible{outline:3px solid var(--rose);outline-offset:5px}button{touch-action:manipulation}a{color:var(--wine)}img,svg{max-width:100%}svg.icon{width:20px;height:20px;flex:none;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}h1,h2,h3,p{margin:0}h1,h2,h3{font-family:var(--serif);font-weight:400;line-height:1.2}button svg{pointer-events:none}.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}.skip-link{position:fixed;left:16px;top:-90px;background:var(--paper);padding:12px 20px;z-index:99}.skip-link:focus{top:16px}.shell{width:calc(100% - 64px);max-width:1200px;margin-inline:auto}.eyebrow{display:flex;align-items:center;gap:10px;font-size:10px;font-weight:600;letter-spacing:2.3px;text-transform:uppercase;color:var(--wine)}.eyebrow::before{content:'';height:1px;width:28px;background:var(--rose);opacity:.65}.text-button{border:0;background:none;display:inline-flex;gap:8px;align-items:center;justify-content:center;padding:12px 0;min-height:44px;font-size:13px;text-decoration:none}.text-button:hover{color:var(--rose)}.button{display:inline-flex;align-items:center;justify-content:center;gap:12px;min-height:52px;padding:14px 24px;border:1px solid transparent;border-radius:7px;background:var(--wine);color:#fffaf5;font-weight:500;font-size:13px;letter-spacing:.1px;text-decoration:none;transition:transform .2s,background .2s,box-shadow .2s}.button:hover{background:#77354b;box-shadow:0 7px 20px #8c455c22;transform:translateY(-2px)}.button:active{transform:translateY(0) scale(.98)}.button.secondary{color:var(--wine);background:transparent;border-color:#d9babf}.button.secondary:hover{background:#f5e6e4;box-shadow:none}.button.light{background:var(--paper);color:var(--wine);border-color:var(--line)}.button.small{min-height:44px;padding:10px 16px}.button .icon{width:18px;height:18px}.divider-star{color:var(--gold);font-size:22px;font-weight:400}
+    *,*::before,*::after{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:24px}body{margin:0;background:var(--cream);color:var(--ink);font-family:var(--sans);font-size:15px;line-height:1.65;min-width:0;min-height:100dvh}body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:-1;background:radial-gradient(ellipse at 93% 12%,#f5d9dc65,transparent 46%),radial-gradient(ellipse at 2% 60%,#f7e8dd66,transparent 45%)}[hidden]{display:none!important}button,input,textarea,select{font:inherit}button,a,input,textarea,select{-webkit-tap-highlight-color:transparent}button{cursor:pointer}button{color:inherit}button:disabled{cursor:default}button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible,summary:focus-visible,[tabindex]:focus-visible{outline:3px solid var(--rose);outline-offset:5px}button{touch-action:manipulation}a{color:var(--wine)}img,svg{max-width:100%}svg.icon{width:20px;height:20px;flex:none;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}h1,h2,h3,p{margin:0}h1,h2,h3{font-family:var(--serif);font-weight:400;line-height:1.2}button svg{pointer-events:none}.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}.skip-link{position:fixed;left:16px;top:-90px;background:var(--paper);padding:12px 20px;z-index:99}.skip-link:focus{top:16px}.skip-link:not(:focus){clip-path:inset(50%);height:1px;width:1px;padding:0;overflow:hidden;white-space:nowrap}.shell{width:calc(100% - 64px);max-width:1200px;margin-inline:auto}.eyebrow{display:flex;align-items:center;gap:10px;font-size:10px;font-weight:600;letter-spacing:2.3px;text-transform:uppercase;color:var(--wine)}.eyebrow::before{content:'';height:1px;width:28px;background:var(--rose);opacity:.65}.text-button{border:0;background:none;display:inline-flex;gap:8px;align-items:center;justify-content:center;padding:12px 0;min-height:44px;font-size:13px;text-decoration:none}.text-button:hover{color:var(--rose)}.button{display:inline-flex;align-items:center;justify-content:center;gap:12px;min-height:52px;padding:14px 24px;border:1px solid transparent;border-radius:7px;background:var(--wine);color:#fffaf5;font-weight:500;font-size:13px;letter-spacing:.1px;text-decoration:none;transition:transform .2s,background .2s,box-shadow .2s}.button:hover{background:#77354b;box-shadow:0 7px 20px #8c455c22;transform:translateY(-2px)}.button:active{transform:translateY(0) scale(.98)}.button.secondary{color:var(--wine);background:transparent;border-color:#d9babf}.button.secondary:hover{background:#f5e6e4;box-shadow:none}.button.light{background:var(--paper);color:var(--wine);border-color:var(--line)}.button.small{min-height:44px;padding:10px 16px}.button .icon{width:18px;height:18px}.divider-star{color:var(--gold);font-size:22px;font-weight:400}
     /* 03. En-tête et pied de page. */
     .site-header{min-height:104px;display:flex;align-items:center;justify-content:space-between;gap:20px;border-bottom:1px solid var(--line)}.brand{display:flex;align-items:center;gap:11px;border:0;background:none;padding:8px 0;text-align:left;min-height:50px}.brand .brand-mark{width:38px;height:42px;color:var(--wine)}.brand-name{display:block;font-family:var(--serif);font-size:25px;line-height:1.1;letter-spacing:-.6px}.brand-caption{display:block;font-size:8px;letter-spacing:2.4px;text-transform:uppercase;color:var(--muted);margin-top:5px}.header-right,.desktop-nav{display:flex;align-items:center;gap:30px}.desktop-nav .text-button{font-size:12px;color:#725b64}.header-audio{border:1px solid #e4d3cf;border-radius:50px;background:transparent;display:flex;align-items:center;gap:8px;min-height:40px;padding:8px 14px;color:var(--wine);font-size:11px}.header-audio .icon{width:16px;height:16px}.header-audio:hover{background:#f6e8e5}.header-audio span[data-music-icon]{display:flex}.site-footer{border-top:1px solid var(--line);margin-top:60px;padding:28px 0 calc(26px + env(safe-area-inset-bottom));display:flex;align-items:center;justify-content:space-between;gap:20px;font-size:11px;color:var(--muted)}.footer-love{display:flex;gap:8px;align-items:center}.footer-love .icon{width:14px;height:14px;color:var(--rose)}.footer-date{letter-spacing:2px;font-size:10px}.audio-bar{margin-top:48px;display:flex;align-items:center;justify-content:space-between;gap:22px;border-top:1px solid var(--line);padding-top:20px}.audio-info{display:flex;align-items:center;gap:13px}.audio-toggle{width:44px;height:44px;border:1px solid #e5d5d1;background:#fffaf7;border-radius:50%;display:grid;place-items:center;color:var(--wine)}.audio-toggle:hover{background:#f7e5e8}.audio-toggle [data-music-icon]{display:flex}.audio-copy{font-size:11px;color:var(--muted)}.audio-copy strong{display:block;font-size:12px;font-weight:500;color:var(--ink);margin-bottom:2px}.volume-wrap{display:flex;align-items:center;gap:10px;font-size:11px;color:var(--muted)}input[type=range]{accent-color:var(--wine);width:95px;height:32px}.volume-wrap output{min-width:28px}
     /* 04. Màn hình chào — bố cục editorial và minh họa giấy. */
@@ -38,6 +43,526 @@
     @media(max-width:370px){.shell{width:calc(100% - 32px)}.hero-art{height:302px}.hero-envelope-button{top:114px}.hero-mini-note{bottom:8px;font-size:6px}.art-annotation{font-size:12px}.recipient-choice{padding-inline:12px}.choice-title{font-size:20px}.recipient-choice[data-recipient=women] .choice-title{font-size:17px}.form-grid{grid-template-columns:1fr}.field.full{grid-column:auto}.volume-wrap input{width:62px}.audio-copy{max-width:150px}.envelope-stage{height:260px}.letter-paper{padding-inline:22px}}
     @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{animation:none!important;transition:none!important}.floating-petal,.petal-burst{display:none}.hero-envelope-button:hover,.recipient-choice:hover,.button:hover{transform:none}}
     @media print{.site-header,.site-footer,.audio-bar,.letter-actions,.letter-links,.share-note,.toast,.manual-copy-panel,.letter-topline{display:none!important}body{background:white}.shell{width:100%}.paper{box-shadow:none}.letter-screen{padding:0}.letter-paper{border:0}}
+/* 21. Xưởng thiệp riêng: màu giấy, nét chữ và bố cục được lưu cùng liên kết. */
+.paper,
+.envelope-stage {
+  --card-bg: #fffdf9;
+  --card-accent: #91465d;
+  --card-ink: #5c4650;
+  --card-muted: #94767d;
+  --card-line: #e5cbbd;
+  --card-gold: #ba9466;
+  --card-tint: #f6e5e5;
+  --card-font: var(--serif);
+}
+.paper[data-theme="sage"],
+.envelope-stage[data-theme="sage"] {
+  --card-bg: #f9fbf5;
+  --card-accent: #496653;
+  --card-ink: #405647;
+  --card-muted: #718473;
+  --card-line: #cad7bc;
+  --card-gold: #b19a67;
+  --card-tint: #e2eadb;
+}
+.paper[data-theme="champagne"],
+.envelope-stage[data-theme="champagne"] {
+  --card-bg: #fffaf0;
+  --card-accent: #84612f;
+  --card-ink: #62523e;
+  --card-muted: #8d795d;
+  --card-line: #e1cda3;
+  --card-gold: #b79045;
+  --card-tint: #f5e8c9;
+}
+.paper[data-theme="midnight"],
+.envelope-stage[data-theme="midnight"] {
+  --card-bg: #1e2b3b;
+  --card-accent: #f3d8a5;
+  --card-ink: #f0e9df;
+  --card-muted: #c2c5c7;
+  --card-line: #7e714f;
+  --card-gold: #d0af73;
+  --card-tint: #344358;
+}
+.paper[data-font="sans"] { --card-font: var(--sans); }
+.paper {
+  isolation: isolate;
+  border-color: var(--card-line);
+  background: var(--card-bg);
+  color: var(--card-ink);
+  box-shadow: 0 28px 65px #67424e12, 0 5px 14px #67424e08;
+  transition: background .28s, border-color .28s, box-shadow .28s;
+}
+.paper::before {
+  inset: 11px;
+  border: 1px solid var(--card-line);
+  opacity: .65;
+  z-index: -1;
+}
+.paper::after {
+  content: '';
+  position: absolute;
+  inset: 5px;
+  border: 1px solid var(--card-line);
+  opacity: .28;
+  pointer-events: none;
+  z-index: -1;
+}
+.paper-heading { position: relative; }
+.paper-flower { color: var(--card-accent); opacity: .7; }
+.paper-kicker { color: var(--card-muted); }
+.paper .paper-date { color: var(--card-accent); }
+.paper-line { color: var(--card-gold); }
+.paper-line::before,
+.paper-line::after { background: var(--card-line); }
+.paper .paper-salutation,
+.paper .paper-sign strong { color: var(--card-accent); font-family: var(--card-font); }
+.paper .paper-body,
+.paper .paper-message {
+  font-family: var(--card-font);
+  color: var(--card-ink);
+  letter-spacing: normal;
+  word-spacing: normal;
+  font-kerning: normal;
+  font-variant-ligatures: common-ligatures;
+  text-rendering: optimizeLegibility;
+  overflow-wrap: anywhere;
+  word-break: normal;
+}
+.paper .paper-message { border-color: var(--card-line); color: var(--card-accent); }
+.paper .paper-sign span { color: var(--card-muted); }
+.paper-dedication {
+  margin: 0 0 12px;
+  font: 500 10px/1.7 var(--sans);
+  letter-spacing: 1.8px;
+  text-transform: uppercase;
+  color: var(--card-muted);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.paper-dedication:empty { display: none; }
+.paper-corner {
+  position: absolute;
+  width: 76px;
+  height: 115px;
+  color: var(--card-accent);
+  opacity: .14;
+  pointer-events: none;
+  z-index: -1;
+}
+.paper-corner svg { display: block; width: 100%; height: 100%; }
+.paper-corner.top-left { top: 18px; left: 18px; transform: rotate(-27deg); }
+.paper-corner.bottom-right { bottom: 18px; right: 18px; transform: rotate(151deg); }
+.paper[data-decoration="stars"] .paper-corner { width: 88px; height: 105px; transform: none; opacity: .65; }
+.paper[data-decoration="stars"] .paper-corner svg { display: none; }
+.paper[data-decoration="stars"] .paper-corner::before,
+.paper[data-decoration="stars"] .paper-corner::after {
+  content: '✦';
+  position: absolute;
+  font: 28px/1 var(--sans);
+  color: var(--card-gold);
+}
+.paper[data-decoration="stars"] .paper-corner::before { top: 4px; left: 7px; }
+.paper[data-decoration="stars"] .paper-corner::after { top: 42px; left: 40px; font-size: 14px; }
+.paper[data-decoration="stars"] .paper-corner.bottom-right { transform: rotate(180deg); }
+.paper[data-decoration="minimal"] .paper-corner,
+.paper[data-decoration="minimal"] .paper-flower { display: none; }
+.paper[data-decoration="minimal"] .paper-heading { padding-top: 4px; }
+.paper[data-layout="centered"] .paper-salutation,
+.paper[data-layout="centered"] .paper-body,
+.paper[data-layout="centered"] .paper-message,
+.paper[data-layout="centered"] .paper-dedication,
+.paper[data-layout="centered"] .paper-sign { text-align: center; }
+.paper[data-layout="centered"] .paper-sign { margin-top: 32px; }
+.paper[data-font="sans"] .paper-body,
+.paper[data-font="sans"] .paper-message { font-size: 14px; line-height: 1.95; }
+.letter-paper[data-font="sans"] .paper-body,
+.letter-paper[data-font="sans"] .paper-message { font-size: 17px; }
+.paper[data-theme="midnight"] { box-shadow: 0 28px 70px #19263825, 0 5px 14px #19263812; }
+
+/* 22. Các điều khiển thiết kế rõ ràng, đủ rộng để thao tác bằng một ngón tay. */
+.custom-panel {
+  margin-top: 24px;
+  border: 1px solid #e5d6ce;
+  border-radius: 12px;
+  background: linear-gradient(145deg, #fffdf9, #fcf3ed);
+}
+.custom-panel > summary {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  min-height: 64px;
+  padding: 16px 19px;
+  list-style: none;
+  color: var(--wine);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  border-radius: 12px;
+}
+.custom-panel > summary::-webkit-details-marker { display: none; }
+.custom-panel > summary .icon { width: 19px; height: 19px; }
+.custom-panel > summary::after {
+  content: '+';
+  margin-left: auto;
+  width: 27px;
+  height: 27px;
+  display: grid;
+  place-items: center;
+  border: 1px solid #dfc8c7;
+  border-radius: 50%;
+  font: 400 19px/1 var(--sans);
+  flex: none;
+}
+.custom-panel[open] > summary::after { content: '−'; }
+.custom-panel[open] > summary { border-radius: 12px 12px 0 0; }
+.custom-panel > summary:hover { background: #f7e9e433; }
+.design-controls {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 21px 16px;
+  padding: 5px 19px 22px;
+}
+.design-controls fieldset {
+  min-width: 0;
+  grid-column: 1 / -1;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+.design-controls legend {
+  padding: 0;
+  margin-bottom: 9px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--ink);
+}
+.design-controls .field { grid-column: 1 / -1; }
+.design-controls .field label { font-size: 11px; }
+.theme-options { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+[data-theme-choice] {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 9px;
+  min-height: 47px;
+  min-width: 0;
+  padding: 10px 12px;
+  border: 1px solid #dfd2ca;
+  border-radius: 7px;
+  background: #fffdf9;
+  color: #67525a;
+  font-size: 11px;
+  text-align: left;
+  transition: border-color .2s, box-shadow .2s, background .2s;
+}
+[data-theme-choice] > .theme-swatch,
+.theme-swatch > span:first-child,
+[data-theme-choice] > span:first-child:not(:last-child) {
+  display: inline-block;
+  width: 17px;
+  height: 17px;
+  border-radius: 50%;
+  flex: none;
+  background: #e8c0c9;
+  box-shadow: inset 0 0 0 1px #0000000b;
+}
+[data-theme-choice="sage"] > .theme-swatch,
+[data-theme-choice="sage"] .theme-swatch > span:first-child,
+[data-theme-choice="sage"] > span:first-child:not(:last-child) { background: #9ba88f; }
+[data-theme-choice="midnight"] > .theme-swatch,
+[data-theme-choice="midnight"] .theme-swatch > span:first-child,
+[data-theme-choice="midnight"] > span:first-child:not(:last-child) { background: #293b52; }
+[data-theme-choice="champagne"] > .theme-swatch,
+[data-theme-choice="champagne"] .theme-swatch > span:first-child,
+[data-theme-choice="champagne"] > span:first-child:not(:last-child) { background: #ddc18c; }
+[data-theme-choice][aria-pressed="true"] {
+  border-color: var(--wine);
+  box-shadow: inset 0 0 0 1px var(--wine);
+  background: #f8edeb;
+  color: var(--wine);
+}
+.mini-options { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.mini-options button {
+  min-height: 45px;
+  min-width: 0;
+  padding: 9px 11px;
+  border: 1px solid #dfd2ca;
+  border-radius: 7px;
+  background: #fffdf9;
+  color: #67525a;
+  font-size: 11px;
+}
+.mini-options button[data-font-choice="serif"] { font-family: var(--serif); font-size: 14px; }
+.mini-options button[aria-pressed="true"] { color: var(--wine); border-color: var(--wine); background: #f8edeb; box-shadow: inset 0 0 0 1px var(--wine); }
+.theme-options button:hover,
+.mini-options button:hover { border-color: var(--wine); }
+#custom-greeting { min-height: 160px; font-size: 12px; line-height: 1.85; }
+#reset-design { justify-self: start; grid-column: 1 / -1; min-height: 44px; margin-top: -6px; padding-block: 8px; font-size: 11px; color: var(--muted); }
+
+/* 23. Chọn và nghe thử từng bản nhạc, luôn hiển thị tên và trạng thái thật. */
+.music-library {
+  margin-top: 24px;
+  padding: 21px 0 20px;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+.music-library > h2,
+.music-library > h3,
+.music-library > p:first-child { font-family: var(--sans); color: var(--wine); font-size: 12px; font-weight: 600; line-height: 1.6; }
+.music-library .music-heading { display: flex; align-items: center; gap: 9px; }
+.music-library .music-heading .icon { width: 18px; height: 18px; }
+.music-hint { margin-top: 6px; color: var(--muted); font-size: 10px; line-height: 1.8; }
+#track-list { display: grid; gap: 8px; margin-top: 14px; }
+.music-track {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 2px;
+  padding: 4px;
+  border: 1px solid #e5d9d2;
+  border-radius: 9px;
+  background: #fffdf9;
+  transition: border-color .2s, background .2s;
+}
+.music-track:has(.track-select[aria-pressed="true"]) { border-color: var(--wine); background: #f8eceb; box-shadow: inset 0 0 0 1px #8c455c22; }
+.track-select {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 2px;
+  min-width: 0;
+  min-height: 54px;
+  padding: 9px 12px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  text-align: left;
+  color: var(--ink);
+}
+.track-title { display: block; font-size: 11px; font-weight: 600; line-height: 1.65; overflow-wrap: anywhere; }
+.track-state { display: block; font-size: 10px; line-height: 1.6; color: var(--muted); }
+.track-select[aria-pressed="true"] { color: var(--wine); }
+.track-select[aria-pressed="true"] .track-state { color: #8b5160; }
+.track-select[aria-pressed="true"] .track-title::before { content: '✓ '; font-size: 10px; }
+.track-preview {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 8px 10px;
+  border: 1px solid #e6d8d0;
+  border-radius: 6px;
+  background: #fffaf5;
+  font-size: 10px;
+  color: var(--wine);
+}
+.track-preview .icon { width: 15px; height: 15px; }
+.track-preview:hover:not(:disabled) { background: #f4e5e5; border-color: #b9949c; }
+.track-preview[aria-pressed="true"] { background: var(--wine); border-color: var(--wine); color: #fffaf5; }
+.music-track.is-missing { background: #f8f4ef; border-style: dashed; }
+.music-track.is-missing .track-title { color: #927d7f; font-weight: 400; }
+.music-track.is-missing .track-state { color: #977a6c; }
+.music-track.is-missing .track-preview,
+.track-preview:disabled { color: #a39490; border-color: #e6ded6; background: transparent; }
+.music-guide { margin-top: 13px; font-size: 10px; color: var(--muted); }
+.music-guide > summary { min-height: 44px; cursor: pointer; padding: 11px 0; color: var(--wine); }
+.music-guide p { margin-top: 4px; line-height: 1.9; }
+.music-guide code { padding: 2px 5px; border-radius: 4px; background: #eee3dc; font-size: 10px; color: #73545e; overflow-wrap: anywhere; }
+.audio-bar { row-gap: 16px; }
+.audio-bar .audio-copy { max-width: 320px; }
+.audio-bar .audio-copy strong { overflow-wrap: anywhere; }
+.audio-bar .field:has(#letter-track-select) { flex: 1 1 200px; max-width: 340px; }
+#letter-track-select { min-height: 44px; padding: 9px 34px 9px 12px; font-size: 11px; color: var(--wine); }
+
+/* 24. Phong bì đổi sắc nhẹ theo tấm thiệp; trang chào giữ màu nhận diện. */
+.envelope-stage .env-letter { background: var(--card-bg); color: var(--card-accent); border-color: var(--card-line); }
+.envelope-stage .env-letter .icon { color: var(--card-accent); }
+.envelope-stage .env-seal { background: radial-gradient(circle at 35% 25%, #b56d7e, #924958 70%); }
+.envelope-stage[data-theme="sage"] .env-seal { background: radial-gradient(circle at 35% 25%, #849e79, #476c52 70%); border-color: #6e8866; }
+.envelope-stage[data-theme="champagne"] .env-seal { background: radial-gradient(circle at 35% 25%, #c3a566, #97763d 70%); border-color: #b6975e; }
+.envelope-stage[data-theme="midnight"] .env-seal { background: radial-gradient(circle at 35% 25%, #59718c, #253951 70%); border-color: #4b6179; }
+.envelope-stage[data-theme="sage"] .env-seal .icon { color: #e3e8cf; }
+.envelope-stage[data-theme="champagne"] .env-seal .icon { color: #fff1ca; }
+.envelope-stage[data-theme="midnight"] .env-seal .icon { color: #e9d3a5; }
+.envelope-stage::after {
+  content: '';
+  position: absolute;
+  width: 64%;
+  height: 60%;
+  left: 18%;
+  top: 20%;
+  border-radius: 50%;
+  background: radial-gradient(ellipse, var(--card-tint), transparent 70%);
+  opacity: .75;
+  pointer-events: none;
+  z-index: -1;
+}
+body[data-card-theme="sage"] .letter-topline h1,
+body[data-card-theme="sage"] .envelope-screen h1 { color: #496653; }
+body[data-card-theme="champagne"] .letter-topline h1,
+body[data-card-theme="champagne"] .envelope-screen h1 { color: #84612f; }
+body[data-card-theme="midnight"] .letter-topline h1,
+body[data-card-theme="midnight"] .envelope-screen h1 { color: #293e55; }
+.letter-screen.screen-enter .letter-paper { animation: letter-arrive 1s cubic-bezier(.2,.7,.2,1) both; }
+.letter-screen.screen-enter .paper-heading { animation: ink-arrive 1s .12s both; }
+.letter-screen.screen-enter .paper-salutation { animation: ink-arrive 1s .2s both; }
+.letter-screen.screen-enter .paper-body { animation: ink-arrive 1s .28s both; }
+.letter-screen.screen-enter .paper-message,
+.letter-screen.screen-enter .paper-sign { animation: ink-arrive 1s .38s both; }
+@keyframes letter-arrive {
+  from { opacity: 0; transform: translateY(26px) rotate(.5deg); }
+  to { opacity: 1; transform: translateY(0) rotate(0); }
+}
+@keyframes ink-arrive {
+  from { opacity: 0; transform: translateY(7px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* 25. Một đợt hiệu ứng ngắn khi mở: cánh hoa, ánh sao hoặc bướm giấy. */
+#petal-burst { --effect-pink: #d399aa; --effect-gold: #c6a66c; }
+body[data-card-theme="sage"] #petal-burst { --effect-pink: #9aaf85; --effect-gold: #bda16b; }
+body[data-card-theme="midnight"] #petal-burst { --effect-pink: #8e9fb5; --effect-gold: #d5b373; }
+body[data-card-theme="champagne"] #petal-burst { --effect-pink: #dfc49b; --effect-gold: #c2a05b; }
+.burst-petal,
+.burst-star,
+.burst-butterfly {
+  position: absolute;
+  top: -36px;
+  pointer-events: none;
+  opacity: 0;
+  will-change: transform, opacity;
+  animation: premium-fall 5.1s cubic-bezier(.26,.34,.48,.88) both;
+}
+.burst-petal {
+  width: 11px;
+  height: 19px;
+  border-radius: 75% 12% 70% 14%;
+  background: linear-gradient(135deg, #f8e2e6, var(--effect-pink));
+  box-shadow: inset 1px 0 2px #ffffff88;
+}
+.burst-star {
+  width: 14px;
+  height: 14px;
+  background: var(--effect-gold);
+  clip-path: polygon(50% 0, 61% 36%, 100% 50%, 61% 62%, 50% 100%, 38% 62%, 0 50%, 38% 36%);
+  animation-name: premium-stars;
+}
+.burst-star:nth-child(3n) { width: 6px; height: 6px; background: var(--effect-pink); }
+.burst-butterfly { width: 27px; height: 20px; background: none; animation-name: premium-butterfly; }
+.burst-butterfly::before,
+.burst-butterfly::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  width: 13px;
+  height: 19px;
+  background: linear-gradient(145deg, #f9e8e1, var(--effect-pink));
+  border: 1px solid #ffffff80;
+  animation: paper-wings .7s ease-in-out infinite alternate;
+}
+.burst-butterfly::before { left: 0; border-radius: 85% 30% 70% 35%; transform-origin: right center; }
+.burst-butterfly::after { right: 0; border-radius: 30% 85% 35% 70%; transform-origin: left center; animation-delay: -.35s; }
+@keyframes premium-fall {
+  0% { opacity: 0; transform: translate3d(0,-2vh,0) rotate(-20deg); }
+  12% { opacity: .82; }
+  78% { opacity: .65; }
+  100% { opacity: 0; transform: translate3d(var(--drift,50px),104dvh,0) rotate(290deg); }
+}
+@keyframes premium-stars {
+  0% { opacity: 0; transform: translate3d(0,-2vh,0) rotate(0deg) scale(.3); }
+  15% { opacity: .9; }
+  40% { opacity: .45; }
+  58% { opacity: .85; }
+  100% { opacity: 0; transform: translate3d(var(--drift,50px),101dvh,0) rotate(170deg) scale(1.1); }
+}
+@keyframes premium-butterfly {
+  0% { opacity: 0; transform: translate3d(0,-2vh,0) rotate(-20deg); }
+  12% { opacity: .8; }
+  45% { transform: translate3d(calc(var(--drift,50px) * -.35),40dvh,0) rotate(15deg); }
+  76% { opacity: .72; }
+  100% { opacity: 0; transform: translate3d(var(--drift,50px),103dvh,0) rotate(-15deg); }
+}
+@keyframes paper-wings { to { transform: scaleX(.45) rotate(8deg); } }
+
+/* 26. Tự co trên máy tính bảng và điện thoại, không cắt nội dung thiệp dài. */
+@media (max-width: 1000px) {
+  .editor-layout { gap: 28px; }
+  .design-controls { padding-inline: 15px; gap: 19px 12px; }
+  .custom-panel > summary { padding-inline: 15px; }
+  [data-theme-choice] { font-size: 10px; padding-inline: 9px; gap: 7px; }
+  .music-track { gap: 0; }
+  .track-select { padding-inline: 9px; }
+  .track-preview { padding-inline: 8px; }
+  .paper-corner { width: 62px; height: 96px; }
+  .audio-bar { flex-wrap: wrap; }
+  .audio-bar .audio-copy { max-width: 300px; }
+}
+@media (max-width: 620px) {
+  .custom-panel { margin-top: 20px; }
+  .custom-panel > summary { min-height: 62px; font-size: 12px; padding: 15px; }
+  .design-controls { padding: 3px 15px 19px; gap: 19px 12px; }
+  .theme-options { gap: 8px; }
+  [data-theme-choice] { font-size: 11px; min-height: 48px; gap: 8px; padding: 10px; }
+  .mini-options button { font-size: 11px; min-height: 46px; }
+  .design-controls input,
+  .design-controls select,
+  .design-controls textarea,
+  #custom-greeting { font-size: 16px; }
+  .design-controls .field label,
+  .design-controls legend { font-size: 12px; }
+  .design-controls .field-help { font-size: 10px; }
+  #reset-design { font-size: 11px; }
+  .paper-corner { width: 53px; height: 85px; opacity: .11; }
+  .paper-corner.top-left { top: 16px; left: 15px; }
+  .paper-corner.bottom-right { bottom: 16px; right: 15px; }
+  .paper[data-decoration="stars"] .paper-corner { width: 65px; height: 80px; opacity: .5; }
+  .paper[data-decoration="stars"] .paper-corner::before { font-size: 21px; }
+  .paper[data-decoration="stars"] .paper-corner::after { top: 33px; left: 31px; font-size: 11px; }
+  .paper-dedication { font-size: 9px; letter-spacing: 1.35px; }
+  .paper[data-font="sans"] .paper-body,
+  .paper[data-font="sans"] .paper-message { font-size: 14px; }
+  .letter-paper[data-font="sans"] .paper-body,
+  .letter-paper[data-font="sans"] .paper-message { font-size: 16px; line-height: 1.95; }
+  .music-library { padding-top: 18px; margin-top: 20px; }
+  .music-hint { font-size: 11px; }
+  .track-title { font-size: 12px; }
+  .track-state { font-size: 10px; }
+  .track-select { min-height: 57px; padding-inline: 10px; }
+  .track-preview { font-size: 10px; padding-inline: 9px; min-height: 46px; }
+  .music-guide { font-size: 11px; }
+  .music-guide code { font-size: 11px; }
+  .audio-bar .audio-info { flex: 1 1 210px; }
+  .audio-bar .audio-copy { max-width: calc(100vw - 130px); }
+  .audio-bar .audio-copy strong { font-size: 11px; }
+  .audio-bar .field:has(#letter-track-select) { flex-basis: 100%; max-width: none; }
+  #letter-track-select { width: 100%; font-size: 16px; min-height: 46px; }
+  .burst-butterfly { width: 23px; height: 17px; }
+  .burst-butterfly::before,
+  .burst-butterfly::after { width: 11px; height: 16px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .paper,
+  .letter-paper,
+  .letter-paper *,
+  .burst-petal,
+  .burst-star,
+  .burst-butterfly,
+  .burst-butterfly::before,
+  .burst-butterfly::after { animation: none !important; transition: none !important; }
+  #petal-burst { display: none; }
+}
+@media print {
+  .paper { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+  .paper::before,
+  .paper::after { display: block; }
+}
+
+.hero h1{letter-spacing:-3px}.paper-sign strong{line-height:1.6}#music-missing-files{padding-left:20px;overflow-wrap:anywhere}.audio-nav{display:flex;align-items:center;gap:4px}.audio-nav .icon-button{border:1px solid var(--line)}.long-link-warning{max-width:600px;margin:14px auto 0;text-align:center;color:var(--wine);font-size:11px}.preview-column{align-self:start}@media(max-width:620px){.hero h1{font-size:clamp(47px,12vw,68px);letter-spacing:-1.6px}.audio-bar .field:has(#letter-track-select){max-width:none;flex-basis:100%}.audio-nav{margin-left:auto}#custom-greeting{font-size:16px}}
   </style>
 </head>
 <body>
@@ -109,13 +634,24 @@
         <div class="field"><label for="sender-name">Tên người gửi</label><input id="sender-name" name="sender" maxlength="100" autocomplete="name" value="Hồng Gia Bảo"></div>
         <div class="field full"><label for="sender-pronoun">Bạn xưng là</label><input id="sender-pronoun" name="pronoun" maxlength="30" placeholder="Ví dụ: con, cháu, em, mình" aria-describedby="pronoun-help"><p class="field-help" id="pronoun-help">Tự gợi ý theo người nhận. Bạn có thể sửa cho thật tự nhiên.</p></div>
         <div class="field full"><label for="personal-message">Lời nhắn riêng <span class="optional">(không bắt buộc)</span></label><textarea id="personal-message" name="message" rows="4" maxlength="1000" placeholder="Có điều gì bạn vẫn muốn nói mà chưa kịp…" aria-describedby="message-count message-error"></textarea><div class="field-foot"><span class="field-help">Một vài dòng từ bạn sẽ làm tấm thiệp đặc biệt hơn.</span><output class="char-count" id="message-count" for="personal-message">0 / 1.000</output></div><p class="field-error" id="message-error" hidden></p></div>
-      </div><div class="template-picker"><div><p class="template-label">Một lời chúc gợi ý</p><p class="template-title" id="sample-title">Những ngày nhẹ lòng</p></div><div class="template-nav"><button type="button" id="prev-greeting" aria-label="Mẫu lời chúc trước"><svg class="icon" aria-hidden="true"><use href="#i-chevron-left"/></svg></button><output id="sample-counter" aria-live="polite">1 / 3</output><button type="button" id="next-greeting" aria-label="Đổi lời chúc"><svg class="icon" aria-hidden="true"><use href="#i-chevron-right"/></svg></button></div></div><div class="form-actions"><button class="text-button" id="preview-button" type="button"><svg class="icon" aria-hidden="true"><use href="#i-eye"/></svg>Xem trước lời chúc</button><button class="button" id="open-card-button" type="submit">Mở thiệp yêu thương <svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></button></div><p class="local-note"><svg class="icon" aria-hidden="true"><use href="#i-lock"/></svg>Thông tin bạn nhập không được gửi đến máy chủ.</p></form>
-        <aside class="preview-column" aria-label="Bản xem trước"><div class="preview-overline"><span>Bản xem trước</span><span><i class="live-dot"></i>Đang cập nhật cùng bạn</span></div><article class="paper" id="preview-card" tabindex="-1"><div class="paper-heading"><svg class="paper-flower" aria-hidden="true"><use href="#i-flower"/></svg><p class="paper-kicker">Chúc mừng Ngày Phụ nữ Việt Nam</p><div class="paper-date">20.10</div><div class="paper-line" aria-hidden="true">✧</div></div><h2 class="paper-salutation" id="preview-recipient"></h2><p class="paper-body" id="preview-greeting"></p><p class="paper-message" id="preview-message"></p><div class="paper-sign"><span>Gửi bằng cả tấm lòng,</span><strong id="preview-sender">Hồng Gia Bảo</strong></div></article><p class="preview-caption">Mỗi lời chân thành đều xứng đáng được giữ gìn.</p></aside>
+      </div><div class="template-picker"><div><p class="template-label">Một lời chúc gợi ý</p><p class="template-title" id="sample-title">Những ngày nhẹ lòng</p></div><div class="template-nav"><button type="button" id="prev-greeting" aria-label="Mẫu lời chúc trước"><svg class="icon" aria-hidden="true"><use href="#i-chevron-left"/></svg></button><output id="sample-counter" aria-live="polite">1 / 3</output><button type="button" id="next-greeting" aria-label="Đổi lời chúc"><svg class="icon" aria-hidden="true"><use href="#i-chevron-right"/></svg></button></div></div><details class="custom-panel" id="design-panel"><summary><svg class="icon" aria-hidden="true"><use href="#i-flower"/></svg>Thiết kế theo cách của bạn</summary><div class="design-controls">
+  <fieldset><legend>Một sắc màu dành riêng</legend><div class="theme-options"><button type="button" data-theme-choice="rose" aria-pressed="true"><span class="theme-swatch" aria-hidden="true"></span>Hồng dịu dàng</button><button type="button" data-theme-choice="sage" aria-pressed="false"><span class="theme-swatch" aria-hidden="true"></span>Khu vườn an yên</button><button type="button" data-theme-choice="champagne" aria-pressed="false"><span class="theme-swatch" aria-hidden="true"></span>Nắng champagne</button><button type="button" data-theme-choice="midnight" aria-pressed="false"><span class="theme-swatch" aria-hidden="true"></span>Đêm ánh kim</button></div></fieldset>
+  <fieldset><legend>Nét chữ</legend><div class="mini-options"><button type="button" data-font-choice="serif" aria-pressed="true">Nét thư thanh lịch</button><button type="button" data-font-choice="sans" aria-pressed="false">Hiện đại, dễ đọc</button></div></fieldset>
+  <fieldset><legend>Bố cục tấm thiệp</legend><div class="mini-options"><button type="button" data-layout-choice="classic" aria-pressed="true">Lá thư riêng</button><button type="button" data-layout-choice="centered" aria-pressed="false">Cân đối, trang trọng</button></div></fieldset>
+  <div class="field"><label for="decoration-field">Điểm xuyết trên giấy</label><select id="decoration-field"><option value="botanical">Nhành hoa mềm mại</option><option value="stars">Ánh sao nhỏ</option><option value="minimal">Giấy tối giản</option></select></div>
+  <div class="field"><label for="effect-field">Khoảnh khắc nhận thiệp</label><select id="effect-field"><option value="petals">Cánh hoa chúc mừng</option><option value="constellation">Một trời sao dành tặng</option><option value="butterflies">Cánh bướm trong vườn</option><option value="none">Tĩnh lặng, chỉ lời thương</option></select><p class="field-help">Hiệu ứng ngắn, không che lời chúc. Tự tắt khi thiết bị bật giảm chuyển động.</p></div>
+  <div class="field"><label for="card-dedication">Dòng đề tặng <span class="optional">(không bắt buộc)</span></label><input id="card-dedication" maxlength="100" placeholder="Ví dụ: Dành riêng cho Ngoại yêu thương"></div>
+  <div class="field"><label for="custom-greeting">Tự viết toàn bộ lời chúc <span class="optional">(không bắt buộc)</span></label><textarea id="custom-greeting" rows="5" maxlength="3000" placeholder="Để trống để dùng mẫu gợi ý, hoặc viết một lá thư hoàn toàn của bạn…" aria-describedby="custom-greeting-help custom-greeting-count custom-greeting-error"></textarea><div class="field-foot"><span class="field-help" id="custom-greeting-help">Nội dung bạn viết sẽ thay phần lời chúc gợi ý và được gửi cùng liên kết.</span><output class="char-count" id="custom-greeting-count">0 / 3.000</output></div><p id="custom-greeting-error" class="field-error" hidden></p><button type="button" class="text-button" id="use-template">Quay về lời chúc gợi ý</button></div>
+  <button type="button" class="text-button" id="reset-design"><svg class="icon" aria-hidden="true"><use href="#i-replay"/></svg>Đặt lại kiểu thiệp · giữ lời bạn viết</button>
+</div></details>
+<section class="music-library" id="music-library" aria-labelledby="music-library-title"><h2 class="music-heading" id="music-library-title"><svg class="icon" aria-hidden="true"><use href="#i-volume"/></svg>Một bản nhạc đi cùng lời chúc</h2><p class="music-hint" id="music-catalog-status" role="status">Đang tìm những bản nhạc dành cho người nhận…</p><div id="track-list" aria-busy="true"></div><details class="music-guide" id="music-guide"><summary>Bổ sung bài nhạc cho tấm thiệp</summary><p>Mỗi nhóm có ít nhất ba vị trí chọn bài. Chỉ những tệp có thật mới nghe được; nhạc cũ vẫn được giữ và sử dụng.</p><ul id="music-missing-files"></ul><p>Thêm các tệp được ghi ở trên vào thư mục gốc hoặc <code>assets/</code>, rồi bấm kiểm tra lại. Có thể thêm tiếp số 3, 4… đến 19 cho mỗi nhóm.</p></details><button type="button" class="text-button" id="rescan-music"><svg class="icon" aria-hidden="true"><use href="#i-replay"/></svg>Kiểm tra lại các bài nhạc</button></section>
+<div class="form-actions"><button class="text-button" id="preview-button" type="button"><svg class="icon" aria-hidden="true"><use href="#i-eye"/></svg>Xem trước lời chúc</button><button class="button" id="open-card-button" type="submit">Mở thiệp yêu thương <svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></button></div><p class="local-note"><svg class="icon" aria-hidden="true"><use href="#i-lock"/></svg>Thông tin bạn nhập không được gửi đến máy chủ.</p></form>
+        <aside class="preview-column" aria-label="Bản xem trước"><div class="preview-overline"><span>Bản xem trước</span><span><i class="live-dot"></i>Đang cập nhật cùng bạn</span></div><article class="paper" id="preview-card" tabindex="-1"><span class="paper-corner top-left" aria-hidden="true"><svg viewBox="0 0 100 170"><use href="#art-sprig"/></svg></span><span class="paper-corner bottom-right" aria-hidden="true"><svg viewBox="0 0 100 170"><use href="#art-sprig"/></svg></span><div class="paper-heading"><svg class="paper-flower" aria-hidden="true"><use href="#i-flower"/></svg><p class="paper-kicker">Chúc mừng Ngày Phụ nữ Việt Nam</p><div class="paper-date">20.10</div><div class="paper-line" aria-hidden="true">✧</div></div><p class="paper-dedication" id="preview-dedication"></p><h2 class="paper-salutation" id="preview-recipient"></h2><p class="paper-body" id="preview-greeting"></p><p class="paper-message" id="preview-message"></p><div class="paper-sign"><span>Gửi bằng cả tấm lòng,</span><strong id="preview-sender">Hồng Gia Bảo</strong></div></article><p class="preview-caption">Mỗi lời chân thành đều xứng đáng được giữ gìn.</p></aside>
       </div>
     </section>
     <section id="envelope-screen" class="envelope-screen screen-enter" hidden aria-labelledby="envelope-title"><div class="eyebrow">Một tấm thiệp dành riêng</div><h1 id="envelope-title" tabindex="-1">Một lời thương đang chờ</h1><p class="intro" id="envelope-subtitle">Có một chút dịu dàng bên trong phong bì này.<br>Chạm để mở và đón nhận nhé.</p><div class="envelope-stage" id="envelope-stage"><button class="open-envelope" id="open-envelope" aria-label="Chạm hoặc nhấn Enter để mở phong bì"><span class="envelope" aria-hidden="true"><span class="env-back"></span><span class="env-letter"><svg class="icon"><use href="#i-flower"/></svg><span class="env-letter-title" id="envelope-recipient">Gửi người thương mến</span><span class="env-letter-small">20.10 · Gửi một lời thương</span></span><span class="env-sides"></span><span class="env-front"></span><span class="env-flap"></span><span class="env-seal"><svg class="icon"><use href="#i-flower"/></svg></span><span class="env-address">Một chút dịu dàng, dành riêng cho bạn</span></span></button></div><p class="envelope-hint">Chạm vào con dấu, một lời thương sẽ mở ra.</p><button class="button" id="envelope-open-button">Mở lời chúc dành cho bạn <svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></button><div class="envelope-options"><button class="text-button" id="back-to-editor"><svg class="icon" aria-hidden="true"><use href="#i-back"/></svg>Chỉnh lại lời nhắn</button><button class="text-button" id="skip-animation" hidden>Hiện thiệp ngay <svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></button></div></section>
-    <section id="letter-screen" class="letter-screen screen-enter" hidden aria-labelledby="letter-title"><div class="letter-topline"><div class="eyebrow">Những điều đẹp đẽ, dành tặng bạn</div><h1 id="letter-title" tabindex="-1">Một lời thương đã đến.</h1></div><div class="letter-layout"><svg class="letter-sprig" aria-hidden="true"><use href="#art-sprig"/></svg><svg class="letter-sprig right" aria-hidden="true"><use href="#art-sprig"/></svg><article class="paper letter-paper"><div class="paper-heading"><svg class="paper-flower" aria-hidden="true"><use href="#i-flower"/></svg><p class="paper-kicker">Chúc mừng Ngày Phụ nữ Việt Nam</p><div class="paper-date">20.10</div><div class="paper-line" aria-hidden="true">✧</div></div><h2 class="paper-salutation" id="letter-recipient"></h2><p class="paper-body" id="letter-greeting"></p><p class="paper-message" id="letter-message"></p><div class="paper-sign"><span>Gửi bằng cả tấm lòng,</span><strong id="letter-sender"></strong></div></article></div><div class="letter-actions"><button class="button" id="share-card"><svg class="icon" aria-hidden="true"><use href="#i-share"/></svg>Chia sẻ thiệp</button><button class="button secondary" id="copy-link"><svg class="icon" aria-hidden="true"><use href="#i-copy"/></svg>Sao chép liên kết</button></div><div class="letter-links"><button class="text-button" id="edit-card"><svg class="icon" aria-hidden="true"><use href="#i-feather"/></svg>Chỉnh sửa thiệp</button><button class="text-button" id="replay-card"><svg class="icon" aria-hidden="true"><use href="#i-replay"/></svg>Mở lại thiệp</button><button class="text-button" id="create-another">Tạo thiệp khác <svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></button></div><p class="share-note" id="share-note"><svg class="icon" aria-hidden="true"><use href="#i-lock"/></svg>Bất kỳ ai có liên kết đều có thể đọc lời nhắn.<br>Hãy gửi riêng cho người bạn muốn chia sẻ nhé.</p><div class="manual-copy-panel" id="manual-copy-panel" hidden><div class="manual-heading"><label for="share-link-field">Liên kết thiệp của bạn</label><button class="icon-button" id="close-copy-panel" aria-label="Đóng khung sao chép"><svg class="icon" aria-hidden="true"><use href="#i-close"/></svg></button></div><input id="share-link-field" readonly aria-describedby="manual-copy-help"><p id="manual-copy-help">Chưa thể sao chép tự động. Chọn liên kết, rồi nhấn Ctrl/Cmd + C hoặc chạm giữ và chọn Sao chép.</p></div></section>
-    <div class="audio-bar" aria-label="Điều khiển nhạc nền"><div class="audio-info"><button class="audio-toggle" id="music-toggle" aria-label="Bật nhạc nền" aria-pressed="false"><span data-music-icon><svg class="icon" aria-hidden="true"><use href="#i-volume-off"/></svg></span><span data-music-label class="sr-only">Bật nhạc</span></button><div class="audio-copy"><strong>Một chút nhạc, một chút bình yên.</strong><span id="music-status" role="status">Chạm để bật nhạc nền</span></div></div><div class="volume-wrap"><label for="volume-control">Âm lượng</label><input type="range" id="volume-control" min="0" max="100" value="30" aria-label="Âm lượng nhạc nền"><output id="volume-value" for="volume-control">30%</output></div></div>
+    <section id="letter-screen" class="letter-screen screen-enter" hidden aria-labelledby="letter-title"><div class="letter-topline"><div class="eyebrow">Những điều đẹp đẽ, dành tặng bạn</div><h1 id="letter-title" tabindex="-1">Một lời thương đã đến.</h1></div><div class="letter-layout"><svg class="letter-sprig" aria-hidden="true"><use href="#art-sprig"/></svg><svg class="letter-sprig right" aria-hidden="true"><use href="#art-sprig"/></svg><article class="paper letter-paper"><span class="paper-corner top-left" aria-hidden="true"><svg viewBox="0 0 100 170"><use href="#art-sprig"/></svg></span><span class="paper-corner bottom-right" aria-hidden="true"><svg viewBox="0 0 100 170"><use href="#art-sprig"/></svg></span><div class="paper-heading"><svg class="paper-flower" aria-hidden="true"><use href="#i-flower"/></svg><p class="paper-kicker">Chúc mừng Ngày Phụ nữ Việt Nam</p><div class="paper-date">20.10</div><div class="paper-line" aria-hidden="true">✧</div></div><p class="paper-dedication" id="letter-dedication"></p><h2 class="paper-salutation" id="letter-recipient"></h2><p class="paper-body" id="letter-greeting"></p><p class="paper-message" id="letter-message"></p><div class="paper-sign"><span>Gửi bằng cả tấm lòng,</span><strong id="letter-sender"></strong></div></article></div><div class="letter-actions"><button class="button" id="share-card"><svg class="icon" aria-hidden="true"><use href="#i-share"/></svg>Chia sẻ thiệp</button><button class="button secondary" id="copy-link"><svg class="icon" aria-hidden="true"><use href="#i-copy"/></svg>Sao chép liên kết</button></div><div class="letter-links"><button class="text-button" id="edit-card"><svg class="icon" aria-hidden="true"><use href="#i-feather"/></svg>Chỉnh sửa thiệp</button><button class="text-button" id="replay-card"><svg class="icon" aria-hidden="true"><use href="#i-replay"/></svg>Mở lại thiệp</button><button class="text-button" id="create-another">Tạo thiệp khác <svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></button></div><p class="long-link-warning" id="share-long-warning" hidden></p><p class="share-note" id="share-note"><svg class="icon" aria-hidden="true"><use href="#i-lock"/></svg>Bất kỳ ai có liên kết đều có thể đọc lời nhắn.<br>Hãy gửi riêng cho người bạn muốn chia sẻ nhé.</p><div class="manual-copy-panel" id="manual-copy-panel" hidden><div class="manual-heading"><label for="share-link-field">Liên kết thiệp của bạn</label><button class="icon-button" id="close-copy-panel" aria-label="Đóng khung sao chép"><svg class="icon" aria-hidden="true"><use href="#i-close"/></svg></button></div><input id="share-link-field" readonly aria-describedby="manual-copy-help"><p id="manual-copy-help">Chưa thể sao chép tự động. Chọn liên kết, rồi nhấn Ctrl/Cmd + C hoặc chạm giữ và chọn Sao chép.</p></div></section>
+    <div class="audio-bar" aria-label="Điều khiển nhạc nền"><div class="audio-info"><button class="audio-toggle" id="music-toggle" aria-label="Bật nhạc nền" aria-pressed="false"><span data-music-icon><svg class="icon" aria-hidden="true"><use href="#i-volume-off"/></svg></span><span data-music-label class="sr-only">Bật nhạc</span></button><div class="audio-copy"><strong>Một chút nhạc, một chút bình yên.</strong><span id="music-status" role="status">Chạm để bật nhạc nền</span></div></div><div class="field"><label for="letter-track-select">Bản nhạc của tấm thiệp</label><select id="letter-track-select" aria-label="Chọn bản nhạc đi cùng thiệp"></select></div><div class="audio-nav"><button class="icon-button" id="prev-track" aria-label="Bài nhạc trước"><svg class="icon" aria-hidden="true"><use href="#i-chevron-left"/></svg></button><button class="icon-button" id="next-track" aria-label="Bài nhạc tiếp theo"><svg class="icon" aria-hidden="true"><use href="#i-chevron-right"/></svg></button></div><div class="volume-wrap"><label for="volume-control">Âm lượng</label><input type="range" id="volume-control" min="0" max="100" value="30" aria-label="Âm lượng nhạc nền"><output id="volume-value" for="volume-control">30%</output></div></div>
   </main>
   <footer class="site-footer shell"><span class="footer-love">Được làm bằng sự chân thành <svg class="icon" aria-hidden="true"><use href="#i-heart"/></svg></span><span class="footer-date">20.10 · MỖI LỜI THƯƠNG ĐỀU ĐÁNG ĐƯỢC GỬI ĐI</span></footer>
   <div id="toast" class="toast" role="status" aria-live="polite" hidden></div><div id="petal-burst" class="petal-burst" aria-hidden="true"></div><audio id="background-music" loop preload="metadata" playsinline></audio>
@@ -238,17 +774,474 @@ const GREETINGS = {
 };
 
 // 12. Cấu hình, trạng thái, hiển thị, sự kiện, nhạc và liên kết chia sẻ.
+// 13. Thư viện và trình phát nhạc theo người nhận.
+/* Nhạc theo từng nhóm: chỉ phát tệp có thật, giữ cả các tệp nhạc cũ. */
+const CardMusic = (() => {
+  'use strict';
+  const definitions = Object.freeze({
+    mom: { stem: 'nhacme', legacy: 'nhac_me.mp3' },
+    grandma: { stem: 'nhacba', legacy: 'nhac_ba.mp3' },
+    teacher: { stem: 'nhacco', legacy: 'assets/music.mp3' },
+    sister: { stem: 'nhacchiem', legacy: 'assets/music.mp3' },
+    friend: { stem: 'nhacban', legacy: 'music_under.mp3' },
+    women: { stem: 'nhacphunu', legacy: 'music_over.mp3' }
+  });
+  const $ = id => document.getElementById(id);
+  const audio = $('background-music');
+  const buttons = [$('music-toggle'), $('header-music-toggle')].filter(Boolean);
+  const probeCache = new Map();
+  const queue = [];
+  let activeProbes = 0;
+  let group = null;
+  let tracks = [];
+  let selectedId = null;
+  let selectedTrack = null;
+  let loading = false;
+  let desired = false;
+  let pendingPlay = false;
+  let userPaused = false;
+  let userActionRevision = 0;
+  let autoAttempted = false;
+  let requestId = 0;
+  let scanId = 0;
+  let statusOverride = '';
+
+  if (audio) {
+    audio.loop = true;
+    audio.preload = 'metadata';
+    audio.volume = .3;
+  }
+
+  const notice = message => document.dispatchEvent(new CustomEvent('cardmusicnotice', { detail: { message } }));
+  const emitSelection = () => document.dispatchEvent(new CustomEvent('cardmusicchange', { detail: { id: selectedId } }));
+  const canonicalURL = path => new URL(path, document.baseURI).href;
+  const actualPlaying = () => Boolean(audio && selectedTrack?.available && desired && !audio.paused && !audio.ended && !audio.error);
+  const labelFor = index => `Bản nhạc ${String(index + 1).padStart(2, '0')}`;
+  const expectedFile = (target, index) => `${index}${definitions[target].stem}.mp3`;
+
+  function drain() {
+    while (activeProbes < 8 && queue.length) {
+      const task = queue.shift();
+      activeProbes += 1;
+      task.run().then(task.resolve, () => task.resolve(null)).finally(() => {
+        activeProbes -= 1;
+        drain();
+      });
+    }
+  }
+
+  function probe(path) {
+    if (probeCache.has(path)) return probeCache.get(path);
+    const result = new Promise(resolve => {
+      queue.push({ resolve, run: async () => {
+        const controller = new AbortController();
+        const timeout = setTimeout(() => controller.abort(), 7000);
+        try {
+          const response = await fetch(path, { method: 'HEAD', cache: 'no-store', signal: controller.signal });
+          const type = (response.headers.get('content-type') || '').split(';')[0].trim().toLowerCase();
+          const lengthHeader = response.headers.get('content-length');
+          const length = lengthHeader === null ? null : Number(lengthHeader);
+          const audioMime = type.startsWith('audio/');
+          const binaryMime = type === 'application/octet-stream' || type === 'binary/octet-stream';
+          const hasBody = length === null ? audioMime : Number.isFinite(length) && length > 0;
+          if (response.ok && (audioMime || binaryMime) && hasBody) return path;
+          return null;
+        } catch (_) {
+          return null;
+        } finally {
+          clearTimeout(timeout);
+        }
+      } });
+      drain();
+    });
+    probeCache.set(path, result);
+    return result;
+  }
+
+  async function findTrack(target, index) {
+    const definition = definitions[target];
+    const expected = expectedFile(target, index);
+    const candidates = [expected, `assets/${expected}`];
+    if (index === 0) {
+      candidates.push(`${definition.stem}.mp3`, `assets/${definition.stem}.mp3`);
+      if (definition.legacy.startsWith('assets/')) candidates.push(definition.legacy);
+      else candidates.push(definition.legacy, `assets/${definition.legacy}`);
+    }
+    for (const path of [...new Set(candidates)]) {
+      const found = await probe(path);
+      if (found) return { id: `${target}:${index}`, index, expected, file: found, url: found, available: true, legacy: ![expected, `assets/${expected}`].includes(found) };
+    }
+    return { id: `${target}:${index}`, index, expected, file: null, url: null, available: false, legacy: false };
+  }
+
+  function currentStatus() {
+    if (!group) return 'Chọn người nhận để chọn nhạc cho thiệp.';
+    if (statusOverride) return statusOverride;
+    if (loading && !selectedTrack?.available) return 'Đang tìm các bản nhạc trong nhóm này…';
+    if (!selectedTrack?.available) return `Chưa có ${selectedTrack?.expected || expectedFile(group, 0)}. Thêm file vào thư mục gốc hoặc assets rồi chọn “Quét lại nhạc”.`;
+    if (actualPlaying()) return `Đang phát ${labelFor(selectedTrack.index)} · ${selectedTrack.file}`;
+    if (pendingPlay && desired) return `Đang mở ${labelFor(selectedTrack.index)}…`;
+    if (userPaused) return 'Nhạc đã tạm dừng. Chạm nút nhạc để nghe tiếp.';
+    return `${labelFor(selectedTrack.index)} đã sẵn sàng. Chạm để bật nhạc.`;
+  }
+
+  function syncUI() {
+    const playing = actualPlaying();
+    for (const button of buttons) {
+      button.disabled = false;
+      button.setAttribute('aria-pressed', String(playing));
+      button.setAttribute('aria-label', playing ? 'Tạm dừng nhạc nền' : 'Bật nhạc nền');
+      const label = button.querySelector('[data-music-label]');
+      const icon = button.querySelector('[data-music-icon] use');
+      if (label) label.textContent = playing ? 'Tắt nhạc' : 'Bật nhạc';
+      if (icon) icon.setAttribute('href', playing ? '#i-volume' : '#i-volume-off');
+    }
+    if ($('music-status')) $('music-status').textContent = currentStatus();
+    if ($('volume-control')) $('volume-control').disabled = false;
+    document.querySelectorAll('#track-list [data-track-id]').forEach(button => {
+      const selected = button.dataset.trackId === selectedId;
+      button.setAttribute('aria-pressed', String(selected));
+      const row = button.closest('.music-track');
+      if (row) row.dataset.selected = String(selected);
+    });
+    document.querySelectorAll('#track-list [data-preview-track]').forEach(button => {
+      const thisPlaying = playing && button.dataset.previewTrack === selectedId;
+      button.textContent = thisPlaying ? 'Tạm dừng' : 'Nghe thử';
+      button.setAttribute('aria-pressed', String(thisPlaying));
+      const track = tracks.find(item => item.id === button.dataset.previewTrack);
+      button.setAttribute('aria-label', `${thisPlaying ? 'Tạm dừng' : 'Nghe thử'} ${track ? labelFor(track.index) : 'bản nhạc'}`);
+    });
+    if ($('letter-track-select')) $('letter-track-select').value = selectedId || '';
+    const available = tracks.filter(track => track.available);
+    for (const id of ['prev-track', 'next-track']) {
+      if ($(id)) $(id).disabled = available.length < 2;
+    }
+  }
+
+  function renderCatalogue() {
+    const list = $('track-list');
+    if (list) {
+      list.setAttribute('aria-busy', String(loading));
+      const fragment = document.createDocumentFragment();
+      for (const track of tracks) {
+        const row = document.createElement('div');
+        row.className = 'music-track';
+        row.dataset.selected = String(track.id === selectedId);
+        const select = document.createElement('button');
+        select.type = 'button';
+        select.className = 'track-select';
+        select.dataset.trackId = track.id;
+        select.disabled = !track.available;
+        select.setAttribute('aria-pressed', String(track.id === selectedId));
+        const title = document.createElement('strong');
+        title.className = 'track-title';
+        title.textContent = track.index === 0 && track.legacy ? 'Bản nhạc đang có' : labelFor(track.index);
+        const detail = document.createElement('small');
+        detail.className = 'track-state';
+        detail.textContent = track.available ? `Có sẵn · ${track.file}` : `Chưa có file · ${track.expected}`;
+        select.append(title, detail);
+        const preview = document.createElement('button');
+        preview.type = 'button';
+        preview.className = 'track-preview';
+        preview.dataset.previewTrack = track.id;
+        preview.disabled = !track.available;
+        preview.textContent = 'Nghe thử';
+        row.append(select, preview);
+        fragment.append(row);
+      }
+      list.replaceChildren(fragment);
+    }
+    const receivedSelect = $('letter-track-select');
+    if (receivedSelect) {
+      const fragment = document.createDocumentFragment();
+      for (const track of tracks) {
+        const option = document.createElement('option');
+        option.value = track.id;
+        option.disabled = !track.available;
+        option.textContent = `${labelFor(track.index)}${track.available ? '' : ' — chưa có file'}`;
+        fragment.append(option);
+      }
+      receivedSelect.replaceChildren(fragment);
+      receivedSelect.value = selectedId || '';
+      receivedSelect.disabled = !tracks.some(track => track.available);
+    }
+    const missingContainer = $('music-missing-files');
+    if (missingContainer) {
+      const missing = tracks.filter(track => track.index < 3 && !track.available);
+      const fragment = document.createDocumentFragment();
+      for (const track of missing) {
+        const item = document.createElement('li');
+        const file = document.createElement('code');
+        file.textContent = track.expected;
+        item.append(file);
+        fragment.append(item);
+      }
+      let missingList = missingContainer.tagName === 'UL' ? missingContainer : missingContainer.querySelector('ul');
+      if (!missingList) {
+        missingList = document.createElement('ul');
+        missingContainer.append(missingList);
+      }
+      missingList.replaceChildren(fragment);
+      missingContainer.hidden = missing.length === 0;
+    }
+    const catalogStatus = $('music-catalog-status');
+    if (catalogStatus) {
+      const count = tracks.filter(track => track.available).length;
+      catalogStatus.textContent = loading ? 'Đang quét nhạc cho nhóm người nhận này…' : `Tìm thấy ${count} bản nhạc thật.${count < 3 ? ` Thêm ${3 - count} file để có ít nhất 3 lựa chọn.` : ' Chọn một bản để gắn vào thiệp.'}`;
+    }
+    if ($('rescan-music')) $('rescan-music').disabled = loading;
+    syncUI();
+  }
+
+  function pause(userInitiated = true) {
+    requestId += 1;
+    desired = false;
+    pendingPlay = false;
+    if (userInitiated) { userPaused = true; userActionRevision += 1; }
+    if (audio) audio.pause();
+    statusOverride = '';
+    syncUI();
+  }
+
+  function loadTrack(track) {
+    requestId += 1;
+    pendingPlay = false;
+    selectedTrack = track || null;
+    if (!audio) return;
+    audio.pause();
+    if (track?.available) {
+      if (audio.getAttribute('src') !== track.url) {
+        audio.src = track.url;
+        audio.load();
+      }
+    } else {
+      audio.removeAttribute('src');
+      audio.load();
+    }
+  }
+
+  function play(userInitiated = true) {
+    if (!audio || !selectedTrack?.available) {
+      syncUI();
+      return Promise.resolve(false);
+    }
+    if (userInitiated) { userPaused = false; userActionRevision += 1; }
+    desired = true;
+    pendingPlay = true;
+    statusOverride = '';
+    const attempt = ++requestId;
+    let result;
+    try {
+      // Gọi play ngay trong thao tác bấm; không chờ dò tệp làm mất quyền phát của trình duyệt.
+      result = audio.play();
+    } catch (error) {
+      result = Promise.reject(error);
+    }
+    syncUI();
+    return Promise.resolve(result).then(() => {
+      if (attempt !== requestId) return false;
+      pendingPlay = false;
+      syncUI();
+      return actualPlaying();
+    }).catch(error => {
+      if (attempt !== requestId) return false;
+      pendingPlay = false;
+      desired = false;
+      if (error?.name !== 'AbortError') {
+        statusOverride = error?.name === 'NotAllowedError'
+          ? 'Trình duyệt chưa cho phép phát nhạc. Chạm nút nhạc một lần nữa để nghe.'
+          : 'Chưa phát được bản nhạc này. Chọn bản khác hoặc thử lại.';
+        notice(statusOverride);
+      }
+      syncUI();
+      return false;
+    });
+  }
+
+  function selectTrack(id, preview = false) {
+    const track = tracks.find(item => item.id === id);
+    if (!track?.available) return false;
+    if (preview && id === selectedId && (actualPlaying() || pendingPlay)) {
+      pause(true);
+      return true;
+    }
+    userActionRevision += 1;
+    const continuePlaying = desired && !userPaused;
+    selectedId = id;
+    statusOverride = '';
+    desired = false;
+    loadTrack(track);
+    emitSelection();
+    syncUI();
+    if (preview || continuePlaying) void play(true);
+    return true;
+  }
+
+  async function setGroup(target, requestedId) {
+    if (!definitions[target]) target = 'women';
+    const changed = group !== target;
+    const generation = ++scanId;
+    if (changed) {
+      pause(false);
+      autoAttempted = false;
+    }
+    group = target;
+    const match = typeof requestedId === 'string' ? requestedId.match(/^([a-z]+):(\d{1,2})$/) : null;
+    const requestedIndex = match && match[1] === target && Number(match[2]) < 20 ? Number(match[2]) : 0;
+    const previousId = selectedId;
+    selectedId = `${target}:${requestedIndex}`;
+    loading = true;
+    statusOverride = '';
+    const shouldContinue = !changed && desired && !userPaused;
+    const actionAtScanStart = userActionRevision;
+    desired = false;
+    tracks = [0, 1, 2].map(index => ({ id: `${target}:${index}`, index, expected: expectedFile(target, index), file: null, url: null, available: false, legacy: false }));
+    const placeholder = tracks.find(track => track.id === selectedId) || { id: selectedId, index: requestedIndex, expected: expectedFile(target, requestedIndex), available: false };
+    loadTrack(null);
+    selectedTrack = placeholder;
+    renderCatalogue();
+    // Ưu tiên bản được chọn trước khi dò các bài bổ sung.
+    const order = [requestedIndex, ...Array.from({ length: 20 }, (_, index) => index).filter(index => index !== requestedIndex)];
+    const found = await Promise.all(order.map(async index => {
+      const track = await findTrack(target, index);
+      if (generation === scanId && group === target && index === requestedIndex) {
+        loadTrack(track);
+        syncUI();
+      }
+      return track;
+    }));
+    if (generation !== scanId || group !== target) return [];
+    tracks = found.filter(track => track.index < 3 || track.available || track.id === selectedId).sort((a, b) => a.index - b.index);
+    selectedTrack = tracks.find(track => track.id === selectedId) || placeholder;
+    loading = false;
+    renderCatalogue();
+    if (selectedId !== previousId) emitSelection();
+    // Không để kết quả quét đến muộn ghi đè thao tác tắt/đổi bài mới của người dùng.
+    if (shouldContinue && !userPaused && userActionRevision === actionAtScanStart && selectedTrack.available) void play(false);
+    return tracks.map(track => ({ ...track }));
+  }
+
+  async function refreshGroup() {
+    if (!group) return [];
+    probeCache.clear();
+    const result = await setGroup(group, selectedId);
+    if (result.length) notice(`Đã quét lại: tìm thấy ${result.filter(track => track.available).length} bản nhạc.`);
+    return result;
+  }
+
+  function openGesture() {
+    if (userPaused || autoAttempted) {
+      syncUI();
+      return Promise.resolve(false);
+    }
+    if (!selectedTrack?.available) {
+      syncUI();
+      return Promise.resolve(false);
+    }
+    autoAttempted = true;
+    return play(false);
+  }
+
+  async function toggle() {
+    if (desired || actualPlaying() || pendingPlay) {
+      pause(true);
+      return;
+    }
+    if (!selectedTrack?.available) {
+      if (loading) {
+        notice('Đang tìm nhạc. Bạn có thể mở thiệp trước, rồi chạm nút nhạc khi file sẵn sàng.');
+        return;
+      }
+      await refreshGroup();
+      if (!selectedTrack?.available) {
+        notice(currentStatus());
+        return;
+      }
+      // Sau khi quét lại, cần một lần chạm mới để trình duyệt cho phép phát nhạc.
+      notice('Đã tìm thấy nhạc. Chạm nút nhạc lần nữa để phát.');
+      syncUI();
+      return;
+    }
+    await play(true);
+  }
+
+  for (const button of buttons) button.addEventListener('click', () => { void toggle(); });
+  $('track-list')?.addEventListener('click', event => {
+    const preview = event.target.closest('[data-preview-track]');
+    const select = event.target.closest('[data-track-id]');
+    if (preview && !preview.disabled) selectTrack(preview.dataset.previewTrack, true);
+    else if (select && !select.disabled) selectTrack(select.dataset.trackId, false);
+  });
+  $('letter-track-select')?.addEventListener('change', event => selectTrack(event.target.value, false));
+  $('rescan-music')?.addEventListener('click', () => { void refreshGroup(); });
+  for (const [id, direction] of [['prev-track', -1], ['next-track', 1]]) {
+    $(id)?.addEventListener('click', () => {
+      const available = tracks.filter(track => track.available);
+      if (!available.length) return;
+      const index = available.findIndex(track => track.id === selectedId);
+      const next = (index < 0 ? (direction > 0 ? 0 : available.length - 1) : (index + direction + available.length) % available.length);
+      selectTrack(available[next].id, false);
+    });
+  }
+  $('volume-control')?.addEventListener('input', event => {
+    const value = Math.min(100, Math.max(0, Number(event.target.value) || 0));
+    if (audio) audio.volume = value / 100;
+    if ($('volume-value')) $('volume-value').textContent = `${value}%`;
+  });
+  if ($('volume-control')) $('volume-control').value = '30';
+  if ($('volume-value')) $('volume-value').textContent = '30%';
+  if (audio) {
+    audio.addEventListener('playing', () => {
+      if (!desired || !selectedTrack?.available) audio.pause();
+      else pendingPlay = false;
+      syncUI();
+    });
+    for (const event of ['pause', 'loadedmetadata', 'ended', 'emptied']) audio.addEventListener(event, syncUI);
+    audio.addEventListener('error', () => {
+      if (!audio.error || !selectedTrack?.available) return;
+      if (audio.currentSrc && audio.currentSrc !== canonicalURL(selectedTrack.url)) return;
+      const failed = selectedTrack;
+      probeCache.set(failed.url, Promise.resolve(null));
+      failed.available = false;
+      failed.file = null;
+      desired = false;
+      pendingPlay = false;
+      requestId += 1;
+      audio.pause();
+      statusOverride = `Không đọc được ${failed.url}. Hãy kiểm tra file MP3, chọn bản khác hoặc quét lại nhạc.`;
+      renderCatalogue();
+      notice(statusOverride);
+    });
+  }
+  function stopOnPageHide() { pause(false); }
+  function resumeUI() { syncUI(); }
+  window.addEventListener('pagehide', stopOnPageHide);
+  window.addEventListener('pageshow', resumeUI);
+  syncUI();
+  return Object.freeze({
+    setGroup,
+    currentId: () => selectedId,
+    openGesture,
+    stopOnPageHide,
+    resumeUI,
+    refreshGroup,
+    get catalogue() { return tracks.map(track => ({ ...track })); }
+  });
+})();
+
+// 14. Tạo, thiết kế và chia sẻ thiệp.
 (() => {
   'use strict';
 
   const CONFIG = Object.freeze({
     siteName: 'Gửi người phụ nữ tôi yêu thương',
     defaultSender: 'Hồng Gia Bảo',
-    musicSrc: 'assets/music.mp3',
     maxMessageLength: 1000,
     maxNameLength: 100,
     maxPronounLength: 30,
-    maxFragmentLength: 16000,
+    maxCustomGreetingLength: 3000,
+    maxDedicationLength: 100,
+    maxFragmentLength: 60000,
     effects: Object.freeze({ openingMs: 1800, petalsDesktop: 14, petalsMobile: 7 })
   });
 
@@ -294,10 +1287,22 @@ const GREETINGS = {
   let petalTimer = 0;
   let toastTimer = 0;
 
+  const DESIGN_OPTIONS = Object.freeze({
+    theme: ['rose', 'sage', 'champagne', 'midnight'],
+    font: ['serif', 'sans'], layout: ['classic', 'centered'],
+    decoration: ['botanical', 'stars', 'minimal'],
+    effect: ['petals', 'constellation', 'butterflies', 'none']
+  });
+  // Các lựa chọn thiết kế cũng đi theo liên kết, không cần lưu dữ liệu ở máy chủ.
+  function defaultDesign() {
+    return { theme: 'rose', font: 'serif', layout: 'classic', decoration: 'botanical', effect: 'petals', dedication: '', body: '' };
+  }
+  function normalizeText(value) { return value.normalize('NFC'); }
+
   function makeDefaultState() {
     return {
       target: 'mom', variant: '', recipientName: '', senderName: CONFIG.defaultSender,
-      pronoun: 'con', sampleIndex: 0, message: ''
+      pronoun: 'con', sampleIndex: 0, message: '', musicId: 'mom:0', design: defaultDesign()
     };
   }
 
@@ -318,7 +1323,7 @@ const GREETINGS = {
     return {
       recipient: name ? `Gửi ${name},` : recipient.salutation,
       envelopeRecipient: `Gửi ${name || recipient.you}`,
-      greeting: template.body.replace(/\{(self|you)\}/g, (_, key) => key === 'self' ? self : recipient.you),
+      greeting: state.design.body.trim() || template.body.replace(/\{(self|you)\}/g, (_, key) => key === 'self' ? self : recipient.you),
       message: state.message.trim(),
       sender: state.senderName.trim() || CONFIG.defaultSender,
       template
@@ -429,7 +1434,7 @@ const GREETINGS = {
 
   function updateMessageCount() {
     const tooLong = state.message.length > CONFIG.maxMessageLength;
-    $('message-count').textContent = `${state.message.length.toLocaleString('vi-VN')} / 1.000`;
+    $('message-count').textContent = `${state.message.length.toLocaleString('vi-VN')} / ${CONFIG.maxMessageLength.toLocaleString('vi-VN')}`;
     $('message-error').textContent = tooLong ? 'Lời nhắn không được vượt quá 1.000 ký tự.' : '';
     $('message-error').hidden = !tooLong;
     fields.message.setAttribute('aria-invalid', String(tooLong));
@@ -442,13 +1447,55 @@ const GREETINGS = {
     Object.entries(fields).forEach(([key, field]) => { field.value = state[key]; });
     updateSelectedRecipients();
     renderVariants();
+    renderDesignControls();
+    CardMusic.setGroup(state.target, state.musicId);
     updateMessageCount();
     renderCard();
+  }
+
+  function renderDesignControls() {
+    $('card-dedication').value = state.design.dedication;
+    $('custom-greeting').value = state.design.body;
+    $('decoration-field').value = state.design.decoration;
+    $('effect-field').value = state.design.effect;
+    updateDesignCount();
+    updateDesignButtons();
+  }
+
+  function updateDesignButtons() {
+    for (const key of ['theme', 'font', 'layout']) {
+      document.querySelectorAll(`[data-${key}-choice]`).forEach(button => {
+        button.setAttribute('aria-pressed', String(button.getAttribute(`data-${key}-choice`) === state.design[key]));
+      });
+    }
+  }
+
+  function updateDesignCount() {
+    const length = state.design.body.length;
+    $('custom-greeting-count').textContent = `${length.toLocaleString('vi-VN')} / ${CONFIG.maxCustomGreetingLength.toLocaleString('vi-VN')}`;
+    const tooLong = length > CONFIG.maxCustomGreetingLength;
+    $('custom-greeting-error').hidden = !tooLong;
+    $('custom-greeting-error').textContent = tooLong ? 'Lời chúc riêng không được vượt quá 3.000 ký tự.' : '';
+    $('custom-greeting').setAttribute('aria-invalid', String(tooLong));
+  }
+
+  function applyDesign() {
+    const design = state.design;
+    document.querySelectorAll('.paper').forEach(paper => {
+      ['theme', 'font', 'layout', 'decoration'].forEach(key => { paper.dataset[key] = design[key]; });
+    });
+    $('envelope-stage').dataset.theme = design.theme;
+    document.body.dataset.cardTheme = design.theme;
+    ['preview', 'letter'].forEach(prefix => { $(`${prefix}-dedication`).textContent = design.dedication; });
+    document.querySelectorAll('.letter-sprig').forEach(sprig => { sprig.style.visibility = design.decoration === 'botanical' ? '' : 'hidden'; });
+    $('use-template').hidden = !design.body;
+    updateDesignButtons();
   }
 
   // Luôn dùng textContent: tên và lời nhắn không bao giờ trở thành mã HTML.
   function renderCard() {
     const text = cardText();
+    applyDesign();
     ['preview', 'letter'].forEach((prefix) => {
       $(`${prefix}-recipient`).textContent = text.recipient;
       $(`${prefix}-greeting`).textContent = text.greeting;
@@ -469,7 +1516,7 @@ const GREETINGS = {
   }
 
   function syncFields() {
-    Object.entries(fields).forEach(([key, field]) => { state[key] = field.value; });
+    Object.entries(fields).forEach(([key, field]) => { state[key] = normalizeText(field.value); });
     updateMessageCount();
     renderCard();
   }
@@ -485,6 +1532,15 @@ const GREETINGS = {
         return false;
       }
     }
+    const designFields = [['body', 'custom-greeting', CONFIG.maxCustomGreetingLength], ['dedication', 'card-dedication', CONFIG.maxDedicationLength]];
+    for (const [key, id, limit] of designFields) {
+      if (state.design[key].length > limit) {
+        showToast(`Nội dung thiết kế vượt ${limit.toLocaleString('vi-VN')} ký tự. Hãy rút ngắn rồi thử lại.`, true);
+        $('design-panel').open = true;
+        $(id).focus();
+        return false;
+      }
+    }
     return true;
   }
 
@@ -497,7 +1553,7 @@ const GREETINGS = {
     const config = RECIPIENTS[target];
     state.variant = config.variants ? variantMemory[target] || config.defaultVariant : '';
     if (!pronounEdited) state.pronoun = recipientFor().pronoun;
-    if (changed) state.sampleIndex = 0;
+    if (changed) { state.sampleIndex = 0; state.musicId = `${target}:0`; }
     renderEditor();
     showScreen('editor');
   }
@@ -506,19 +1562,20 @@ const GREETINGS = {
     const length = samplesFor().length;
     state.sampleIndex = (state.sampleIndex + direction + length) % length;
     renderCard();
+    if (state.design.body.trim()) showToast('Mẫu gợi ý đã đổi. Bạn đang dùng lời tự viết; chọn “Quay về lời chúc gợi ý” nếu muốn dùng mẫu.');
   }
 
   function burstPetals() {
     window.clearTimeout(petalTimer);
     const container = $('petal-burst');
     container.replaceChildren();
-    if (reducedMotion.matches) return;
+    if (reducedMotion.matches || state.design.effect === 'none') return;
     const count = window.matchMedia('(max-width: 640px)').matches
       ? CONFIG.effects.petalsMobile : CONFIG.effects.petalsDesktop;
     const fragment = document.createDocumentFragment();
     for (let i = 0; i < count; i += 1) {
       const petal = document.createElement('span');
-      petal.className = 'burst-petal';
+      petal.className = state.design.effect === 'constellation' ? 'burst-star' : state.design.effect === 'butterflies' ? 'burst-butterfly' : 'burst-petal';
       petal.setAttribute('aria-hidden', 'true');
       petal.style.left = `${Math.random() * 100}%`;
       petal.style.setProperty('--drift', `${Math.round(Math.random() * 160 - 80)}px`);
@@ -541,10 +1598,7 @@ const GREETINGS = {
   // Một bộ hẹn giờ duy nhất, có thể bỏ qua và không chạy chồng khi mở lại.
   function openEnvelope() {
     if (screen !== 'envelope' || opening) return;
-    if (!music.autoAttempted && !music.userPaused) {
-      music.autoAttempted = true;
-      requestMusic(true);
-    }
+    CardMusic.openGesture();
     if (reducedMotion.matches) {
       revealLetter();
       return;
@@ -561,7 +1615,7 @@ const GREETINGS = {
   function stringProperty(data, key, fallback, limit) {
     if (!Object.hasOwn(data, key)) return fallback;
     if (typeof data[key] !== 'string' || data[key].length > limit) throw new Error('Invalid text');
-    return data[key];
+    return normalizeText(data[key]);
   }
 
   // Liên kết chỉ chứa dữ liệu văn bản; giới hạn kích thước trước khi giải mã.
@@ -569,7 +1623,7 @@ const GREETINGS = {
     if (hash.length > CONFIG.maxFragmentLength || !hash.startsWith('#card=')) throw new Error('Invalid fragment');
     const data = JSON.parse(decodeURIComponent(hash.slice(6)));
     if (!data || typeof data !== 'object' || Array.isArray(data)) throw new Error('Invalid card');
-    if (data.v !== 1) throw new Error('Unsupported version');
+    if (data.v !== 1 && data.v !== 2) throw new Error('Unsupported version');
     const target = Object.hasOwn(data, 'target') ? data.target : 'mom';
     if (typeof target !== 'string' || !Object.hasOwn(RECIPIENTS, target)) throw new Error('Invalid target');
     const config = RECIPIENTS[target];
@@ -585,6 +1639,26 @@ const GREETINGS = {
     result.sampleIndex = Object.hasOwn(data, 'sampleIndex') ? data.sampleIndex : 0;
     if (!Number.isInteger(result.sampleIndex) || result.sampleIndex < 0 || result.sampleIndex >= samplesFor(result).length) {
       throw new Error('Invalid template');
+    }
+    result.musicId = `${target}:0`;
+    result.design = defaultDesign();
+    if (data.v === 2) {
+      if (Object.hasOwn(data, 'musicId')) {
+        if (typeof data.musicId !== 'string' || !new RegExp(`^${target}:(?:[0-9]|1[0-9])$`).test(data.musicId)) throw new Error('Invalid song');
+        result.musicId = data.musicId;
+      }
+      if (Object.hasOwn(data, 'design')) {
+        const design = data.design;
+        if (!design || typeof design !== 'object' || Array.isArray(design)) throw new Error('Invalid design');
+        for (const [key, choices] of Object.entries(DESIGN_OPTIONS)) {
+          if (Object.hasOwn(design, key)) {
+            if (typeof design[key] !== 'string' || !choices.includes(design[key])) throw new Error('Invalid design choice');
+            result.design[key] = design[key];
+          }
+        }
+        result.design.dedication = stringProperty(design, 'dedication', '', CONFIG.maxDedicationLength);
+        result.design.body = stringProperty(design, 'body', '', CONFIG.maxCustomGreetingLength);
+      }
     }
     return result;
   }
@@ -611,15 +1685,18 @@ const GREETINGS = {
 
   function prepareShareLink() {
     const payload = {
-      v: 1, target: state.target, variant: state.variant,
+      v: 2, target: state.target, variant: state.variant,
       recipientName: state.recipientName, senderName: state.senderName,
-      pronoun: state.pronoun, sampleIndex: state.sampleIndex, message: state.message
+      pronoun: state.pronoun, sampleIndex: state.sampleIndex, message: state.message,
+      musicId: state.musicId, design: { ...state.design }
     };
     const fragment = `#card=${encodeURIComponent(JSON.stringify(payload))}`;
     if (fragment.length > CONFIG.maxFragmentLength) {
       showToast('Liên kết quá dài. Hãy rút ngắn lời nhắn trước khi chia sẻ.', true);
       return null;
     }
+    $('share-long-warning').hidden = fragment.length <= 12000;
+    $('share-long-warning').textContent = 'Liên kết này khá dài. Một số ứng dụng có thể cắt liên kết; hãy kiểm tra lại sau khi gửi hoặc rút ngắn lời nhắn.';
     const url = new URL(window.location.href);
     url.hash = fragment;
     const link = url.href;
@@ -687,111 +1764,53 @@ const GREETINGS = {
     await copyPreparedLink(link);
   }
 
-  const audio = $('background-music');
-  const musicButtons = [$('music-toggle'), $('header-music-toggle')];
-  const music = {
-    desired: false, pending: false, unavailable: false,
-    userPaused: false, autoAttempted: false, request: 0, error: ''
-  };
+  // Trình phát dùng một audio duy nhất, tự dò tệp theo nhóm và giữ lựa chọn khi chia sẻ.
+  document.addEventListener('cardmusicchange', event => {
+    const id = event.detail && event.detail.id;
+    if (typeof id === 'string' && id.startsWith(`${state.target}:`)) state.musicId = id;
+  });
+  document.addEventListener('cardmusicnotice', event => {
+    if (event.detail && typeof event.detail.message === 'string') showToast(event.detail.message, true);
+  });
 
-  function actuallyPlaying() {
-    return !audio.paused && !audio.ended && !music.unavailable;
-  }
-
-  function renderMusic() {
-    const playing = actuallyPlaying();
-    musicButtons.forEach((button) => {
-      button.querySelector('[data-music-label]').textContent = playing ? 'Tắt nhạc' : 'Bật nhạc';
-      button.querySelector('[data-music-icon] use').setAttribute('href', playing ? '#i-volume' : '#i-volume-off');
-      button.setAttribute('aria-label', music.unavailable ? 'Chưa có nhạc nền' : playing ? 'Tắt nhạc nền' : 'Bật nhạc nền');
-      button.setAttribute('aria-pressed', String(playing));
-      button.disabled = music.unavailable;
-      button.title = music.unavailable ? 'Chưa có nhạc nền' : playing ? 'Tắt nhạc nền' : 'Bật nhạc nền';
+  ['theme', 'font', 'layout'].forEach(key => {
+    document.querySelectorAll(`[data-${key}-choice]`).forEach(button => {
+      button.addEventListener('click', () => {
+        state.design[key] = button.getAttribute(`data-${key}-choice`);
+        renderCard();
+      });
     });
-    $('volume-control').disabled = music.unavailable;
-    let status = 'Nhạc sẽ phát khi bạn mở thiệp.';
-    if (music.unavailable) status = 'Chưa có nhạc nền';
-    else if (music.error === 'blocked') status = 'Trình duyệt chưa cho phép phát nhạc. Chọn “Bật nhạc” để thử lại.';
-    else if (music.error === 'playback') status = 'Chưa thể phát nhạc lúc này. Chọn “Bật nhạc” để thử lại.';
-    else if (music.pending) status = 'Đang mở nhạc…';
-    else if (playing) status = 'Nhạc nền đang phát.';
-    else if (music.userPaused) status = 'Nhạc đã tắt theo lựa chọn của bạn.';
-    $('music-status').textContent = status;
-  }
-
-  // Đánh số yêu cầu để xử lý an toàn các lần bật/tắt nhạc liên tục.
-  async function requestMusic(play, explicit = false) {
-    const request = ++music.request;
-    if (explicit) {
-      music.userPaused = !play;
-      music.autoAttempted = true;
-    }
-    music.desired = play;
-    music.error = '';
-    if (music.unavailable) {
-      music.desired = false;
-      music.pending = false;
-      renderMusic();
-      return;
-    }
-    if (!play) {
-      music.pending = false;
-      audio.pause();
-      renderMusic();
-      return;
-    }
-    music.pending = true;
-    renderMusic();
-    try {
-      await Promise.resolve(audio.play());
-      if (request !== music.request || !music.desired) {
-        if (!music.desired) audio.pause();
-        return;
-      }
-      music.pending = false;
-      renderMusic();
-    } catch (error) {
-      if (request !== music.request || !music.desired) return;
-      music.pending = false;
-      music.desired = false;
-      if (error && error.name === 'NotSupportedError') music.unavailable = true;
-      else music.error = error && error.name === 'NotAllowedError' ? 'blocked' : 'playback';
-      renderMusic();
-    }
-  }
-
-  audio.addEventListener('playing', () => {
-    if (!music.desired) {
-      audio.pause();
-      return;
-    }
-    music.pending = false;
-    music.error = '';
-    renderMusic();
   });
-  audio.addEventListener('pause', () => {
-    // Sự kiện pause cũ có thể đến sau play mới: không ghi đè ý định hiện tại.
-    renderMusic();
+  ['decoration', 'effect'].forEach(key => {
+    $(`${key}-field`).addEventListener('change', event => {
+      state.design[key] = event.target.value;
+      renderCard();
+    });
   });
-  audio.addEventListener('loadedmetadata', () => {
-    music.unavailable = false;
-    renderMusic();
+  [['card-dedication', 'dedication'], ['custom-greeting', 'body']].forEach(([id, key]) => {
+    $(id).addEventListener('input', event => {
+      state.design[key] = normalizeText(event.target.value);
+      updateDesignCount();
+      renderCard();
+    });
   });
-  audio.addEventListener('error', () => {
-    music.request += 1;
-    music.unavailable = true;
-    music.desired = false;
-    music.pending = false;
-    audio.pause();
-    renderMusic();
+  $('use-template').addEventListener('click', () => {
+    state.design.body = '';
+    renderDesignControls();
+    renderCard();
   });
-  musicButtons.forEach((button) => {
-    button.addEventListener('click', () => requestMusic(music.pending ? !music.desired : !actuallyPlaying(), true));
+  $('reset-design').addEventListener('click', () => {
+    state.design = { ...defaultDesign(), body: state.design.body };
+    renderDesignControls();
+    renderCard();
   });
-  $('volume-control').addEventListener('input', (event) => {
-    const value = Math.min(100, Math.max(0, Number(event.target.value) || 0));
-    audio.volume = value / 100;
-    $('volume-value').textContent = `${value}%`;
+  $('custom-greeting').addEventListener('paste', event => {
+    const pasted = event.clipboardData && event.clipboardData.getData('text/plain');
+    const field = event.currentTarget;
+    if (pasted && field.value.length - (field.selectionEnd - field.selectionStart) + pasted.length > CONFIG.maxCustomGreetingLength) {
+      event.preventDefault();
+      showToast('Lời chúc riêng vượt 3.000 ký tự. Hãy rút ngắn rồi dán lại; nội dung hiện tại được giữ nguyên.', true);
+    }
   });
 
   document.querySelector('.skip-link').addEventListener('click', (event) => {
@@ -894,29 +1913,18 @@ const GREETINGS = {
   if (typeof reducedMotion.addEventListener === 'function') reducedMotion.addEventListener('change', onMotionChange);
   else if (typeof reducedMotion.addListener === 'function') reducedMotion.addListener(onMotionChange);
   window.addEventListener('pagehide', () => {
-    music.request += 1;
-    music.desired = false;
-    music.pending = false;
-    audio.pause();
+    CardMusic.stopOnPageHide();
     window.clearTimeout(openingTimer);
     window.clearTimeout(petalTimer);
   });
 
   window.addEventListener('pageshow', (event) => {
-    if (event.persisted) { cancelOpening(); renderMusic(); }
+    if (event.persisted) { cancelOpening(); CardMusic.resumeUI(); }
   });
 
   document.title = CONFIG.siteName;
   $('manual-copy-panel').hidden = true;
   $('skip-animation').hidden = true;
-  $('volume-control').value = '30';
-  $('volume-value').textContent = '30%';
-  audio.preload = 'metadata';
-  audio.loop = true;
-  audio.volume = 0.3;
-  renderMusic();
-  audio.src = CONFIG.musicSrc;
-  audio.load();
   renderEditor();
   if (!loadFragment()) showScreen('home', false);
 })();

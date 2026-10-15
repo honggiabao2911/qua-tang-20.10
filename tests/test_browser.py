@@ -94,7 +94,7 @@ class CardBrowserTests(unittest.TestCase):
 
     def serve_valid_audio(self):
         self.context.unroute("**/assets/music.mp3")
-        self.context.route("**/assets/music.mp3", lambda route: route.fulfill(
+        self.context.route("**/0nhacme.mp3", lambda route: route.fulfill(
             path=str(ROOT / "music_under.mp3"), content_type="audio/mpeg"))
 
     def assert_layout(self, label):
@@ -376,12 +376,19 @@ class CardBrowserTests(unittest.TestCase):
         self.assertLess(time.monotonic() - started, 1.5)
 
     def test_12_missing_music_keeps_complete_flow_usable(self):
+        # All actual candidate paths must be absent; blocking the old single
+        # default is insufficient now that legacy music is correctly restored.
+        self.context.route("**/*.mp3", lambda route: route.fulfill(status=404))
         self.editor()
+        expect(self.page.locator("#track-list")).to_have_attribute("aria-busy", "false")
         self.open_letter()
-        expect(self.page.locator("#music-status")).to_have_text("Chưa có nhạc nền")
-        expect(self.page.locator("#music-toggle")).to_be_disabled()
-        expect(self.page.locator("#header-music-toggle")).to_be_disabled()
-        expect(self.page.locator("#volume-control")).to_be_disabled()
+        expect(self.page.locator("#music-status")).to_contain_text("0nhacme.mp3")
+        expect(self.page.locator("#music-toggle")).to_be_enabled()
+        expect(self.page.locator("#header-music-toggle")).to_be_enabled()
+        expect(self.page.locator("#volume-control")).to_be_enabled()
+        self.page.locator("#music-toggle").click()
+        expect(self.page.locator("#track-list")).to_have_attribute("aria-busy", "false")
+        self.assertTrue(self.page.locator("#background-music").evaluate("a=>a.paused"))
         self.page.locator("#edit-card").click()
         expect(self.page.locator("#editor-screen")).to_be_visible()
 
