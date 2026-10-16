@@ -83,7 +83,7 @@ class ArrivalBrowserTests(unittest.TestCase):
                 self.assertFalse(self.metrics()["visible"])
                 self.assertFalse(self.metrics()["running"])
 
-    def test_02_bouquet_fills_the_phone_and_keeps_the_card_inside(self):
+    def test_02_bouquet_fills_the_phone_and_keeps_the_receive_button_inside(self):
         for width, height in ((360, 800), (390, 844), (1440, 900)):
             with self.subTest(viewport=(width, height)):
                 self.page.set_viewport_size({"width": width, "height": height})

@@ -535,7 +535,39 @@ const CardLinks = (() => {
     });
     return design;
   }
-  function encode(payload) {
+  // Frozen wire v5 character table: common Vietnamese code points cost eight
+  // bits on first use rather than sixteen. Latin-1 bytes are escaped losslessly.
+  // Never reorder/edit these v5 tables. v3/v4 remain unchanged; callers choose
+  // the shorter full-content encoding.
+  const vietnameseWide='ĂăĐđĨĩŨũƠơƯư'+Array.from({length:90},(_,i)=>String.fromCharCode(0x1ea0+i)).join('');
+  const vietnameseCodes=new Map(Array.from(vietnameseWide,(character,index)=>[character,String.fromCharCode(128+index)]));
+  const vietnamesePhrases=['yêu thương','hạnh phúc','bình yên','Nhân ngày','nhiều ','những ','luôn ','được ','thật ','ngày ','20/10','một ','Mong ','người ','thương','chúc ','của ','và ','cho ','với ','có ','con ','mẹ ','anh ','em '];
+  function packVietnamese(source){
+    let result='';
+    for(let i=0;i<source.length;){
+      const phrase=vietnamesePhrases.findIndex(value=>source.startsWith(value,i));
+      if(phrase>=0){result+=String.fromCharCode(230+phrase);i+=vietnamesePhrases[phrase].length;continue;}
+      const character=source[i++],mapped=vietnameseCodes.get(character),code=character.charCodeAt(0);
+      result+=mapped===undefined?(code>=128&&code<=255?'ÿ'+character:character):mapped;
+    }
+    return result;
+  }
+  function unpackVietnamese(source){
+    let result='';
+    for(let i=0;i<source.length;i++){
+      const code=source.charCodeAt(i);
+      if(code===255){
+        const escaped=source.charCodeAt(++i);
+        if(!(escaped>=128&&escaped<=255))throw new Error('Invalid Vietnamese escape');
+        result+=source[i];
+      }else if(code>=230&&code<=254)result+=vietnamesePhrases[code-230];
+      else result+=code>=128&&code<128+vietnameseWide.length?vietnameseWide[code-128]:source[i];
+      if(result.length>MAX_TEXT_LENGTH)throw new Error('Card text exceeds limit');
+    }
+    return result;
+  }
+  function encodeCompact(payload){return encode(payload,true);}
+  function encode(payload, compact=false) {
     if (!isRecord(payload)) throw new Error('Invalid card');
     for (const key of Object.keys(payload)) {
       if (!rootFields.has(key)) throw new Error('Invalid card field');
@@ -570,7 +602,14 @@ const CardLinks = (() => {
     ]);
     const source = JSON.stringify(packed);
     if (source.length > MAX_TEXT_LENGTH) throw new Error('Card text exceeds limit');
-    const hash = '#c=' + compress(source, 6, value => alphabet.charAt(value));
+    let hash = '#c=' + compress(source, 6, value => alphabet.charAt(value));
+    if(compact){
+      const compactSource=packVietnamese(source.replace(/^\[4/, '[5'));
+      if(compactSource.length<=MAX_TEXT_LENGTH){
+        const alternate='#c='+compress(compactSource,6,value=>alphabet.charAt(value));
+        if(alternate.length<hash.length)hash=alternate;
+      }
+    }
     if (hash.length > MAX_FRAGMENT_LENGTH) throw new Error('Card link exceeds limit');
     return hash;
   }
@@ -650,11 +689,13 @@ const CardLinks = (() => {
     if (!input.length || !/^[A-Za-z0-9_-]+$/.test(input)) throw new Error('Invalid card encoding');
     const source = decompress(input.length, 32, index => alphabet.indexOf(input.charAt(index)));
     if (!source) throw new Error('Invalid compressed card');
-    const packed = parseJSON(source);
+    const isVietnamese=/^\[5(?:,|\])/.test(source);
+    const packed = parseJSON(isVietnamese?unpackVietnamese(source):source);
+    if(isVietnamese)packed[0]=4;
     if (!Array.isArray(packed)) throw new Error('Unsupported card encoding');
     if (packed[0] === 3) return decodeLegacyPacked(packed);
     if (packed[0] === 4) return decodeV4(packed);
     throw new Error('Unsupported card encoding');
   }
-  return Object.freeze({ encode, decode });
+  return Object.freeze({ encode, decode, encodeCompact });
 })();

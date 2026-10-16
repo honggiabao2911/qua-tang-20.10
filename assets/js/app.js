@@ -319,7 +319,7 @@
     if (!choices.includes(state.design.scene)) state.design.scene = preset?.opening || 'envelope';
     const effects = preset ? (['galaxy','aurora','moonlake','lovegalaxy','crystal','pearl'].includes(state.design.experience) ? ['constellation','none'] : ['petals','butterflies','none']) : ['petals','constellation','butterflies','none'];
     if (!effects.includes(state.design.effect)) state.design.effect = effects[0];
-    const labels = {petals:'Cánh hoa',constellation:'Ánh sao',butterflies:'Bướm và hoa',none:'Không thêm hiệu ứng'};
+    const labels = {petals:'Cánh hoa bay nhẹ',constellation:'Sao nhỏ lấp lánh',butterflies:'Cánh bướm bay quanh',none:'Không thêm hoa, sao hoặc bướm'};
     $('effect-field').replaceChildren(...effects.map(value => new Option(labels[value],value)));
     $('effect-field').value = state.design.effect;
   }
@@ -368,8 +368,31 @@
     $('gift-configuration').hidden=!GiftScenes.has(design.experience);
     $('flower-notes-fields').hidden=design.experience!=='wishtree';
     $('secret-note').hidden=!design.secret.trim(); $('secret-content').textContent=design.secret;
+    renderEffectGuide();
     renderJourneyGuide();
     updateDesignButtons();
+  }
+
+  const EFFECT_DESCRIPTIONS={
+    petals:'Khi mở phần đọc, cánh hoa bay nhẹ ở mép thiệp; vài cánh hoa tiếp tục trôi trên nền.',
+    constellation:'Khi mở phần đọc, sao nhỏ lóe sáng ở mép thiệp và lấp lánh trên nền.',
+    butterflies:'Khi mở phần đọc, những cánh bướm bay quanh mép thiệp; không che lời chúc.',
+    none:'Không thêm hạt trang trí bay quanh chữ. Cảnh chủ đề vẫn hiện đầy đủ.'
+  };
+  function renderEffectGuide(replay=false){
+    const demo=$('effect-preview-stage'),effect=state.design.effect;
+    $('effect-description').textContent=EFFECT_DESCRIPTIONS[effect]+(state.design.intensity==='off'?' Bạn đang tắt chuyển động.':' Chọn “Xem thử” để nhìn trước; giảm chuyển động sẽ hiện bản tĩnh.');
+    const key=`${effect}:${state.design.intensity}:${reducedMotion.matches}`;
+    if(!replay&&demo.dataset.previewKey===key)return;
+    demo.dataset.previewKey=key;demo.dataset.effect=effect;demo.dataset.intensity=state.design.intensity;
+    const particles=$('effect-preview-particles');particles.replaceChildren();
+    document.querySelectorAll('.reading-ambience i').forEach(node=>{node.innerHTML=effect==='butterflies'?`<svg viewBox="0 0 48 48" aria-hidden="true">${CardThemes.effectGlyph(effect)}</svg>`:'';});
+    if(effect==='none')return;
+    const glyph=CardThemes.effectGlyph(effect);
+    for(let i=0;i<6;i++){
+      const particle=document.createElement('span');particle.style.cssText=`--x:${8+i*16}%;--delay:${i*.1}s;--turn:${i%2?-30:20}deg`;
+      particle.innerHTML=`<svg viewBox="0 0 48 48" aria-hidden="true">${glyph}</svg>`;particles.append(particle);
+    }
   }
 
   const READING_NOTES={
@@ -444,7 +467,7 @@
     if (GiftScenes.has(state.design.experience) && state.design.giftIntro.trim()) $('envelope-subtitle').textContent=state.design.giftIntro;
     if(arrivalActive()){
       $('envelope-title').textContent=shared?'Một bó hoa dành riêng cho bạn':'Món quà người nhận sẽ thấy';
-      $('envelope-subtitle').textContent='Tấm thiệp đang nằm trong bó hoa. Chạm vào tấm thiệp để mở nhé.';
+      $('envelope-subtitle').textContent='Tặng một bó hoa nhân ngày 20/10. Nhận hoa rồi mở món quà và lời chúc phía sau nhé.';
     }
     if(hasArrival()&&!arrivalActive()&&state.design.experience){$('envelope-title').textContent=CardThemes.catalog[state.design.experience].name;}
     $('envelope-recipient').textContent = text.envelopeRecipient;
@@ -709,7 +732,7 @@
       musicId: state.musicId, design: { ...state.design }
     };
     let fragment;
-    try { fragment = CardLinks.encode(payload); }
+    try { fragment = CardLinks.encodeCompact(payload); }
     catch (_) { showToast('Chưa thể tạo liên kết. Hãy kiểm tra độ dài lời nhắn và thử lại.', true); return null; }
     const originalLength = `#card=${encodeURIComponent(JSON.stringify(payload))}`.length;
     const savedPercent = Math.max(0, Math.round((1 - fragment.length / originalLength) * 100));
@@ -854,6 +877,7 @@
   document.querySelectorAll('[data-arrival-choice]').forEach(button=>button.addEventListener('click',()=>{state.design.arrival=button.dataset.arrivalChoice;renderDesignControls();renderCard();}));
   document.querySelectorAll('[data-preview-arrival]').forEach(button=>button.addEventListener('click',()=>{if(!validateFields())return;state.design.arrival=button.dataset.previewArrival;renderDesignControls();shared=false;renderCard();showScreen('envelope');}));
   $('preview-arrival').addEventListener('click',()=>{if(!validateFields())return;shared=false;renderCard();showScreen('envelope');});
+  $('preview-effect').addEventListener('click',()=>renderEffectGuide(true));
   $('jump-to-preview').addEventListener('click', () => focusElement($('preview-card'), true));
   [['card-dedication', 'dedication'], ['custom-greeting', 'body']].forEach(([id, key]) => {
     $(id).addEventListener('input', event => {

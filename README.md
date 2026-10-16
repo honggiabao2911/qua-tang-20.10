@@ -1,6 +1,6 @@
 # Lời thương · Thiệp 20/10
 
-Website thiệp chúc mừng bằng HTML, CSS, JavaScript thuần. Người nhận được đón bằng bó hoa lớn từ 2.450 hạt sáng (1.250 trên điện thoại) hoặc hoa mọc nở, rồi chạm tấm thiệp nằm trong bó hoa. Tạo lời chúc theo quan hệ, chọn thiết kế từ 22 chủ đề, nghe thử nhạc và chia sẻ nguyên tấm thiệp. Không cần backend, tài khoản, thư viện từ CDN hoặc bước build. Font tiếng Việt nằm trong dự án.
+Website thiệp chúc mừng bằng HTML, CSS, JavaScript thuần. Người nhận được đón bằng bó hoa lớn từ 2.450 hạt sáng (1.250 trên điện thoại) hoặc hoa mọc nở, kèm lời tặng hoa nhân ngày 20/10, rồi nhấn **Nhận hoa và mở lời chúc** để tiếp tục. Màn đầu không hiển thị tấm thiệp. Tạo lời chúc theo quan hệ, chọn thiết kế từ 22 chủ đề, nghe thử nhạc và chia sẻ nguyên tấm thiệp. Không cần backend, tài khoản, thư viện từ CDN hoặc bước build. Font tiếng Việt nằm trong dự án.
 
 ## Chạy và triển khai
 
@@ -27,11 +27,11 @@ Lời tự viết tối đa 3.000 đơn vị UTF-16, lời nhắn riêng và l�
 
 ## Bó hoa lớn khi nhận thiệp
 
-Thiệp mới mặc định dùng **Bó hoa từ ngàn hạt sáng**. Có thể chọn **Bó hoa mọc lên và bung nở** hoặc **Dùng cảnh mở trong thư viện**. Hai kiểu bó hoa có cùng tấm thiệp chạm được ở giữa bó. Khi chạm, hoa tách ra, thiệp bay lên và **cảnh chủ đề đã chọn tiếp tục mở đầy đủ**: đảo hoa, cây lời nhắn, ngân hà hoặc một trong 22 chủ đề. Nhạc bắt đầu từ thao tác chạm ban đầu và tiếp tục xuyên suốt, không phát lại khi chuyển cảnh. Với 10 cảnh quà có trạng thái hoàn chỉnh, người nhận tự chọn đọc sau khi ngắm món quà.
+Thiệp mới mặc định dùng **Bó hoa từ ngàn hạt sáng**. Có thể chọn **Bó hoa mọc lên và bung nở** hoặc **Dùng cảnh mở trong thư viện**. Hai kiểu bó hoa chỉ hiện hoa và lời tặng 20/10, không đặt tấm thiệp ở giữa bó. Khi nhấn **Nhận hoa và mở lời chúc**, cả bó hoa rung nhẹ như một khối rồi **cảnh chủ đề đã chọn tiếp tục mở đầy đủ**: đảo hoa, cây lời nhắn, ngân hà hoặc một trong 22 chủ đề. Nhạc bắt đầu từ thao tác chạm ban đầu và tiếp tục xuyên suốt, không phát lại khi chuyển cảnh. Với 10 cảnh quà có trạng thái hoàn chỉnh, người nhận tự chọn đọc sau khi ngắm món quà.
 
 Khi đọc, cảnh chủ đề hiện lớn cạnh lời chúc trên desktop, phía trên thiệp trên điện thoại; cây/hoa/quỹ đạo vẫn ở lại, giữ chuyển động nhẹ và tương tác. Không giấu cảnh trong một dấu nhỏ trên giấy hay chỉ đặt tận cuối trang. Phần lựa chọn màn đón có hình minh họa, mô tả chuỗi mở, hình chủ đề cập nhật trực tiếp và nút **Xem trọn luồng này** cho cả ba lựa chọn. Chế độ giảm/tắt chuyển động vẫn hiện đầy đủ món quà tĩnh.
 
-Phần đón bó hoa dùng canvas điểm sáng định vị theo cánh/nhụy/lá/cành và hình SVG 23 đóa hoa, giấy gói, nơ. Giới hạn DPR 1,5 và giảm mật độ trên thiết bị yếu. Dừng vòng vẽ khi ẩn, chuyển màn hoặc bật giảm chuyển động; bản tĩnh vẫn có đầy đủ bó hoa. Liên kết lưu `design.arrival`; liên kết cũ chưa có trường này giữ cảnh đã chọn.
+Phần đón bó hoa dùng canvas điểm sáng định vị theo cánh/nhụy/lá/cành và hình SVG 23 đóa hoa, giấy gói, nơ. Cành bắt đầu tại tâm mỗi hoa; cành, hoa, giấy gói và điểm sáng cùng chuyển động, không tách hai nửa. Giới hạn DPR 1,5 và giảm mật độ trên thiết bị yếu. Nhịp vẽ hạt sáng tối đa 30 lần/giây lúc xuất hiện, 20 khi đã ổn định (24/12 trên máy yếu); SVG rung nhẹ vẫn dùng CSS. Quầng sáng được vẽ sẵn theo màu và tái sử dụng, không tạo radial gradient trong mỗi khung hình. Giảm số lớp cánh/nhụy và bỏ các filter trên từng bông hoa. Dừng vòng vẽ khi ẩn, chuyển màn hoặc bật giảm chuyển động; bản tĩnh vẫn có đầy đủ bó hoa. Liên kết lưu `design.arrival`; liên kết cũ chưa có trường này giữ cảnh đã chọn.
 
 Nhạc riêng khi làm thiệp lấy từ **`nhac.mp3` ở thư mục gốc**, âm lượng độc lập với nhạc người nhận. Hiện chưa có tệp này: thêm bản thu của bạn để nghe. Thiếu tệp không chặn tạo thiệp. Không tự phát khi tải trang và chỉ có một audio hoạt động. Các dòng gợi ý chọn nhạc đã được bỏ.
 
@@ -96,7 +96,7 @@ Chỉ có một phần tử audio. Trình phát kiểm tra HEAD cho nhóm đư�
 
 ## Liên kết giữ đúng tấm thiệp
 
-Định dạng mới `#c=` nén dữ liệu v4, lưu nguyên văn lời chúc đã render, cặp xưng hô, người nhận/gửi, lời nhắn, mọi lựa chọn thiết kế, ID cảnh quà, câu mở quà, các lời nhắn trên hoa, nhạc và âm lượng. Các trường mới được thêm ở cuối dữ liệu v4 để thiệp v4 trước đó vẫn đọc được. Thay đổi danh sách mẫu sau này không làm lời chúc đã gửi đổi theo. Không tạo mã ngắn qua dịch vụ bên ngoài; độ dài vẫn phụ thuộc nội dung.
+Định dạng `#c=` chọn bản ngắn hơn giữa dữ liệu v4 và v5. V5 dùng bảng ký tự/cụm từ tiếng Việt cố định trước khi nén LZ; Latin-1 được escape để giữ chính xác văn bản đa ngôn ngữ, có giới hạn trong lúc mở rộng. API giải mã trả về cùng snapshot v4; v1/v2/v3/v4 cũ vẫn đọc nguyên vẹn. Liên kết lưu nguyên văn lời chúc đã render, cặp xưng hô, người nhận/gửi, lời nhắn, mọi lựa chọn thiết kế, ID cảnh quà, câu mở quà, các lời nhắn trên hoa, nhạc và âm lượng. Các trường mới được thêm ở cuối dữ liệu v4 để thiệp v4 trước đó vẫn đọc được. Thay đổi danh sách mẫu sau này không làm lời chúc đã gửi đổi theo. Không tạo mã ngắn qua dịch vụ bên ngoài; độ dài vẫn phụ thuộc nội dung.
 
 Đọc được liên kết `#card=` v1/v2 và `#c=` packed v3 của các bản trước. Dữ liệu lời cũ được giữ riêng; nhạc cũ `women:0` được chuyển sang vị trí tương ứng `women:1`. Tên đã có trong dữ liệu thiệp cũ vẫn được tôn trọng. Người dùng mới luôn bắt đầu với ô tên trống.
 
@@ -111,7 +111,7 @@ Giới hạn kích thước cả trước và trong giải nén; kiểm tra phi�
 | `assets/js/greetings.js` | 54 lời chúc, sắc thái, cặp xưng hô, các trường template rõ ràng |
 | `assets/js/legacy-greetings.js` | Nguyên văn 24 lời chúc của liên kết cũ |
 | `assets/js/themes.js` | Danh mục chủ đề, 12 không gian cũ và kết nối cảnh quà mới |
-| `assets/js/bouquet-arrival.js`, `assets/css/bouquet-arrival.css` | Bó hoa lớn, hạt sáng, nở hoa, tấm thiệp trong bó và vòng đời canvas |
+| `assets/js/bouquet-arrival.js`, `assets/css/bouquet-arrival.css` | Bó hoa lớn, lời tặng 20/10, cành và hoa chuyển động liền nhau, vòng đời canvas |
 | `assets/css/reception.css` | Màn tạo thiệp, nhạc riêng và hiệu ứng mở hai cánh giấy |
 | `assets/js/gift-scenes.js` | Danh mục 10 cảnh quà, bộ dựng dùng chung, trạng thái mở/hoàn chỉnh/đọc và vòng đời xem trước |
 | `assets/js/gift-art-a.js`, `assets/js/gift-art-b.js`, `assets/js/gift-art-c.js` | SVG và tạo hình riêng của các cảnh quà mới |
@@ -119,7 +119,7 @@ Giới hạn kích thước cả trước và trong giải nén; kiểm tra phi�
 | `assets/css/gift-scenes.css`, `assets/css/gift-art-a.css`, `assets/css/gift-art-b.css`, `assets/css/gift-art-c.css` | Thư viện quà, bản xem trước và chuyển động từng cảnh |
 | `assets/js/card-music.js` | Tìm tệp và trình phát duy nhất |
 | `assets/music/catalog.json` | 36 mục ID, đường dẫn, tên hiển thị và nghệ sĩ |
-| `assets/js/card-links.js` | Bộ nén LZ và schema v4, đọc dữ liệu cũ; kèm giấy phép MIT |
+| `assets/js/card-links.js` | Bộ nén LZ, bảng tiếng Việt v5, snapshot v4 và dữ liệu cũ; kèm giấy phép MIT |
 | `assets/fonts/` | Font tự lưu và giấy phép OFL |
 
 ## Kiểm thử
@@ -134,4 +134,6 @@ Các bộ kiểm thử hiện có gồm luồng tạo/gửi, Unicode và nội d
 
 Kiểm tra bằng Chromium với viewport mô phỏng không thay thế việc xác minh trên iPhone/Safari hay Android thật. Trường hợp `file://` có thể bị chính sách Chromium của môi trường chặn trước khi chạy ứng dụng. GitHub Pages chỉ cập nhật sau khi PR được merge và tác vụ triển khai thành công.
 
-Bộ kiểm thử có thêm `tests/test_journey.py`: kiểm tra hai kiểu bó hoa với đủ 22 chủ đề, cảnh lớn còn hiện khi đọc, chuyển động thật, nhạc liên tục, lựa chọn có hình, lời nhắn trên hoa ở điện thoại, chia sẻ, xem lại, hủy và thay đổi chế độ giảm chuyển động giữa lúc mở. Phiên bản này chạy **110 ca trình duyệt đạt, 1 ca `file://` bỏ qua do chính sách môi trường**, và **197 kiểm tra liên kết đạt**. Ca hồi quy về lớp nền không chặn thao tác đã được chạy lại sau khi giữ `pointer-events: none`; tương tác sao/hoa vẫn hoạt động. JavaScript qua kiểm tra cú pháp, HTML không trùng ID và đủ các đường dẫn script/CSS.
+Bộ kiểm thử có thêm `tests/test_journey.py`: kiểm tra hai kiểu bó hoa với đủ 22 chủ đề, cảnh lớn còn hiện khi đọc, chuyển động thật, nhạc liên tục, lựa chọn có hình, lời nhắn trên hoa ở điện thoại, chia sẻ, xem lại, hủy và thay đổi chế độ giảm chuyển động giữa lúc mở. Bản lời tặng hoa có thêm sáu ca trong `tests/test_refinements.py`: không hiện thiệp trong bó hoa, 23 cành khớp tâm hoa trong lúc mọc/rung, cache quầng sáng và nhịp vẽ, xem thử khớp hiệu ứng thật, nút tạo thiệp nổi bật và liên kết nén tiếng Việt. **116 ca trình duyệt đạt, 1 ca `file://` bỏ qua do chính sách môi trường; 308 kiểm tra liên kết đạt.** Hai ca về kích thước bó hoa desktop và nút tạo thiệp điện thoại đã chạy lại đạt sau chỉnh bố cục. JavaScript qua kiểm tra cú pháp, HTML không trùng ID và đủ các đường dẫn script/CSS.
+
+Phần chọn hoa/sao/bướm bay khi đọc có bản xem thử dùng cùng nét vẽ với hiệu ứng thật. Cảnh quà cũng có lớp đón hiệu ứng này. Khối **Tạo thiệp của bạn** nổi bật sau lời chúc; tạo mới xóa dữ liệu thiệp nhận và đưa về sáu nhóm người nhận.

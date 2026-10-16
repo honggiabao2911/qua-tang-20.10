@@ -184,16 +184,19 @@
     }
     burstTimer = setTimeout(stopBurst, 3100);
   }
+  function effectGlyph(effect){
+    return effect==='butterflies' ? '<path d="M24 24C-8-7-4 35 18 26 0 49 23 49 24 24M24 24C56-7 52 35 30 26 48 49 25 49 24 24"/>' : effect==='petals' ? '<path d="M5 42C-2 9 24-6 43 5 49 27 31 48 5 42Z"/>' : '<path d="m24 2 5 16 17 6-17 5-5 17-6-17L2 24l16-6Z"/>';
+  }
   function celebrate(effect) {
     if (!refs.backdrop || reduced.matches || design.intensity === 'off' || effect === 'none') return;
     stopBurst();
     const layer=refs.backdrop.querySelector('.tx-interaction-layer');
     if (!layer) return;
-    const glyph=effect==='butterflies' ? '<path d="M24 24C-8-7-4 35 18 26 0 49 23 49 24 24M24 24C56-7 52 35 30 26 48 49 25 49 24 24"/>' : effect==='petals' ? '<path d="M5 42C-2 9 24-6 43 5 49 27 31 48 5 42Z"/>' : '<path d="m24 2 5 16 17 6-17 5-5 17-6-17L2 24l16-6Z"/>';
+    const glyph=effectGlyph(effect);
     const count=design.intensity==='gentle'||lowPower?4:8;
     for(let i=0;i<count;i++){
       const particle=document.createElement('span');particle.className='tx-touch-particle tx-welcome-particle';
-      particle.style.cssText=`left:${i%2?96:4}%;top:${190+i*34}px;--dx:${i%2?-15:15}px;--dy:-70px;--rotation:${i*47}deg;--delay:${i*.12}s`;
+      particle.style.cssText=`left:${i%2?96:4}%;top:${22+i%4*16}%;--dx:${i%2?-15:15}px;--dy:-70px;--rotation:${i*47}deg;--delay:${i*.12}s`;
       particle.innerHTML=`<svg viewBox="0 0 48 48" aria-hidden="true">${glyph}</svg>`;layer.append(particle);
     }
     burstTimer=setTimeout(stopBurst,3900);
@@ -228,5 +231,5 @@
   }
   document.addEventListener('visibilitychange', () => { if (document.hidden) stopBurst(); motionState(); });
   reduced.addEventListener('change', motionState);
-  window.CardThemes = Object.freeze({ catalog, defaults, openingNames, mount, apply, open, reset, setScreen, celebrate, destroy, renderArt:art });
+  window.CardThemes = Object.freeze({ catalog, defaults, openingNames, mount, apply, open, reset, setScreen, celebrate, destroy, renderArt:art, effectGlyph });
 })();
