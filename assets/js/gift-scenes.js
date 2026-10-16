@@ -88,8 +88,8 @@
     refs.stage.classList.add('gift-host');refs.backdrop.classList.add('gift-reading-backdrop');
     refs.stage.style.setProperty('--tx-bg',catalog[id].background);refs.stage.style.setProperty('--tx-color',catalog[id].color);
     refs.backdrop.style.setProperty('--tx-bg',catalog[id].background);refs.backdrop.style.setProperty('--tx-color',catalog[id].color);
-    refs.backdrop.parentElement.dataset.experience=id;refs.backdrop.parentElement.classList.add('has-theme-experience');
-    refs.backdrop.parentElement.dataset.giftDark=String(['umbrella','ocean','lantern','lightbridge'].includes(id));
+    refs.backdrop.closest('#letter-screen').dataset.experience=id;refs.backdrop.closest('#letter-screen').classList.add('has-theme-experience');
+    refs.backdrop.closest('#letter-screen').dataset.giftDark=String(['umbrella','ocean','lantern','lightbridge'].includes(id));
     document.querySelectorAll('.paper .paper-heading').forEach(heading=>{
       let mark=heading.querySelector('.tx-paper-mark');if(!mark){mark=document.createElement('span');mark.className='tx-paper-mark';mark.setAttribute('aria-hidden','true');heading.prepend(mark);}
       if(mark.dataset.experience!==id){mark.dataset.experience=id;mark.classList.add('gift-scene','gift-motion-off');mark.dataset.phase='ready';mark.innerHTML=art(id,'reading');}

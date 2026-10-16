@@ -55,7 +55,13 @@ class ArrivalBrowserTests(unittest.TestCase):
     def read_arrival(self, page=None):
         page = page or self.page
         page.locator("#bouquet-letter-open").click()
-        expect(page.locator("#letter-screen")).to_be_visible(timeout=7000)
+        # Bouquet is the introduction, not a replacement for the chosen scene.
+        page.wait_for_function("""() => !document.querySelector('#letter-screen').hidden ||
+            Boolean(document.querySelector('#theme-stage:not([hidden]) .gift-scene[data-phase="ready"]'))""",
+            timeout=12000)
+        if page.locator("#envelope-screen").is_visible():
+            page.locator("#envelope-open-button").click()
+        expect(page.locator("#letter-screen")).to_be_visible(timeout=12000)
 
     def metrics(self):
         return self.page.evaluate("BouquetArrival.metrics()")
