@@ -1,0 +1,103 @@
+/* Each timeline runs only while its root is in the opening phase. */
+.gac-art { display:block; width:100%; height:100%; overflow:visible; }
+.gac-art g,.gac-art path,.gac-art ellipse { transform-box:fill-box; }
+.gac-art .gac-silk-reveal { transform-origin:50% 100%; transform:translateY(72px) scale(.35); opacity:0; }
+.gac-art .gac-silk-wing-left { transform-origin:100% 100%; }
+.gac-art .gac-silk-wing-right { transform-origin:0 100%; }
+.gac-art .gac-silk-tag { opacity:0; transform-origin:15% 0; transform:rotate(-15deg); }
+.gac-art .gac-flying-silk { opacity:0; stroke-dasharray:1550; stroke-dashoffset:1550; }
+.gac-art .gac-flower { transform-origin:50% 70%; }
+.gac-art .gac-sparkle { transform-origin:center; }
+.gac-art .gac-bow-loop { transform-origin:50% 80%; }
+.gac-art .gac-bow-tail { transform-origin:50% 0; }
+.gift-scene[data-phase="opening"] .gac-silk-reveal { animation:gac-bouquet-reveal 2s .85s cubic-bezier(.18,.66,.24,1) both; }
+.gift-scene[data-phase="opening"] .gac-silk-reveal .gac-flower { animation:gac-petal-open 1.1s calc(1.05s + var(--gac-delay,0ms)) both; }
+.gift-scene[data-phase="opening"] .gac-silk-wing-left { animation:gac-paper-left 1.8s .85s ease both; }
+.gift-scene[data-phase="opening"] .gac-silk-wing-right { animation:gac-paper-right 1.8s .85s ease both; }
+.gift-scene[data-phase="opening"] .gac-bow-loop-left { animation:gac-bow-left 1.45s ease-in-out both; }
+.gift-scene[data-phase="opening"] .gac-bow-loop-right { animation:gac-bow-right 1.45s ease-in-out both; }
+.gift-scene[data-phase="opening"] .gac-bow-tail-left { animation:gac-tail-left 1.4s ease-in-out both; }
+.gift-scene[data-phase="opening"] .gac-bow-tail-right { animation:gac-tail-right 1.4s ease-in-out both; }
+.gift-scene[data-phase="opening"] .gac-bow-knot { animation:gac-knot-open .8s .15s both; }
+.gift-scene[data-phase="opening"] .gac-flying-silk { animation:gac-silk-flight 3.5s .3s ease-in-out both; }
+.gift-scene[data-phase="opening"] .gac-silk-tag { animation:gac-tag-reveal 1.3s 2.65s ease both; }
+.gift-scene[data-phase="opening"] .gac-sparkle { animation:gac-sparkle-show 3.2s .75s ease both; }
+.gift-scene[data-phase="ready"] .gac-silk-reveal,.gift-scene[data-phase="reading"] .gac-silk-reveal,.gac-mode-thumb .gac-silk-reveal { transform:translateY(0) scale(1); opacity:1; }
+.gift-scene[data-phase="ready"] .gac-silk-wing-left,.gift-scene[data-phase="reading"] .gac-silk-wing-left,.gac-mode-thumb .gac-silk-wing-left { transform:rotate(-17deg); }
+.gift-scene[data-phase="ready"] .gac-silk-wing-right,.gift-scene[data-phase="reading"] .gac-silk-wing-right,.gac-mode-thumb .gac-silk-wing-right { transform:rotate(17deg); }
+.gift-scene[data-phase="ready"] .gac-silk-bow,.gift-scene[data-phase="reading"] .gac-silk-bow,.gac-mode-thumb .gac-silk-bow { opacity:0; }
+.gift-scene[data-phase="ready"] .gac-silk-tag,.gift-scene[data-phase="reading"] .gac-silk-tag,.gac-mode-thumb .gac-silk-tag { opacity:1; transform:rotate(0); }
+.gift-scene[data-phase="ready"] .gac-flying-silk,.gift-scene[data-phase="reading"] .gac-flying-silk,.gac-mode-thumb .gac-flying-silk { opacity:.82; stroke-dashoffset:0; }
+.gac-art .gac-bridge-tile { opacity:.13; }
+.gac-art .gac-path-flower,.gac-art .gac-arch-flower { opacity:.12; transform:scale(.35); transform-origin:50% 100%; }
+.gac-art .gac-bridge-present { opacity:0; transform:translateY(12px); }
+.gac-art .gac-bridge-camera { transform-origin:50% 48%; }
+.gac-art .gac-gate-left { transform-origin:0 50%; }
+.gac-art .gac-gate-right { transform-origin:100% 50%; }
+.gift-scene[data-phase="opening"] .gac-bridge-camera { animation:gac-bridge-approach 3.1s ease-in-out both; }
+.gift-scene[data-phase="opening"] .gac-bridge-tile { animation:gac-tile-light .85s var(--gac-delay,0ms) ease both; }
+.gift-scene[data-phase="opening"] .gac-path-flower { animation:gac-path-bloom 1.1s var(--gac-delay,0ms) ease both; }
+.gift-scene[data-phase="opening"] .gac-arch-flower { animation:gac-path-bloom 1s var(--gac-delay,0ms) ease both; }
+.gift-scene[data-phase="opening"] .gac-gate-left { animation:gac-gate-open-left 1.3s 2.2s ease both; }
+.gift-scene[data-phase="opening"] .gac-gate-right { animation:gac-gate-open-right 1.3s 2.2s ease both; }
+.gift-scene[data-phase="opening"] .gac-gate-detail { animation:gac-fade-gate 1s 2.2s ease both; }
+.gift-scene[data-phase="opening"] .gac-bridge-present { animation:gac-bridge-gift 1s 2.8s ease both; }
+.gift-scene[data-phase="ready"] .gac-bridge-camera,.gift-scene[data-phase="reading"] .gac-bridge-camera,.gac-mode-thumb .gac-bridge-camera { transform:scale(1.035); }
+.gift-scene[data-phase="ready"] .gac-bridge-tile,.gift-scene[data-phase="reading"] .gac-bridge-tile,.gac-mode-thumb .gac-bridge-tile { opacity:1; }
+.gift-scene[data-phase="ready"] .gac-path-flower,.gift-scene[data-phase="reading"] .gac-path-flower,.gac-mode-thumb .gac-path-flower,.gift-scene[data-phase="ready"] .gac-arch-flower,.gift-scene[data-phase="reading"] .gac-arch-flower,.gac-mode-thumb .gac-arch-flower { opacity:1; transform:scale(1); }
+.gift-scene[data-phase="ready"] .gac-gate-left,.gift-scene[data-phase="reading"] .gac-gate-left,.gac-mode-thumb .gac-gate-left { transform:scaleX(.16); }
+.gift-scene[data-phase="ready"] .gac-gate-right,.gift-scene[data-phase="reading"] .gac-gate-right,.gac-mode-thumb .gac-gate-right { transform:scaleX(.16); }
+.gift-scene[data-phase="ready"] .gac-gate-detail,.gift-scene[data-phase="reading"] .gac-gate-detail,.gac-mode-thumb .gac-gate-detail { opacity:0; }
+.gift-scene[data-phase="ready"] .gac-bridge-present,.gift-scene[data-phase="reading"] .gac-bridge-present,.gac-mode-thumb .gac-bridge-present { opacity:1; transform:translateY(0); }
+.gac-art .gac-box-lid { transform-origin:50% 100%; transform:translateY(8px) scaleY(.2); opacity:0; }
+.gac-art .gac-music-rise { opacity:0; transform:translateY(80px) scale(.32); transform-origin:50% 100%; }
+.gac-art .gac-music-wreath { transform-origin:50% 50%; transform:scale(.4); opacity:0; }
+.gac-art .gac-wreath-flower { transform-origin:50% 100%; }
+.gac-art .gac-music-scroll { transform-origin:50% 50%; transform:scaleX(.05); opacity:0; }
+.gac-art .gac-central-flower { transform-origin:50% 80%; }
+.gift-scene[data-phase="opening"] .gac-box-cap {animation:gac-cap-release .65s ease both;}
+.gift-scene[data-phase="ready"] .gac-box-cap,.gift-scene[data-phase="reading"] .gac-box-cap,.gac-mode-thumb .gac-box-cap {opacity:0;}
+.gift-scene[data-phase="opening"] .gac-box-lid { animation:gac-lid-lift 1.5s cubic-bezier(.2,.55,.25,1) both; }
+.gift-scene[data-phase="opening"] .gac-music-rise { animation:gac-music-lift 1.7s .75s ease both; }
+.gift-scene[data-phase="opening"] .gac-central-flower { animation:gac-petal-open 1.7s 1s ease both; }
+.gift-scene[data-phase="opening"] .gac-music-wreath { animation:gac-wreath-open 1.9s 1.15s ease both; }
+.gift-scene[data-phase="opening"] .gac-wreath-flower { animation:gac-petal-open 1s var(--gac-delay,0ms) ease both; }
+.gift-scene[data-phase="opening"] .gac-music-scroll { animation:gac-scroll-unroll 1.2s 2.65s ease both; }
+.gift-scene[data-phase="ready"] .gac-box-lid,.gift-scene[data-phase="reading"] .gac-box-lid,.gac-mode-thumb .gac-box-lid { transform:translateY(0) scaleY(1); opacity:1; }
+.gift-scene[data-phase="ready"] .gac-music-rise,.gift-scene[data-phase="reading"] .gac-music-rise,.gac-mode-thumb .gac-music-rise { opacity:1; transform:translateY(0) scale(1); }
+.gift-scene[data-phase="ready"] .gac-music-wreath,.gift-scene[data-phase="reading"] .gac-music-wreath,.gac-mode-thumb .gac-music-wreath { opacity:1; transform:scale(1); }
+.gift-scene[data-phase="ready"] .gac-music-scroll,.gift-scene[data-phase="reading"] .gac-music-scroll,.gac-mode-thumb .gac-music-scroll { opacity:1; transform:scaleX(1); }
+@keyframes gac-bouquet-reveal { 0% { transform:translateY(72px) scale(.35); opacity:0; } 28% {opacity:1;} 100% { transform:translateY(0) scale(1); opacity:1; } }
+@keyframes gac-petal-open { from { transform:scale(.3) rotate(-12deg); opacity:.25; } to { transform:scale(1) rotate(0); opacity:1; } }
+@keyframes gac-paper-left { from {transform:rotate(0);} to {transform:rotate(-17deg);} }
+@keyframes gac-paper-right { from {transform:rotate(0);} to {transform:rotate(17deg);} }
+@keyframes gac-bow-left { 0%,15% {transform:scale(1);opacity:1;} 55% {transform:translateX(-30px) rotate(-15deg) scale(.7);} 100% {transform:translate(-100px,-30px) rotate(-40deg) scale(.08);opacity:0;} }
+@keyframes gac-bow-right { 0%,15% {transform:scale(1);opacity:1;} 55% {transform:translateX(30px) rotate(15deg) scale(.7);} 100% {transform:translate(100px,-30px) rotate(40deg) scale(.08);opacity:0;} }
+@keyframes gac-tail-left { 0% {transform:rotate(0);opacity:1;} 55% {transform:rotate(65deg) translate(-15px,0);opacity:1;} 100% {transform:rotate(105deg) translate(-80px,-30px);opacity:0;} }
+@keyframes gac-tail-right { 0% {transform:rotate(0);opacity:1;} 55% {transform:rotate(-65deg) translate(15px,0);opacity:1;} 100% {transform:rotate(-105deg) translate(80px,-30px);opacity:0;} }
+@keyframes gac-knot-open { to {opacity:0;transform:scale(.35);} }
+@keyframes gac-silk-flight { 0% {opacity:0;stroke-dashoffset:1550;} 12% {opacity:1;} 70% {stroke-dashoffset:0;opacity:1;} 100% {opacity:.82;stroke-dashoffset:0;} }
+@keyframes gac-tag-reveal { 0% {opacity:0;transform:rotate(-15deg);} 55% {opacity:1;transform:rotate(6deg);} 100% {opacity:1;transform:rotate(0);} }
+@keyframes gac-sparkle-show { 0%,100% {opacity:.6;transform:scale(1);} 50% {opacity:1;transform:scale(1.4);} }
+@keyframes gac-bridge-approach { from {transform:scale(1);} to {transform:scale(1.035);} }
+@keyframes gac-tile-light { from {opacity:.13;} 60% {opacity:1;filter:brightness(1.55);} to {opacity:1;filter:brightness(1);} }
+@keyframes gac-path-bloom { from {opacity:.12;transform:scale(.35);} to {opacity:1;transform:scale(1);} }
+@keyframes gac-gate-open-left { to {transform:scaleX(.16);} }
+@keyframes gac-gate-open-right { to {transform:scaleX(.16);} }
+@keyframes gac-fade-gate { to {opacity:0;} }
+@keyframes gac-bridge-gift { to {opacity:1;transform:translateY(0);} }
+@keyframes gac-cap-release {0%,20% {opacity:1;} 100% {opacity:0;}}
+@keyframes gac-lid-lift { 0% {transform:translateY(8px) scaleY(.2);opacity:0;} 20% {opacity:1;} 25% {transform:translateY(6px) scaleY(.38);} 100% {transform:translateY(0) scaleY(1);opacity:1;} }
+@keyframes gac-music-lift { from {opacity:0;transform:translateY(80px) scale(.32);} 25% {opacity:1;} to {opacity:1;transform:translateY(0) scale(1);} }
+@keyframes gac-wreath-open { from {transform:scale(.4) rotate(-20deg);opacity:0;} to {transform:scale(1) rotate(0);opacity:1;} }
+@keyframes gac-scroll-unroll { from {transform:scaleX(.05);opacity:0;} 20% {opacity:1;} to {transform:scaleX(1);opacity:1;} }
+.gift-paused .gac-art *,.gift-held .gac-art * { animation-play-state:paused!important; }
+.gift-motion-off .gac-art * { animation:none!important; transition:none!important; }
+.gift-motion-off .gac-silk-reveal,.gift-motion-off .gac-silk-tag,.gift-motion-off .gac-bridge-present,.gift-motion-off .gac-music-rise,.gift-motion-off .gac-music-wreath,.gift-motion-off .gac-music-scroll { opacity:1!important; transform:none!important; }
+.gift-motion-off .gac-silk-bow {opacity:0!important;}
+.gift-motion-off .gac-box-lid {transform:none!important;opacity:1!important;}
+.gift-motion-off .gac-box-cap {opacity:0!important;}
+.gift-motion-off .gac-path-flower,.gift-motion-off .gac-arch-flower,.gift-motion-off .gac-bridge-tile {opacity:1!important;transform:none!important;}
+.gift-motion-off .gac-gate-left,.gift-motion-off .gac-gate-right {transform:scaleX(.16)!important;}
+.gift-motion-off .gac-gate-detail {opacity:0!important;}
+@media(prefers-reduced-motion:reduce) { .gac-art * {animation-duration:.001ms!important;animation-delay:0ms!important;transition:none!important;} }

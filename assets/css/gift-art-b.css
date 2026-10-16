@@ -1,0 +1,52 @@
+/* Artwork-specific animation. Scene lifecycle belongs to the gift engine. */
+.gab-art{display:block;width:100%;height:100%;overflow:visible}
+.gab-art g,.gab-art path{transform-box:view-box}
+.gab-balloon-trip,.gab-balloon-sway,.gab-basket-extra,.gab-balloon-letter,.gab-near-lantern,.gab-lantern-wreath,.gab-lantern-letter,.gab-tree-grown,.gab-tree-canopy,.gab-tree-flower{transform-origin:450px 330px}
+.gab-basket-extra{transform-origin:450px 421px}.gab-balloon-letter{transform-origin:453px 461px}.gab-near-lantern{transform-origin:450px 432px}.gab-lantern-wreath,.gab-lantern-letter{transform-origin:450px 301px}.gab-tree-grown{transform-origin:450px 525px}.gab-tree-flower{transform-box:fill-box;transform-origin:center}.gab-tree-seed,.gab-tree-sprout{opacity:0}.gab-light-trail path{stroke-dasharray:700;stroke-dashoffset:0}
+.gift-scene[data-phase="initial"] .gab-balloon-trip{transform:translate(-75px,-15px) scale(.91)}
+.gift-scene[data-phase="initial"] .gab-basket-extra{opacity:0;transform:scale(.15)}
+.gift-scene[data-phase="initial"] .gab-balloon-letter{opacity:0;transform:translate(0,-80px) scale(.5)}
+.gift-scene[data-phase="opening"] .gab-balloon-trip{animation:gab-arrive 4.2s cubic-bezier(.22,.61,.36,1) both}
+.gift-scene[data-phase="opening"] .gab-basket-extra{animation:gab-bouquet-unfold 4.2s ease both}
+.gift-scene[data-phase="opening"] .gab-balloon-letter{animation:gab-letter-drop 4.2s cubic-bezier(.22,.61,.36,1) both}
+.gift-scene[data-phase="initial"] .gab-near-lantern{transform:translate(0,0)}
+.gift-scene[data-phase="ready"] .gab-near-lantern,.gift-scene[data-phase="reading"] .gab-near-lantern,.gab-thumb .gab-near-lantern,.gab-reading .gab-near-lantern{transform:translate(126px,-268px) scale(.72)}
+.gift-scene[data-phase="initial"] .gab-lantern-wreath,.gift-scene[data-phase="initial"] .gab-lantern-letter,.gift-scene[data-phase="initial"] .gab-far-lantern,.gift-scene[data-phase="initial"] .gab-light-trail{opacity:0}
+.gift-scene[data-phase="opening"] .gab-near-lantern{animation:gab-lantern-rise 4.2s ease-in-out both}
+.gift-scene[data-phase="opening"] .gab-lantern-wreath{animation:gab-wreath-reveal 4.2s ease both}
+.gift-scene[data-phase="opening"] .gab-lantern-letter{animation:gab-lantern-mail 4.2s ease both}
+.gift-scene[data-phase="opening"] .gab-light-trail{animation:gab-trail-show 4.2s ease both}
+.gift-scene[data-phase="opening"] .gab-light-trail path{animation:gab-trail-draw 4.2s ease both}
+.gift-scene[data-phase="opening"] .gab-far-lantern{animation:gab-far-rise 2s ease both;animation-delay:var(--lantern-delay,1s)}
+.gab-far-one{--lantern-delay:.5s}.gab-far-two{--lantern-delay:.85s}.gab-far-three{--lantern-delay:1.1s}.gab-far-four{--lantern-delay:1.35s}.gab-far-five{--lantern-delay:1.6s}
+.gift-scene[data-phase="initial"] .gab-tree-grown{opacity:0;transform:scale(.06)}
+.gift-scene[data-phase="initial"] .gab-tree-seed{opacity:1;transform:translateY(-180px)}
+.gift-scene[data-phase="initial"] .gab-tree-gold{opacity:0}
+.gift-scene[data-phase="opening"] .gab-tree-seed{animation:gab-seed-fall 4.2s ease both}
+.gift-scene[data-phase="opening"] .gab-tree-sprout{animation:gab-sprout 4.2s ease both;transform-origin:450px 510px}
+.gift-scene[data-phase="opening"] .gab-tree-grown{animation:gab-tree-grow 4.2s cubic-bezier(.2,.6,.3,1) both}
+.gift-scene[data-phase="opening"] .gab-tree-flower{animation:gab-flower-open 1.25s ease both;animation-delay:var(--bloom-delay,1.5s)}
+.gift-scene[data-phase="opening"] .gab-tree-gold{animation:gab-lantern-mail 4.2s ease both}
+.gift-scene[data-phase="reading"] .gab-balloon-sway,.gift-scene[data-phase="ready"] .gab-balloon-sway{animation:gab-anchor-sway 8s ease-in-out infinite}
+.gift-scene[data-phase="reading"] .gab-far-lantern{animation:gab-quiet-glow 7s ease-in-out infinite}
+.gift-scene[data-phase="reading"] .gab-tree-gold{animation:gab-quiet-glow 6s ease-in-out infinite}
+.gift-paused .gab-art *,.gift-paused.gift-scene .gab-art *,.gift-held .gab-art *,.gift-held.gift-scene .gab-art *{animation-play-state:paused!important}
+.gift-motion-off .gab-art *,.gift-motion-off.gift-scene .gab-art *{animation:none!important;transition:none!important}
+.gift-motion-off .gab-balloon-trip,.gift-motion-off .gab-basket-extra,.gift-motion-off .gab-balloon-letter,.gift-motion-off .gab-lantern-wreath,.gift-motion-off .gab-lantern-letter,.gift-motion-off .gab-far-lantern,.gift-motion-off .gab-light-trail,.gift-motion-off .gab-tree-grown,.gift-motion-off .gab-tree-flower,.gift-motion-off .gab-tree-gold{opacity:1!important;transform:none!important}
+.gift-motion-off .gab-near-lantern{transform:translate(126px,-268px) scale(.72)!important}.gift-motion-off .gab-tree-seed,.gift-motion-off .gab-tree-sprout{opacity:0!important}
+@keyframes gab-arrive{0%{transform:translate(-100px,-30px) scale(.84)}35%{transform:translate(12px,-24px) scale(.96)}70%,100%{transform:translate(0,0) scale(1)}}
+@keyframes gab-bouquet-unfold{0%,31%{opacity:0;transform:scale(.15)}40%{opacity:.6}78%,100%{opacity:1;transform:scale(1)}}
+@keyframes gab-letter-drop{0%,49%{opacity:0;transform:translate(0,-80px) scale(.5)}57%{opacity:1}82%{transform:translate(0,3px) scale(1) rotate(2deg)}100%{opacity:1;transform:translate(0,0) scale(1)}}
+@keyframes gab-lantern-rise{0%,10%{transform:translate(0,0) scale(1)}27%{transform:translate(5px,-38px) scale(.97)}100%{transform:translate(126px,-268px) scale(.72)}}
+@keyframes gab-wreath-reveal{0%,32%{opacity:0;transform:scale(.65) rotate(-9deg)}70%,100%{opacity:1;transform:scale(1) rotate(0)}}
+@keyframes gab-lantern-mail{0%,63%{opacity:0;transform:translateY(17px)}87%,100%{opacity:1;transform:translateY(0)}}
+@keyframes gab-trail-show{0%,15%{opacity:0}29%,100%{opacity:1}}
+@keyframes gab-trail-draw{0%,14%{stroke-dashoffset:700}73%,100%{stroke-dashoffset:0}}
+@keyframes gab-far-rise{from{opacity:0;transform:translateY(70px)}to{opacity:1;transform:translateY(0)}}
+@keyframes gab-seed-fall{0%{opacity:1;transform:translateY(-180px)}18%{opacity:1;transform:translateY(0)}32%,100%{opacity:0;transform:translateY(0)}}
+@keyframes gab-sprout{0%,15%{opacity:0;transform:scale(.1)}24%{opacity:1;transform:scale(1)}43%,100%{opacity:0;transform:scale(1)}}
+@keyframes gab-tree-grow{0%,21%{opacity:0;transform:scale(.06)}27%{opacity:1}72%,100%{opacity:1;transform:scale(1)}}
+@keyframes gab-flower-open{from{opacity:0;transform:scale(.05) rotate(-22deg)}to{opacity:1;transform:scale(1) rotate(0)}}
+@keyframes gab-anchor-sway{0%,100%{transform:rotate(-.45deg)}50%{transform:rotate(.45deg)}}
+@keyframes gab-quiet-glow{0%,100%{opacity:.74}50%{opacity:1}}
+@media(prefers-reduced-motion:reduce){.gab-art *{animation:none!important;transition:none!important}.gift-scene .gab-balloon-trip,.gift-scene .gab-basket-extra,.gift-scene .gab-balloon-letter,.gift-scene .gab-lantern-wreath,.gift-scene .gab-lantern-letter,.gift-scene .gab-far-lantern,.gift-scene .gab-light-trail,.gift-scene .gab-tree-grown,.gift-scene .gab-tree-flower,.gift-scene .gab-tree-gold{opacity:1!important;transform:none!important}.gift-scene .gab-near-lantern{transform:translate(126px,-268px) scale(.72)!important}.gift-scene .gab-tree-seed,.gift-scene .gab-tree-sprout{opacity:0!important}}

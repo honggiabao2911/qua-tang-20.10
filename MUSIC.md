@@ -6,7 +6,7 @@ Mỗi thiệp dùng một trong **6 nhóm nhạc**, mỗi nhóm có **6 vị tr�
 
 ## Danh sách file cần bổ sung
 
-Hiện cả **36 đường dẫn chuẩn dưới đây chưa có file**. Bốn vị trí có thể nghe được nhờ file cũ được giữ nguyên, nên còn **32 vị trí chưa có bản nhạc**. Không có file rỗng hoặc một bài bị sao chép để giả thành nhiều lựa chọn.
+Đã có **6 file chuẩn cho Mẹ**, từ `assets/music/0me.mp3` đến `5me.mp3`, do bạn tải lên `main`; cả sáu đã kiểm tra là MP3 hợp lệ. Còn **30 đường dẫn chuẩn chưa có file**. Ba vị trí trong các nhóm khác nghe được nhờ file cũ, nên còn **27 vị trí chưa có bản nhạc**: `1–5ba`, `0–5co`, `0–5chi`, `2–5nu`, `0–5yeu` (đều đuôi `.mp3`). Không suy đoán tên bản thu từ số thứ tự.
 
 | Thiệp | Sáu tên file trong `assets/music/` |
 |---|---|
@@ -17,7 +17,7 @@ Hiện cả **36 đường dẫn chuẩn dưới đây chưa có file**. Bốn v
 | Bạn nữ/nhóm phụ nữ | `0nu.mp3`, `1nu.mp3`, `2nu.mp3`, `3nu.mp3`, `4nu.mp3`, `5nu.mp3` |
 | Người thương | `0yeu.mp3`, `1yeu.mp3`, `2yeu.mp3`, `3yeu.mp3`, `4yeu.mp3`, `5yeu.mp3` |
 
-Các file cũ **không bị xóa, đổi tên hoặc suy đoán tên bài hát**. Chúng được dùng làm nguồn dự phòng theo nhóm mà phiên bản trước đã sử dụng:
+Các file cũ **không bị xóa, đổi tên hoặc suy đoán tên bài hát**. Những file `.MP3` bạn tải ở thư mục gốc cũng được giữ; website dùng các đường dẫn chuẩn chữ thường dưới `assets/music/`. Chúng được dùng làm nguồn dự phòng theo nhóm mà phiên bản trước đã sử dụng:
 
 | Đường dẫn chuẩn ưu tiên | File cũ dự phòng | Cơ sở phân nhóm |
 |---|---|---|
