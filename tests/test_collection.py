@@ -1,4 +1,4 @@
-"""Acceptance checks for the recipient-aware, twelve-theme card collection.
+"""Acceptance checks for the recipient-aware, twenty-two-theme card collection.
 
     BASE_URL=http://127.0.0.1:8001/ python3 tests/test_collection.py
 
@@ -27,7 +27,7 @@ GROUPS = {
 DEFAULT_PAIRS = {
     "mom": ("con", "mẹ"), "grandma": ("cháu", "bà"),
     "teacher": ("em", "cô"), "sister": ("em", "chị"),
-    "friend": ("mình", "bạn"), "women": ("mình", "mọi người"),
+    "friend": ("mình", "bạn"), "women": ("mình", "bạn"),
     "lover": ("anh", "em"),
 }
 
@@ -37,11 +37,7 @@ class CollectionBrowserTests(unittest.TestCase):
     tearDownClass = classmethod(regression.UpgradeBrowserTests.tearDownClass.__func__)
     new_page = regression.UpgradeBrowserTests.new_page
     route_audio = regression.UpgradeBrowserTests.route_audio
-    def editor(self, recipient="mom", url=BASE_URL):
-        self.page.goto(url)
-        expect(self.page.locator("#home-screen")).to_be_visible()
-        self.page.locator(f'button[data-recipient="{recipient}"]').first.click()
-        expect(self.page.locator("#editor-screen")).to_be_visible()
+    editor = regression.UpgradeBrowserTests.editor
     open_design = regression.UpgradeBrowserTests.open_design
     wait_playing = regression.UpgradeBrowserTests.wait_playing
     copy_link = regression.UpgradeBrowserTests.copy_link
@@ -70,7 +66,7 @@ class CollectionBrowserTests(unittest.TestCase):
             page.locator("#open-card-button").click()
         expect(page.locator("#envelope-screen")).to_be_visible()
         page.locator("#envelope-open-button").click()
-        expect(page.locator("#letter-screen")).to_be_visible(timeout=5000)
+        regression.finish_opening(page)
 
     def theme_buttons(self):
         return self.page.locator("#theme-gallery [data-theme-preset]")
@@ -151,14 +147,14 @@ class CollectionBrowserTests(unittest.TestCase):
         expect(self.page.locator("#preview-greeting")).not_to_have_text(custom)
         self.assertNotIn("chúc bạn", self.page.locator("#preview-greeting").inner_text().lower())
 
-    def test_04_all_twelve_themes_have_recognizable_previews(self):
+    def test_04_all_twenty_two_themes_have_recognizable_previews(self):
         self.editor()
         buttons = self.theme_buttons()
-        expect(buttons).to_have_count(12)
-        self.assertEqual(12, len(set(buttons.evaluate_all("els => els.map(el => el.dataset.themePreset)"))))
+        expect(buttons).to_have_count(22)
+        self.assertEqual(22, len(set(buttons.evaluate_all("els => els.map(el => el.dataset.themePreset)"))))
         previews = []
         appearances = []
-        for index in range(12):
+        for index in range(22):
             button = buttons.nth(index)
             self.assertTrue(button.locator("svg,canvas,img").count(), button.inner_text())
             previews.append(button.locator("svg,canvas,img").first.evaluate("el => el.outerHTML"))
@@ -168,8 +164,8 @@ class CollectionBrowserTests(unittest.TestCase):
                 background:getComputedStyle(el).backgroundImage,
                 radius:getComputedStyle(el).borderRadius
             })"""))
-        self.assertEqual(12, len(set(previews)), "Each tile needs its own artwork")
-        self.assertEqual(12, len({json.dumps(style, sort_keys=True) for style in appearances}))
+        self.assertEqual(22, len(set(previews)), "Each tile needs its own artwork")
+        self.assertEqual(22, len({json.dumps(style, sort_keys=True) for style in appearances}))
 
     def test_05_visual_themes_preserve_custom_text_relationship_and_selected_music(self):
         self.add_group_audio("mom")
@@ -180,7 +176,7 @@ class CollectionBrowserTests(unittest.TestCase):
         custom = "Con gửi mẹ một ngày thật dịu dàng. " + VIETNAMESE
         self.page.locator("#custom-greeting").fill(custom)
         self.page.locator("#personal-message").fill("Yêu mẹ.")
-        for index in range(12):
+        for index in range(22):
             self.theme_buttons().nth(index).click()
             expect(self.page.locator("#preview-greeting")).to_have_text(custom)
             expect(self.page.locator("#preview-message")).to_have_text("Yêu mẹ.")

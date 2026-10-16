@@ -31,6 +31,16 @@ VIEWPORTS = [(360, 800), (390, 844), (430, 932), (768, 1024),
 VIETNAMESE = "Điều ước thật đẹp, dịu dàng, hạnh phúc và yêu thương. Ắ ằ ể ỗ ợ ự đ 🌷"
 
 
+def finish_opening(page, timeout=7000):
+    """Read after a new gift reaches its keepsake scene; old themes auto-open."""
+    page.wait_for_function("""() => !document.querySelector('#letter-screen').hidden ||
+        Boolean(document.querySelector('#theme-stage .gift-scene[data-phase="ready"]'))""",
+        timeout=timeout)
+    if not page.locator("#letter-screen").is_visible():
+        page.locator("#envelope-open-button").click()
+    expect(page.locator("#letter-screen")).to_be_visible(timeout=timeout)
+
+
 class UpgradeBrowserTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
@@ -109,8 +119,11 @@ class UpgradeBrowserTests(unittest.TestCase):
     def editor(self, recipient="mom", url=BASE_URL):
         self.page.goto(url)
         expect(self.page.locator("#home-screen")).to_be_visible()
-        self.page.locator(f'button[data-recipient="{recipient}"]').first.click()
+        ui_recipient = "women" if recipient == "friend" else recipient
+        self.page.locator(f'button[data-recipient="{ui_recipient}"]').first.click()
         expect(self.page.locator("#editor-screen")).to_be_visible()
+        if recipient == "friend":
+            self.page.locator("#variant-field").select_option("friend")
 
     def settle_library(self):
         # All six slots must exist independently of actual file availability.
@@ -126,7 +139,7 @@ class UpgradeBrowserTests(unittest.TestCase):
         self.page.locator("#open-card-button").click()
         expect(self.page.locator("#envelope-screen")).to_be_visible()
         self.page.locator("#envelope-open-button").click()
-        expect(self.page.locator("#letter-screen")).to_be_visible(timeout=4000)
+        finish_opening(self.page)
 
     def wait_playing(self, expected_filename=None):
         self.page.wait_for_function("""() => {
@@ -470,7 +483,10 @@ class UpgradeBrowserTests(unittest.TestCase):
         expect(self.page.locator("#petal-burst")).to_be_empty()
         self.page.emulate_media(reduced_motion="no-preference")
         self.page.locator("#replay-card").click()
-        self.page.locator("#envelope-open-button").click()
+        # Replay resets the page's scroll position. A real keyboard activation
+        # avoids Playwright scrolling against the browser's new smooth scroll.
+        self.page.locator("#envelope-open-button").focus()
+        self.page.locator("#envelope-open-button").press("Enter")
         expect(self.page.locator("#skip-animation")).to_be_visible()
         self.page.locator("#skip-animation").click()
         expect(self.page.locator("#letter-screen")).to_be_visible(timeout=1500)

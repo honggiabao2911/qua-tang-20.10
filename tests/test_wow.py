@@ -99,7 +99,7 @@ class WowBrowserTests(unittest.TestCase):
             page.locator("#open-card-button").click()
         expect(page.locator("#envelope-screen")).to_be_visible()
         page.locator("#envelope-open-button").click()
-        expect(page.locator("#letter-screen")).to_be_visible(timeout=4000)
+        regression.finish_opening(page)
 
     def decode(self, fragment):
         return self.page.evaluate("hash => CardLinks.decode(hash)", fragment)

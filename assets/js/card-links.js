@@ -428,17 +428,21 @@ const CardLinks = (() => {
     ['petals', 'constellation', 'butterflies', 'none']
   ];
   const tones = ['all', 'short', 'warm', 'playful', 'moving', 'sweet', 'romantic'];
+  // Positional fields and choice indexes are append-only: shared v4 cards keep
+  // their original meaning when more gift experiences become available.
   const designFields = [...legacyDesignFields, 'scene', 'structure', 'ornament', 'intensity',
-    'experience', 'size', 'reveal', 'showDate', 'showSignature', 'secret'];
+    'experience', 'size', 'reveal', 'showDate', 'showSignature', 'secret', 'giftIntro', 'flowerNotes'];
   const designChoices = [
     ['rose', 'sage', 'champagne', 'midnight', 'teal', 'lilac'],
     ['serif', 'sans', 'italic', 'handwriting'],
     ...legacyDesignChoices.slice(2), null, null,
-    ['stardust', 'aurora', 'bloom', 'rose', 'sunrise', 'lotus', 'moonlight', 'butterflies', 'envelope', 'layers', 'crystal', 'orbits', 'bouquet', 'galaxy'],
+    ['stardust', 'aurora', 'bloom', 'rose', 'sunrise', 'lotus', 'moonlight', 'butterflies', 'envelope', 'layers', 'crystal', 'orbits', 'bouquet', 'galaxy',
+      'umbrella', 'storybook', 'island', 'ocean', 'balloon', 'lantern', 'wishtree', 'silk', 'lightbridge', 'musicbox'],
     ['letter', 'arch', 'postcard', 'folded'], ['botanical', 'orbit', 'pressed'],
     ['cinematic', 'medium', 'gentle', 'off'],
-    ['galaxy', 'aurora', 'garden', 'rose', 'sunflower', 'lotus', 'moonlake', 'butterfly', 'letter', 'pearl', 'crystal', 'lovegalaxy'],
-    ['small', 'medium', 'large'], ['instant', 'gentle', 'slow'], ['on', 'off'], ['on', 'off']
+    ['galaxy', 'aurora', 'garden', 'rose', 'sunflower', 'lotus', 'moonlake', 'butterfly', 'letter', 'pearl', 'crystal', 'lovegalaxy',
+      'umbrella', 'storybook', 'island', 'ocean', 'balloon', 'lantern', 'wishtree', 'silk', 'lightbridge', 'musicbox'],
+    ['small', 'medium', 'large'], ['instant', 'gentle', 'slow'], ['on', 'off'], ['on', 'off'], null, null, null
   ];
   const rootFields = new Set(['v', 'target', 'variant', 'recipientName', 'senderName', 'pronoun',
     'sampleIndex', 'message', 'musicId', 'design', 'recipientPronoun', 'tone', 'greeting', 'volume']);
@@ -481,7 +485,19 @@ const CardLinks = (() => {
     return value;
   }
   function designText(value, key) {
-    const limit = key === 'body' ? 3000 : key === 'secret' ? 1000 : key === 'dedication' ? 100 : 40;
+    if (key === 'flowerNotes') {
+      // JSON can escape each UTF-16 code unit with six characters. Bound the
+      // encoded string before parsing, then validate its small, flat structure.
+      const source = limitedText(value, 5 * (160 * 6 + 3) + 1);
+      const notes = JSON.parse(source);
+      if (!Array.isArray(notes) || notes.length > 5 ||
+          notes.some(note => typeof note !== 'string' || note.length > 160)) {
+        throw new Error('Invalid flower notes');
+      }
+      return source;
+    }
+    const limit = key === 'body' ? 3000 : key === 'secret' ? 1000 :
+      key === 'giftIntro' ? 160 : key === 'dedication' ? 100 : 40;
     return limitedText(value, limit);
   }
   function packDesign(design) {

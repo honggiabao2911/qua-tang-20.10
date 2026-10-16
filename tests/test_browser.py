@@ -67,13 +67,20 @@ class CardBrowserTests(unittest.TestCase):
     def editor(self, recipient="mom"):
         self.visit()
         self.page.locator("#start-button").click()
-        self.page.locator(f'button[data-recipient="{recipient}"]').first.click()
+        ui_recipient = "women" if recipient == "friend" else recipient
+        self.page.locator(f'button[data-recipient="{ui_recipient}"]').first.click()
         expect(self.page.locator("#editor-screen")).to_be_visible()
+        if recipient == "friend":
+            self.page.locator("#variant-field").select_option("friend")
 
     def open_letter(self):
         self.page.locator("#open-card-button").click()
         expect(self.page.locator("#envelope-screen")).to_be_visible()
         self.page.locator("#envelope-open-button").click()
+        self.page.wait_for_function("""() => !document.querySelector('#letter-screen').hidden ||
+            Boolean(document.querySelector('#theme-stage .gift-scene[data-phase="ready"]'))""")
+        if not self.page.locator("#letter-screen").is_visible():
+            self.page.locator("#envelope-open-button").click()
         expect(self.page.locator("#letter-screen")).to_be_visible(timeout=3000)
 
     def mock_clipboard(self, failure=False):
@@ -122,13 +129,13 @@ class CardBrowserTests(unittest.TestCase):
         self.assertTrue(self.page.locator("#background-music").evaluate("el => el.paused"))
         self.page.locator("#start-button").click()
         self.page.wait_for_function("document.querySelector('#recipients').getBoundingClientRect().top < innerHeight")
-        self.assertEqual(8, self.page.locator("button[data-recipient]").count())
+        self.assertEqual(6, self.page.locator("button[data-recipient]").count())
 
     def test_01_all_recipients_variants_and_six_templates(self):
-        for recipient in ("mom", "grandma", "teacher", "sister", "friend", "women"):
+        for recipient in ("mom", "grandma", "teacher", "sister", "women", "lover"):
             with self.subTest(recipient=recipient):
                 self.editor(recipient)
-                variants = {"sister": ["older", "younger"], "women": ["one", "group"]}.get(recipient, [None])
+                variants = {"sister": ["older", "younger"], "women": ["friend", "one", "group"]}.get(recipient, [None])
                 for variant in variants:
                     with self.subTest(variant=variant):
                         if variant:
@@ -179,7 +186,7 @@ class CardBrowserTests(unittest.TestCase):
         self.page.locator("#recipient-name").fill("Em gái yêu")
         self.page.locator("#back-to-recipients").click()
         expect(self.page.locator("#home-screen")).to_be_visible()
-        self.page.locator('button[data-recipient="sister"][data-variant="younger"]').click()
+        self.page.locator('button[data-recipient="sister"]').click()
         expect(self.page.locator("#personal-message")).to_have_value(message)
         expect(self.page.locator("#recipient-name")).to_have_value("Em gái yêu")
         expect(self.page.locator("#variant-field")).to_have_value("younger")
@@ -357,7 +364,8 @@ class CardBrowserTests(unittest.TestCase):
         expect(self.page.locator("#letter-message")).to_have_text("Con luôn thương bà.")
         self.page.locator("#create-another").click()
         expect(self.page.locator("#home-screen")).to_be_visible()
-        self.page.locator('button[data-recipient="friend"]').click()
+        self.page.locator('button[data-recipient="women"]').click()
+        self.page.locator("#variant-field").select_option("friend")
         expect(self.page.locator("#personal-message")).to_have_value("")
 
     def test_11_skip_animation_and_reduced_motion(self):
@@ -466,7 +474,8 @@ class CardBrowserTests(unittest.TestCase):
                 self.page.set_viewport_size({"width": width, "height": height})
                 self.visit()
                 self.assert_layout(f"{width}x{height} home")
-                self.page.locator('button[data-recipient="friend"]').click()
+                self.page.locator('button[data-recipient="women"]').click()
+                self.page.locator("#variant-field").select_option("friend")
                 self.page.locator("#personal-message").fill(message)
                 self.assert_layout(f"{width}x{height} editor")
                 self.page.locator("#open-card-button").click()

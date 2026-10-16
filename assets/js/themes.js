@@ -2,6 +2,7 @@
 (() => {
   'use strict';
   const catalog = Object.freeze({
+    ...GiftScenes.catalog,
     galaxy: { name: 'Vũ trụ ngân hà', description: 'Tinh vân tím · bụi sao hội tụ', palette: 'midnight', opening: 'stardust', compatibleOpenings: ['stardust', 'orbits'], structure: 'postcard', ornament: 'orbit', effect: 'constellation', invitation: 'Một vũ trụ nhỏ đang chờ được mở.', interaction: 'Chạm để nối một chòm sao', color: '#bdb5ff', background: '#10142f' },
     aurora: { name: 'Cực quang', description: 'Dải sáng ngọc · bầu trời phương Bắc', palette: 'teal', opening: 'aurora', compatibleOpenings: ['aurora', 'stardust'], structure: 'arch', ornament: 'orbit', effect: 'constellation', invitation: 'Có một dải sáng dành riêng cho người nhận.', interaction: 'Chạm để đánh thức dải sáng', color: '#80e8ce', background: '#122e39' },
     garden: { name: 'Khu vườn xanh', description: 'Hoa xanh · lá mở · sương sớm', palette: 'sage', opening: 'bloom', compatibleOpenings: ['bloom', 'butterflies'], structure: 'arch', ornament: 'botanical', effect: 'butterflies', invitation: 'Một khu vườn nhỏ cất giữ những lời thương.', interaction: 'Chạm để một cụm hoa nở', color: '#83bb9b', background: '#edf5ec' },
@@ -53,6 +54,7 @@
     return `<g class="tx-reveal"><rect x="313" y="163" width="274" height="321" rx="6" fill="url(#${p}paper)" stroke="#cfb995" stroke-width="1.5"/><rect x="325" y="175" width="250" height="297" rx="2" fill="none" stroke="#c8b18d" stroke-opacity=".55"/><path d="M420 233h60M395 346h110M377 366h146M398 386h104M417 416h66" stroke="#af8a85" stroke-opacity=".6" stroke-width="2"/><text x="450" y="309" text-anchor="middle" font-family="Lora,Georgia,serif" font-size="57" fill="#906071">20.10</text>${use(`${p}star`, 450, 211, 1.05)}</g>`;
   }
   function art(id, mode = 'stage') {
+    if (GiftScenes.has(id)) return GiftScenes.art(id,mode);
     const t = catalog[id];
     const p = `tx${++serial}-`;
     const back = mode === 'backdrop';
@@ -100,7 +102,10 @@
   function renderGallery() {
     if (!refs.gallery) return;
     refs.gallery.classList.add('theme-gallery');
-    refs.gallery.innerHTML = Object.entries(catalog).map(([id, t]) => `<button type="button" class="theme-tile" data-theme-preset="${id}" aria-pressed="false"><span class="theme-thumbnail" data-experience="${id}" style="--tx-bg:${t.background};--tx-color:${t.color}">${art(id, 'thumb')}<span class="theme-check" aria-hidden="true">✓</span></span><span class="theme-tile-name">${t.name}</span><span class="theme-tile-description">${t.description}</span></button>`).join('');
+    refs.gallery.innerHTML = Object.entries(catalog).map(([id,t]) => {
+      const artwork=GiftScenes.has(id)?`<span class="gift-scene gift-motion-off" data-phase="ready">${art(id,'thumb')}</span>`:art(id,'thumb');
+      return `<div class="theme-entry" data-entry-id="${id}"><button type="button" class="theme-tile" data-theme-preset="${id}" aria-pressed="false"><span class="theme-thumbnail" data-experience="${id}" style="--tx-bg:${t.background};--tx-color:${t.color}">${artwork}<span class="theme-check" aria-hidden="true">✓</span></span><span class="theme-tile-name">${t.name}</span><span class="theme-tile-description">${t.description}</span></button><button type="button" class="gift-preview-button" data-preview-theme="${id}" aria-label="Xem cảnh mở ${t.name}">Xem cảnh mở</button></div>`;
+    }).join('');
   }
   function stopBurst() {
     clearTimeout(burstTimer);
@@ -114,6 +119,9 @@
   function apply(next) {
     design = next || {};
     const id = Object.hasOwn(catalog, design.experience) ? design.experience : 'sunflower';
+    if (GiftScenes.has(id)) { current=id;GiftScenes.applyMain(refs,design);return; }
+    GiftScenes.clearMain();
+    if (document.getElementById('gift-freeze')) document.getElementById('gift-freeze').hidden=true;
     const changed = id !== current || !refs.stage?.querySelector('#open-theme-card');
     current = id;
     const theme = catalog[id];
@@ -127,6 +135,7 @@
       if (!design.experience) { if (mark) mark.remove(); return; }
       if (mark && mark.dataset.experience === id) return;
       if (!mark) { mark = document.createElement('span'); mark.className = 'tx-paper-mark'; mark.setAttribute('aria-hidden','true'); heading.prepend(mark); }
+      mark.classList.remove('gift-scene','gift-motion-off');mark.removeAttribute('data-phase');
       mark.dataset.experience = id; mark.innerHTML = art(id,'backdrop');
     });
     for (const node of [refs.stage, refs.backdrop]) if (node) {
@@ -205,12 +214,13 @@
     apply(design);
   }
   function open() {
+    if (GiftScenes.has(design.experience)) return GiftScenes.open();
     reset();
     refs.stage?.classList.add('is-opening');
     return reduced.matches || design.intensity === 'off' ? 0 : design.intensity === 'gentle' ? 2000 : 2800;
   }
-  function reset() { refs.stage?.classList.remove('is-opening'); stopBurst(); }
-  function setScreen(value) { screen = String(value || '').replace(/-screen$/, ''); reset(); motionState(); }
+  function reset() { GiftScenes.reset();refs.stage?.classList.remove('is-opening'); stopBurst(); }
+  function setScreen(value) { screen = String(value || '').replace(/-screen$/, ''); reset(); motionState();GiftScenes.setScreen(screen); }
   function destroy() {
     reset(); refs.backdrop?.removeEventListener('click', interact); refs.stage?.removeEventListener('pointermove', pointer);
     for (const node of [refs.stage, refs.backdrop]) if (node) { node.replaceChildren(); node.classList.add('tx-paused'); }
@@ -218,5 +228,5 @@
   }
   document.addEventListener('visibilitychange', () => { if (document.hidden) stopBurst(); motionState(); });
   reduced.addEventListener('change', motionState);
-  window.CardThemes = Object.freeze({ catalog, defaults, openingNames, mount, apply, open, reset, setScreen, celebrate, destroy });
+  window.CardThemes = Object.freeze({ catalog, defaults, openingNames, mount, apply, open, reset, setScreen, celebrate, destroy, renderArt:art });
 })();
