@@ -119,7 +119,7 @@
   function apply(next) {
     design = next || {};
     const id = Object.hasOwn(catalog, design.experience) ? design.experience : 'sunflower';
-    if (GiftScenes.has(id)) { current=id;GiftScenes.applyMain(refs,design);return; }
+    if (GiftScenes.has(id)) { current=id;GiftScenes.applyMain(refs,design);motionState();return; }
     GiftScenes.clearMain();
     if (document.getElementById('gift-freeze')) document.getElementById('gift-freeze').hidden=true;
     const changed = id !== current || !refs.stage?.querySelector('#open-theme-card');
@@ -146,9 +146,9 @@
       node.style.setProperty('--tx-color', theme.color);
       node.classList.toggle('tx-low-power', !!lowPower);
     }
-    if (refs.backdrop?.parentElement) {
-      refs.backdrop.parentElement.classList.add('has-theme-experience');
-      refs.backdrop.parentElement.dataset.experience = id;
+    if (refs.backdrop?.closest('#letter-screen')) {
+      refs.backdrop.closest('#letter-screen').classList.add('has-theme-experience');
+      refs.backdrop.closest('#letter-screen').dataset.experience = id;
     }
     refs.gallery?.querySelectorAll('[data-theme-preset]').forEach(button => button.setAttribute('aria-pressed', String(button.dataset.themePreset === id)));
     motionState();

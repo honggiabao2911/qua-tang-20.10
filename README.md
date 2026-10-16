@@ -27,7 +27,9 @@ Lời tự viết tối đa 3.000 đơn vị UTF-16, lời nhắn riêng và l�
 
 ## Bó hoa lớn khi nhận thiệp
 
-Thiệp mới mặc định dùng **Bó hoa từ ngàn hạt sáng**. Có thể chọn **Bó hoa mọc lên và bung nở** hoặc **Dùng cảnh mở trong thư viện**. Hai kiểu bó hoa có cùng tấm thiệp chạm được ở giữa bó; khi chạm, hoa tách ra, thiệp bay lên và lá thư mở thành hai cánh giấy.
+Thiệp mới mặc định dùng **Bó hoa từ ngàn hạt sáng**. Có thể chọn **Bó hoa mọc lên và bung nở** hoặc **Dùng cảnh mở trong thư viện**. Hai kiểu bó hoa có cùng tấm thiệp chạm được ở giữa bó. Khi chạm, hoa tách ra, thiệp bay lên và **cảnh chủ đề đã chọn tiếp tục mở đầy đủ**: đảo hoa, cây lời nhắn, ngân hà hoặc một trong 22 chủ đề. Nhạc bắt đầu từ thao tác chạm ban đầu và tiếp tục xuyên suốt, không phát lại khi chuyển cảnh. Với 10 cảnh quà có trạng thái hoàn chỉnh, người nhận tự chọn đọc sau khi ngắm món quà.
+
+Khi đọc, cảnh chủ đề hiện lớn cạnh lời chúc trên desktop, phía trên thiệp trên điện thoại; cây/hoa/quỹ đạo vẫn ở lại, giữ chuyển động nhẹ và tương tác. Không giấu cảnh trong một dấu nhỏ trên giấy hay chỉ đặt tận cuối trang. Phần lựa chọn màn đón có hình minh họa, mô tả chuỗi mở, hình chủ đề cập nhật trực tiếp và nút **Xem trọn luồng này** cho cả ba lựa chọn. Chế độ giảm/tắt chuyển động vẫn hiện đầy đủ món quà tĩnh.
 
 Phần đón bó hoa dùng canvas điểm sáng định vị theo cánh/nhụy/lá/cành và hình SVG 23 đóa hoa, giấy gói, nơ. Giới hạn DPR 1,5 và giảm mật độ trên thiết bị yếu. Dừng vòng vẽ khi ẩn, chuyển màn hoặc bật giảm chuyển động; bản tĩnh vẫn có đầy đủ bó hoa. Liên kết lưu `design.arrival`; liên kết cũ chưa có trường này giữ cảnh đã chọn.
 
@@ -132,4 +134,4 @@ Các bộ kiểm thử hiện có gồm luồng tạo/gửi, Unicode và nội d
 
 Kiểm tra bằng Chromium với viewport mô phỏng không thay thế việc xác minh trên iPhone/Safari hay Android thật. Trường hợp `file://` có thể bị chính sách Chromium của môi trường chặn trước khi chạy ứng dụng. GitHub Pages chỉ cập nhật sau khi PR được merge và tác vụ triển khai thành công.
 
-Bản bó hoa và nhạc riêng đã kiểm tra: **102 ca trình duyệt đạt, 1 ca `file://` bỏ qua vì chính sách môi trường**, cùng **197 kiểm tra bộ mã hóa liên kết đạt**. Gồm 11 ca mới về bó hoa, vòng vẽ, chia sẻ và chuyển nguồn nhạc; các bộ hồi quy xác minh 22 cảnh trong chế độ thư viện. Hai ca hồi quy được chạy lại sau khi sửa kiểm tra đường dẫn nhạc riêng và khung hình cảnh ô; kết quả đều đạt. JavaScript qua kiểm tra cú pháp, không trùng ID HTML và đủ các đường dẫn script/CSS.
+Bộ kiểm thử có thêm `tests/test_journey.py`: kiểm tra hai kiểu bó hoa với đủ 22 chủ đề, cảnh lớn còn hiện khi đọc, chuyển động thật, nhạc liên tục, lựa chọn có hình, lời nhắn trên hoa ở điện thoại, chia sẻ, xem lại, hủy và thay đổi chế độ giảm chuyển động giữa lúc mở. Phiên bản này chạy **110 ca trình duyệt đạt, 1 ca `file://` bỏ qua do chính sách môi trường**, và **197 kiểm tra liên kết đạt**. Ca hồi quy về lớp nền không chặn thao tác đã được chạy lại sau khi giữ `pointer-events: none`; tương tác sao/hoa vẫn hoạt động. JavaScript qua kiểm tra cú pháp, HTML không trùng ID và đủ các đường dẫn script/CSS.
