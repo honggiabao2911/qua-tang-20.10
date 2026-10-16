@@ -47,7 +47,7 @@ class RefinementBrowserTests(unittest.TestCase):
             return self.page.evaluate("""() => [...document.querySelectorAll('#bouquet-arrival .ba-stems>path')].map(stem=>{
                 const bloom=document.querySelector('#bouquet-arrival .ba-bloom[data-flower-index="'+stem.dataset.flowerIndex+'"]');
                 const a=stem.getPointAtLength(0).matrixTransform(stem.getScreenCTM());
-                const b=new DOMPoint(0,0).matrixTransform(bloom.getScreenCTM());
+                const b=new DOMPoint(0,0).matrixTransform(bloom.querySelector('.ba-bloom-petals').getScreenCTM());
                 return Math.hypot(a.x-b.x,a.y-b.y);
             })""")
         for _ in range(3):
@@ -139,6 +139,26 @@ class RefinementBrowserTests(unittest.TestCase):
         second=self.new_page();second.goto(link);self.read_arrival(second)
         expect(second.locator('#letter-greeting')).to_have_text(greeting)
         expect(second.locator('#letter-message')).to_have_text(message)
+
+    def test_07_both_arrivals_unfurl_petals_in_stages_instead_of_wiping_the_picture(self):
+        self.page.emulate_media(reduced_motion='no-preference')
+        for style in ('stardust', 'growing'):
+            with self.subTest(style=style):
+                self.editor()
+                self.page.locator('#arrival-style').select_option(style)
+                self.invitation()
+                self.assertEqual('none', self.page.locator('#bouquet-arrival .ba-bouquet-svg').evaluate('n=>getComputedStyle(n).clipPath'))
+                blooms=self.page.locator('#bouquet-arrival .ba-bloom-petals')
+                self.assertEqual(23, blooms.count())
+                self.assertEqual(23, blooms.evaluate_all("els=>els.filter(n=>n.getAnimations().some(a=>a.animationName==='ba-petals-unfurl')).length"))
+                self.page.wait_for_timeout(1300)
+                opacity=blooms.evaluate_all('els=>els.map(n=>Number(getComputedStyle(n).opacity))')
+                self.assertTrue(any(value>.5 for value in opacity))
+                self.assertTrue(any(value<.9 for value in opacity), 'Blooms must open at different moments')
+                self.assertEqual('ba-halo-bloom', self.page.locator('.ba-reveal-halo').evaluate('n=>getComputedStyle(n).animationName'))
+                self.page.wait_for_function("BouquetArrival.state.phase==='ready'", timeout=6000)
+                self.assertTrue(all(value>.99 for value in blooms.evaluate_all('els=>els.map(n=>Number(getComputedStyle(n).opacity))')))
+                self.read_arrival()
 
 
 if __name__ == '__main__':
