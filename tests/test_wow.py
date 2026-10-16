@@ -20,7 +20,7 @@ import test_upgrade as regression
 BASE_URL = regression.BASE_URL
 VIETNAMESE = regression.VIETNAMESE
 VIEWPORTS = regression.VIEWPORTS
-SCENES = ("bouquet", "galaxy", "envelope")
+SCENES = ("galaxy", "aurora", "garden", "rose", "sunflower", "lotus", "moonlake", "butterfly", "letter", "pearl", "crystal", "lovegalaxy")
 STRUCTURES = ("letter", "arch", "postcard")
 # LZ-string fixture expanding to 30,000 "x" characters: exercises the decoder's
 # expanded-output limit using a small URL rather than only its input-size guard.
@@ -91,7 +91,7 @@ class WowBrowserTests(unittest.TestCase):
 
     def choose_scene(self, scene):
         self.open_design()
-        self.page.locator("#scene-field").select_option(scene)
+        self.page.locator(f'[data-theme-preset="{scene}"]').click()
 
     def open_letter(self, page=None):
         page = page or self.page
@@ -115,8 +115,8 @@ class WowBrowserTests(unittest.TestCase):
         paper = self.page.locator("#preview-card")
         appearances = []
         designs = []
-        for preset in ("bouquet", "galaxy", "atelier"):
-            self.page.locator(f'[data-preset="{preset}"]').click()
+        for preset in ("garden", "galaxy", "letter"):
+            self.page.locator(f'[data-theme-preset="{preset}"]').click()
             designs.append(paper.evaluate("el => [el.dataset.scene,el.dataset.structure,el.dataset.theme]"))
             appearances.append(paper.evaluate("""el => {
                 const style=getComputedStyle(el);
@@ -143,7 +143,7 @@ class WowBrowserTests(unittest.TestCase):
         expect(self.page.locator("#mini-preview-recipient")).to_contain_text("Mẹ yêu")
         expect(self.page.locator("#mini-preview-line")).to_contain_text("Một vườn hoa")
         before = self.page.locator("#design-summary").inner_text()
-        self.page.locator('[data-preset="galaxy"]').click()
+        self.page.locator('[data-theme-preset="galaxy"]').click()
         expect(self.page.locator("#design-summary")).not_to_have_text(before)
         self.page.locator("#ornament-field").scroll_into_view_if_needed()
         bounds = mini.bounding_box()
@@ -159,18 +159,18 @@ class WowBrowserTests(unittest.TestCase):
     def test_03_new_design_fields_reach_the_live_preview_and_received_card(self):
         self.editor()
         self.open_design()
-        self.page.locator("#scene-field").select_option("galaxy")
+        self.page.locator('[data-theme-preset="galaxy"]').click()
         self.page.locator('[data-structure-choice="arch"]').click()
         self.page.locator("#ornament-field").select_option("orbit")
         self.page.locator("#intensity-field").select_option("gentle")
-        expected = {"scene": "galaxy", "structure": "arch", "ornament": "orbit", "intensity": "gentle"}
+        expected = {"scene": "stardust", "structure": "arch", "ornament": "orbit", "intensity": "gentle"}
         for key, value in expected.items():
             expect(self.page.locator("#preview-card")).to_have_attribute("data-" + key, value)
         self.open_letter()
         for key, value in expected.items():
             expect(self.page.locator(".letter-paper")).to_have_attribute("data-" + key, value)
-        expect(self.page.locator("#letter-screen.immersive-scene")).to_have_attribute("data-scene", "galaxy")
-        garden = self.page.locator("#cosmic-garden")
+        expect(self.page.locator("#letter-screen.has-theme-experience")).to_have_attribute("data-scene", "stardust")
+        garden = self.page.locator("#theme-backdrop")
         expect(garden).to_be_visible()
         self.assertEqual("none", garden.evaluate("el => getComputedStyle(el).pointerEvents"))
 
@@ -181,21 +181,23 @@ class WowBrowserTests(unittest.TestCase):
                 self.editor()
                 self.choose_scene(scene)
                 self.page.locator("#open-card-button").click()
-                expect(self.page.locator(f"#{scene}-stage")).to_be_visible()
-                for other in set(SCENES) - {scene}:
-                    expect(self.page.locator(f"#{other}-stage")).not_to_be_visible()
-                opener = self.page.locator(f"#open-{scene}")
+                expect(self.page.locator("#theme-stage")).to_be_visible()
+                expect(self.page.locator("#theme-stage")).to_have_attribute("data-experience", scene)
+                opener = self.page.locator("#open-theme-card")
                 opener.focus()
                 opener.press("Enter")
                 expect(self.page.locator("#skip-animation")).to_be_visible()
                 self.page.locator("#skip-animation").click()
                 expect(self.page.locator("#letter-screen")).to_be_visible(timeout=3000)
                 expect(self.page.locator("#letter-greeting")).not_to_have_text("")
-                self.assertEqual(scene, self.page.locator(".letter-paper").get_attribute("data-scene"))
-                if scene == "envelope":
-                    expect(self.page.locator("#cosmic-garden")).not_to_be_visible()
-                else:
-                    expect(self.page.locator("#cosmic-garden")).to_be_visible()
+                self.assertEqual(scene, self.page.locator(".letter-paper").get_attribute("data-experience"))
+                expect(self.page.locator("#theme-backdrop")).to_be_visible()
+                # Bounded interaction and no orphaned effects when replaying.
+                button = self.page.locator("#theme-backdrop .tx-interact")
+                button.click()
+                self.assertLessEqual(self.page.locator(".tx-touch-particle").count(),9)
+                self.page.locator("#replay-card").click()
+                self.assertEqual(0,self.page.locator(".tx-touch-particle").count())
 
     def test_05_open_gesture_starts_real_audio_and_does_not_autoplay_on_load(self):
         self.add_group_audio()
@@ -206,7 +208,7 @@ class WowBrowserTests(unittest.TestCase):
         self.page.locator("#open-card-button").click()
         self.assertTrue(self.page.locator("#background-music").evaluate("el => el.paused"))
         self.page.locator("#envelope-open-button").click()
-        self.wait_playing("0nhacme.mp3")
+        self.wait_playing("0me.mp3")
         calls = self.page.evaluate("window.__musicPlayCalls")
         self.assertTrue(calls and calls[0]["active"], calls)
         self.assertEqual(1, self.page.locator("audio").count())
@@ -223,7 +225,7 @@ class WowBrowserTests(unittest.TestCase):
         for route in self.pending_audio:
             regression.UpgradeBrowserTests.route_audio(self, route)
         self.pending_audio.clear()
-        self.wait_playing("0nhacme.mp3")
+        self.wait_playing("0me.mp3")
 
     def test_07_explicit_pause_survives_scene_replay(self):
         self.add_group_audio()
@@ -245,10 +247,13 @@ class WowBrowserTests(unittest.TestCase):
             with self.subTest(greeting_length=length):
                 card = payload()
                 card["design"]["body"] = (VIETNAMESE + "\n") * 60
-                card["design"]["body"] = card["design"]["body"][:length]
+                card["design"]["body"] = card["design"]["body"].encode("utf-16-le")[:length * 2].decode("utf-16-le", errors="ignore")
                 fragment = self.page.evaluate("card => CardLinks.encode(card)", card)
                 self.assertTrue(fragment.startswith("#c="), fragment[:60])
-                self.assertEqual(card, self.decode(fragment))
+                decoded = self.decode(fragment)
+                for key in card:
+                    if key != "v": self.assertEqual(card[key], decoded[key])
+                self.assertEqual(4, decoded["v"])
                 legacy = "#card=" + quote(json.dumps(card, ensure_ascii=False, separators=(",", ":")), safe="")
                 self.assertLess(len(fragment), len(legacy) * 0.5, (len(fragment), len(legacy)))
 
@@ -259,13 +264,13 @@ class WowBrowserTests(unittest.TestCase):
         self.settle_library()
         self.page.locator("#track-list .track-select").nth(2).click()
         self.open_design()
-        self.page.locator('[data-preset="galaxy"]').click()
+        self.page.locator('[data-theme-preset="galaxy"]').click()
         self.page.locator('[data-structure-choice="postcard"]').click()
         self.page.locator("#ornament-field").select_option("pressed")
         self.page.locator("#intensity-field").select_option("gentle")
         self.page.locator('[data-font-choice="sans"]').click()
         self.page.locator('[data-layout-choice="centered"]').click()
-        self.page.locator("#effect-field").select_option("butterflies")
+        self.page.locator("#effect-field").select_option("constellation")
         self.page.locator("#card-dedication").fill("Vũ trụ nhỏ dành cho mẹ")
         self.page.locator("#custom-greeting").fill(VIETNAMESE)
         self.page.locator("#personal-message").fill("Con luôn ở đây.\nYêu mẹ ♥")
@@ -276,7 +281,7 @@ class WowBrowserTests(unittest.TestCase):
         second = self.new_page()
         second.goto(link)
         expect(second.locator("#envelope-screen")).to_be_visible()
-        expect(second.locator("#galaxy-stage")).to_be_visible()
+        expect(second.locator("#theme-stage")).to_be_visible()
         expect(second.locator("#track-list")).to_have_attribute("aria-busy", "false")
         self.assertTrue(second.locator("#background-music").evaluate("el => el.paused"))
         self.open_letter(second)
@@ -286,7 +291,7 @@ class WowBrowserTests(unittest.TestCase):
             expect(second.locator(".letter-paper")).to_have_attribute("data-" + key, canonical["design"][key])
         expect(second.locator("#letter-track-select")).to_have_value("mom:2")
         second.wait_for_function("!document.querySelector('#background-music').paused")
-        self.assertTrue(second.locator("#background-music").evaluate("el => el.currentSrc").endswith("/2nhacme.mp3"))
+        self.assertTrue(second.locator("#background-music").evaluate("el => el.currentSrc").endswith("/2me.mp3"))
         expect(second.locator("#edit-card")).not_to_be_visible()
 
     def test_10_legacy_links_still_work_without_new_design_fields(self):
@@ -350,6 +355,7 @@ class WowBrowserTests(unittest.TestCase):
                 self.page.set_viewport_size({"width": width, "height": height})
                 self.editor()
                 self.open_design()
+                self.page.locator("#sender-name").fill("Người gửi")
                 self.page.locator("#custom-greeting").fill(greeting)
                 self.page.locator("#personal-message").fill(message)
                 for shape in STRUCTURES:
@@ -387,15 +393,15 @@ class WowBrowserTests(unittest.TestCase):
             self.assertEqual(1, self.page.locator("#cosmic-garden").count())
 
     def test_15_representative_bouquet_and_galaxy_layouts_capture_cleanly(self):
-        for width, height, scene in ((1440, 900, "bouquet"), (390, 844, "galaxy")):
+        for width, height, scene in ((1440, 900, "garden"), (390, 844, "galaxy")):
             self.page.set_viewport_size({"width": width, "height": height})
             self.editor()
-            self.page.locator(f'[data-preset="{scene}"]').click()
+            self.page.locator(f'[data-theme-preset="{scene}"]').click()
             self.page.locator("#open-card-button").click()
             self.page.screenshot(path=f"/tmp/wow-{scene}-opening.png", full_page=True)
             self.open_letter()
             self.assert_layout(f"{scene} received")
-            expect(self.page.locator("#cosmic-garden")).to_be_visible()
+            expect(self.page.locator("#theme-backdrop")).to_be_visible()
             self.page.screenshot(path=f"/tmp/wow-{scene}-received.png", full_page=True)
 
 

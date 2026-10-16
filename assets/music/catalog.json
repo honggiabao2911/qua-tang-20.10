@@ -1,0 +1,263 @@
+{
+  "version": 1,
+  "basePath": "assets/music/",
+  "note": "suggestion là hướng chọn nhạc, không phải tên hoặc mô tả bản thu đang có. Chỉ cập nhật displayName và artist khi đã xác định nội dung tệp.",
+  "tracks": [
+    {
+      "id": "me:0",
+      "path": "assets/music/0me.mp3",
+      "displayName": "Bản nhạc 01",
+      "artist": null,
+      "suggestion": "Ca khúc về mẹ",
+      "legacyFallback": "nhac_me.mp3"
+    },
+    {
+      "id": "me:1",
+      "path": "assets/music/1me.mp3",
+      "displayName": "Bản nhạc 02",
+      "artist": null,
+      "suggestion": "Ca khúc gia đình ấm áp"
+    },
+    {
+      "id": "me:2",
+      "path": "assets/music/2me.mp3",
+      "displayName": "Bản nhạc 03",
+      "artist": null,
+      "suggestion": "Piano dịu"
+    },
+    {
+      "id": "me:3",
+      "path": "assets/music/3me.mp3",
+      "displayName": "Bản nhạc 04",
+      "artist": null,
+      "suggestion": "Guitar acoustic"
+    },
+    {
+      "id": "me:4",
+      "path": "assets/music/4me.mp3",
+      "displayName": "Bản nhạc 05",
+      "artist": null,
+      "suggestion": "Piano và dây"
+    },
+    {
+      "id": "me:5",
+      "path": "assets/music/5me.mp3",
+      "displayName": "Bản nhạc 06",
+      "artist": null,
+      "suggestion": "Nhạc không lời tươi sáng"
+    },
+    {
+      "id": "ba:0",
+      "path": "assets/music/0ba.mp3",
+      "displayName": "Bản nhạc 01",
+      "artist": null,
+      "suggestion": "Giai điệu quê hương",
+      "legacyFallback": "nhac_ba.mp3"
+    },
+    {
+      "id": "ba:1",
+      "path": "assets/music/1ba.mp3",
+      "displayName": "Bản nhạc 02",
+      "artist": null,
+      "suggestion": "Ca khúc về bà phù hợp"
+    },
+    {
+      "id": "ba:2",
+      "path": "assets/music/2ba.mp3",
+      "displayName": "Bản nhạc 03",
+      "artist": null,
+      "suggestion": "Đàn tranh nhẹ"
+    },
+    {
+      "id": "ba:3",
+      "path": "assets/music/3ba.mp3",
+      "displayName": "Bản nhạc 04",
+      "artist": null,
+      "suggestion": "Guitar mộc"
+    },
+    {
+      "id": "ba:4",
+      "path": "assets/music/4ba.mp3",
+      "displayName": "Bản nhạc 05",
+      "artist": null,
+      "suggestion": "Piano hoài niệm"
+    },
+    {
+      "id": "ba:5",
+      "path": "assets/music/5ba.mp3",
+      "displayName": "Bản nhạc 06",
+      "artist": null,
+      "suggestion": "Hòa tấu ấm áp"
+    },
+    {
+      "id": "co:0",
+      "path": "assets/music/0co.mp3",
+      "displayName": "Bản nhạc 01",
+      "artist": null,
+      "suggestion": "Ca khúc tri ân"
+    },
+    {
+      "id": "co:1",
+      "path": "assets/music/1co.mp3",
+      "displayName": "Bản nhạc 02",
+      "artist": null,
+      "suggestion": "Ca khúc tuổi học trò"
+    },
+    {
+      "id": "co:2",
+      "path": "assets/music/2co.mp3",
+      "displayName": "Bản nhạc 03",
+      "artist": null,
+      "suggestion": "Piano trong trẻo"
+    },
+    {
+      "id": "co:3",
+      "path": "assets/music/3co.mp3",
+      "displayName": "Bản nhạc 04",
+      "artist": null,
+      "suggestion": "Guitar nhẹ"
+    },
+    {
+      "id": "co:4",
+      "path": "assets/music/4co.mp3",
+      "displayName": "Bản nhạc 05",
+      "artist": null,
+      "suggestion": "Hòa tấu dây"
+    },
+    {
+      "id": "co:5",
+      "path": "assets/music/5co.mp3",
+      "displayName": "Bản nhạc 06",
+      "artist": null,
+      "suggestion": "Nhạc không lời trang nhã"
+    },
+    {
+      "id": "chi:0",
+      "path": "assets/music/0chi.mp3",
+      "displayName": "Bản nhạc 01",
+      "artist": null,
+      "suggestion": "Pop vui"
+    },
+    {
+      "id": "chi:1",
+      "path": "assets/music/1chi.mp3",
+      "displayName": "Bản nhạc 02",
+      "artist": null,
+      "suggestion": "Acoustic tích cực"
+    },
+    {
+      "id": "chi:2",
+      "path": "assets/music/2chi.mp3",
+      "displayName": "Bản nhạc 03",
+      "artist": null,
+      "suggestion": "Lo-fi sáng"
+    },
+    {
+      "id": "chi:3",
+      "path": "assets/music/3chi.mp3",
+      "displayName": "Bản nhạc 04",
+      "artist": null,
+      "suggestion": "Ukulele"
+    },
+    {
+      "id": "chi:4",
+      "path": "assets/music/4chi.mp3",
+      "displayName": "Bản nhạc 05",
+      "artist": null,
+      "suggestion": "Piano vui"
+    },
+    {
+      "id": "chi:5",
+      "path": "assets/music/5chi.mp3",
+      "displayName": "Bản nhạc 06",
+      "artist": null,
+      "suggestion": "Chill không lời"
+    },
+    {
+      "id": "nu:0",
+      "path": "assets/music/0nu.mp3",
+      "displayName": "Bản nhạc 01",
+      "artist": null,
+      "suggestion": "Pop tích cực",
+      "legacyFallback": "music_under.mp3"
+    },
+    {
+      "id": "nu:1",
+      "path": "assets/music/1nu.mp3",
+      "displayName": "Bản nhạc 02",
+      "artist": null,
+      "suggestion": "Acoustic tươi",
+      "legacyFallback": "music_over.mp3"
+    },
+    {
+      "id": "nu:2",
+      "path": "assets/music/2nu.mp3",
+      "displayName": "Bản nhạc 03",
+      "artist": null,
+      "suggestion": "Lo-fi nhẹ"
+    },
+    {
+      "id": "nu:3",
+      "path": "assets/music/3nu.mp3",
+      "displayName": "Bản nhạc 04",
+      "artist": null,
+      "suggestion": "Bossa nova"
+    },
+    {
+      "id": "nu:4",
+      "path": "assets/music/4nu.mp3",
+      "displayName": "Bản nhạc 05",
+      "artist": null,
+      "suggestion": "Piano sáng"
+    },
+    {
+      "id": "nu:5",
+      "path": "assets/music/5nu.mp3",
+      "displayName": "Bản nhạc 06",
+      "artist": null,
+      "suggestion": "Hòa tấu vui"
+    },
+    {
+      "id": "yeu:0",
+      "path": "assets/music/0yeu.mp3",
+      "displayName": "Bản nhạc 01",
+      "artist": null,
+      "suggestion": "Tình ca ngọt ngào"
+    },
+    {
+      "id": "yeu:1",
+      "path": "assets/music/1yeu.mp3",
+      "displayName": "Bản nhạc 02",
+      "artist": null,
+      "suggestion": "Tình ca đồng hành"
+    },
+    {
+      "id": "yeu:2",
+      "path": "assets/music/2yeu.mp3",
+      "displayName": "Bản nhạc 03",
+      "artist": null,
+      "suggestion": "Acoustic lãng mạn"
+    },
+    {
+      "id": "yeu:3",
+      "path": "assets/music/3yeu.mp3",
+      "displayName": "Bản nhạc 04",
+      "artist": null,
+      "suggestion": "Piano tình cảm"
+    },
+    {
+      "id": "yeu:4",
+      "path": "assets/music/4yeu.mp3",
+      "displayName": "Bản nhạc 05",
+      "artist": null,
+      "suggestion": "Chill R&B phù hợp"
+    },
+    {
+      "id": "yeu:5",
+      "path": "assets/music/5yeu.mp3",
+      "displayName": "Bản nhạc 06",
+      "artist": null,
+      "suggestion": "Không lời kiểu điện ảnh"
+    }
+  ]
+}

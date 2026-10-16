@@ -23,8 +23,8 @@ ROOT = Path(__file__).resolve().parents[1]
 BASE_URL = os.environ.get("BASE_URL", "http://127.0.0.1:8000/")
 CHROMIUM = os.environ.get("CHROMIUM_PATH", "/usr/bin/chromium")
 GROUPS = {
-    "mom": "nhacme", "grandma": "nhacba", "teacher": "nhacco",
-    "sister": "nhacchiem", "friend": "nhacban", "women": "nhacphunu",
+    "mom": "me", "grandma": "ba", "teacher": "co",
+    "sister": "chi", "friend": "nu", "women": "nu",
 }
 VIEWPORTS = [(360, 800), (390, 844), (430, 932), (768, 1024),
              (1024, 768), (1366, 768), (1440, 900), (1920, 1080), (844, 390)]
@@ -101,7 +101,7 @@ class UpgradeBrowserTests(unittest.TestCase):
         route.fulfill(status=200, headers=headers, content_type="audio/mpeg", body=body)
 
     def add_group_audio(self, recipient="mom", assets=False):
-        prefix = "assets/" if assets else ""
+        prefix = "assets/music/"
         source_names = list(self.audio_bytes)
         for index in range(3):
             self.available[f"{prefix}{index}{GROUPS[recipient]}.mp3"] = source_names[index]
@@ -109,12 +109,12 @@ class UpgradeBrowserTests(unittest.TestCase):
     def editor(self, recipient="mom", url=BASE_URL):
         self.page.goto(url)
         expect(self.page.locator("#home-screen")).to_be_visible()
-        self.page.locator(f'button[data-recipient="{recipient}"]').click()
+        self.page.locator(f'button[data-recipient="{recipient}"]').first.click()
         expect(self.page.locator("#editor-screen")).to_be_visible()
 
     def settle_library(self):
-        # The three requested slots must exist independently of availability.
-        expect(self.page.locator("#track-list .track-select")).to_have_count(3)
+        # All six slots must exist independently of actual file availability.
+        expect(self.page.locator("#track-list .track-select")).to_have_count(6)
         expect(self.page.locator("#track-list")).to_have_attribute("aria-busy", "false")
 
     def open_design(self):
@@ -134,6 +134,7 @@ class UpgradeBrowserTests(unittest.TestCase):
             return audio.readyState >= 2 && !audio.paused && !audio.ended;
         }""")
         if expected_filename:
+            self.page.wait_for_function("filename => { const a=document.querySelector('#background-music'); return !a.paused && a.readyState>=2 && a.currentSrc.endsWith('/'+filename); }", arg=expected_filename)
             self.assertTrue(self.page.locator("#background-music").evaluate(
                 "el => new URL(el.currentSrc).pathname").endswith("/" + expected_filename))
 
@@ -216,10 +217,10 @@ class UpgradeBrowserTests(unittest.TestCase):
         self.editor()
         self.settle_library()
         expect(self.page.locator("#track-list .track-select:enabled")).to_have_count(1)
-        expect(self.page.locator("#track-list .track-select:disabled")).to_have_count(2)
+        expect(self.page.locator("#track-list .track-select:disabled")).to_have_count(5)
         missing = self.page.locator("#music-missing-files")
-        expect(missing).to_contain_text("1nhacme.mp3")
-        expect(missing).to_contain_text("2nhacme.mp3")
+        expect(missing).to_contain_text("1me.mp3")
+        expect(missing).to_contain_text("2me.mp3")
         self.open_letter()
         self.wait_playing("nhac_me.mp3")
         expect(self.page.locator("#letter-track-select option:not([disabled])")).to_have_count(1)
@@ -227,8 +228,8 @@ class UpgradeBrowserTests(unittest.TestCase):
     def test_05_all_music_missing_preserves_creation_and_recovers_after_files_arrive(self):
         self.editor("teacher")
         self.settle_library()
-        expect(self.page.locator("#track-list .track-select:disabled")).to_have_count(3)
-        expect(self.page.locator("#music-missing-files")).to_contain_text("nhacco.mp3")
+        expect(self.page.locator("#track-list .track-select:disabled")).to_have_count(6)
+        expect(self.page.locator("#music-missing-files")).to_contain_text("co.mp3")
         self.open_letter()
         expect(self.page.locator("#letter-greeting")).not_to_have_text("")
         self.assertTrue(self.page.locator("#background-music").evaluate("el => el.paused"))
@@ -238,7 +239,7 @@ class UpgradeBrowserTests(unittest.TestCase):
         self.settle_library()
         expect(self.page.locator("#track-list .track-select:enabled")).to_have_count(3)
         self.open_letter()
-        self.wait_playing("0nhacco.mp3")
+        self.wait_playing("0co.mp3")
 
     def test_06_assets_directory_music_is_discovered_and_played(self):
         self.add_group_audio("mom", assets=True)
@@ -246,20 +247,20 @@ class UpgradeBrowserTests(unittest.TestCase):
         self.settle_library()
         expect(self.page.locator("#track-list .track-select:enabled")).to_have_count(3)
         self.open_letter()
-        self.wait_playing("0nhacme.mp3")
+        self.wait_playing("0me.mp3")
         current = self.page.locator("#background-music").evaluate("el => new URL(el.currentSrc).pathname")
-        self.assertIn("/assets/0nhacme.mp3", current)
+        self.assertIn("/assets/music/0me.mp3", current)
 
     def test_07_next_previous_and_rapid_track_switch_keep_latest_source(self):
         self.add_group_audio()
         self.editor()
         self.settle_library()
         self.open_letter()
-        self.wait_playing("0nhacme.mp3")
+        self.wait_playing("0me.mp3")
         self.page.locator("#next-track").click()
-        self.wait_playing("1nhacme.mp3")
+        self.wait_playing("1me.mp3")
         self.page.locator("#prev-track").click()
-        self.wait_playing("0nhacme.mp3")
+        self.wait_playing("0me.mp3")
         select = self.page.locator("#letter-track-select")
         values = select.locator("option:not([disabled])").evaluate_all("options => options.map(option => option.value)")
         # Dispatch browser change events rapidly to exercise real load/play promises.
@@ -268,7 +269,7 @@ class UpgradeBrowserTests(unittest.TestCase):
                 el.value = value; el.dispatchEvent(new Event('change', {bubbles:true}));
             }
         }""", values)
-        self.wait_playing("2nhacme.mp3")
+        self.wait_playing("2me.mp3")
         expect(self.page.locator("#music-toggle")).to_have_attribute("aria-pressed", "true")
         self.assertEqual(1, self.page.locator("audio").count())
 
@@ -312,10 +313,10 @@ class UpgradeBrowserTests(unittest.TestCase):
         self.page.locator("#edit-card").click()
         self.open_design()
         self.page.locator("#reset-design").click()
-        for attribute, value in (("theme", "rose"), ("font", "serif"), ("layout", "classic"), ("decoration", "botanical")):
+        for attribute, value in (("theme", "champagne"), ("font", "serif"), ("layout", "classic"), ("decoration", "botanical")):
             expect(preview).to_have_attribute("data-" + attribute, value)
 
-    def test_10_shared_v2_restores_design_custom_text_and_selected_music(self):
+    def test_10_shared_v4_restores_design_custom_text_and_selected_music(self):
         self.clipboard()
         self.add_group_audio()
         self.editor()
@@ -327,6 +328,9 @@ class UpgradeBrowserTests(unittest.TestCase):
         self.page.locator('[data-font-choice="sans"]').click()
         self.page.locator('[data-layout-choice="centered"]').click()
         self.page.locator("#decoration-field").select_option("stars")
+        self.page.locator('[data-theme-preset="galaxy"]').click()
+        self.page.locator('[data-font-choice="sans"]').click()
+        self.page.locator('[data-layout-choice="centered"]').click()
         self.page.locator("#effect-field").select_option("constellation")
         self.page.locator("#card-dedication").fill("Chỉ riêng mẹ")
         self.page.locator("#custom-greeting").fill(VIETNAMESE)
@@ -334,7 +338,7 @@ class UpgradeBrowserTests(unittest.TestCase):
         self.open_letter()
         link = self.copy_link()
         payload = self.page.evaluate("link => CardLinks.decode(new URL(link).hash)", link)
-        self.assertEqual(2, payload["v"])
+        self.assertEqual(4, payload["v"])
         second = self.new_page()
         second.goto(link)
         expect(second.locator("#envelope-screen")).to_be_visible()
@@ -347,7 +351,7 @@ class UpgradeBrowserTests(unittest.TestCase):
         expect(paper).to_contain_text("Chỉ riêng mẹ")
         expect(second.locator("#letter-track-select")).to_have_value(selected_id)
         second.wait_for_function("!document.querySelector('#background-music').paused")
-        self.assertTrue(second.locator("#background-music").evaluate("el => el.currentSrc").endswith("/2nhacme.mp3"))
+        self.assertTrue(second.locator("#background-music").evaluate("el => el.currentSrc").endswith("/2me.mp3"))
         # Received cards keep editing private; controls still reflect restored state.
         expect(second.locator("#edit-card")).not_to_be_visible()
         expect(second.locator("#effect-field")).to_have_value("constellation")
@@ -406,9 +410,9 @@ class UpgradeBrowserTests(unittest.TestCase):
                 self.assert_layout(f"{width}x{height} letter")
                 # Native pointer clicks also establish controls remain reachable.
                 self.page.locator("#next-track").click()
-                self.wait_playing("1nhacme.mp3")
+                self.wait_playing("1me.mp3")
                 self.page.locator("#prev-track").click()
-                self.wait_playing("0nhacme.mp3")
+                self.wait_playing("0me.mp3")
                 self.page.locator("#edit-card").click()
                 expect(self.page.locator("#custom-greeting")).to_have_value(greeting)
 
@@ -431,12 +435,12 @@ class UpgradeBrowserTests(unittest.TestCase):
         self.settle_library()
         preview = self.page.locator("#track-list [data-preview-track]").nth(1)
         preview.click()
-        self.wait_playing("1nhacme.mp3")
+        self.wait_playing("1me.mp3")
         selected = self.page.locator('#track-list .track-select[aria-pressed="true"]')
         expect(selected).to_have_attribute("data-track-id", preview.get_attribute("data-preview-track"))
         self.assertEqual(1, self.page.locator("audio").count())
         self.open_letter()
-        self.wait_playing("1nhacme.mp3")
+        self.wait_playing("1me.mp3")
 
     def test_16_decomposed_vietnamese_keeps_every_diacritic(self):
         self.editor("grandma")
@@ -470,7 +474,8 @@ class UpgradeBrowserTests(unittest.TestCase):
         expect(self.page.locator("#skip-animation")).to_be_visible()
         self.page.locator("#skip-animation").click()
         expect(self.page.locator("#letter-screen")).to_be_visible(timeout=1500)
-        particles = self.page.locator("#petal-burst > *")
+        self.page.locator("#theme-backdrop .tx-interact").click()
+        particles = self.page.locator(".tx-touch-particle")
         self.assertGreater(particles.count(), 0, "The selected effect should render after opening")
         self.assertLessEqual(particles.count(), 14, "Effects must stay bounded during replay")
         expect(self.page.locator("#petal-burst")).to_be_empty(timeout=7500)
@@ -498,7 +503,7 @@ class UpgradeBrowserTests(unittest.TestCase):
         self.settle_library()
         expect(self.page.locator("#track-list .track-select:enabled")).to_have_count(3)
         self.open_letter()
-        self.wait_playing("0nhacme.mp3")
+        self.wait_playing("0me.mp3")
         self.assertTrue(self.page.locator("#background-music").evaluate(
             "el => new URL(el.currentSrc).pathname").startswith(prefix + "assets/"))
         self.assertTrue(self.audio_requests)
@@ -509,13 +514,13 @@ class UpgradeBrowserTests(unittest.TestCase):
         self.editor()
         self.settle_library()
         self.page.locator("#track-list [data-preview-track]").nth(0).click()
-        self.wait_playing("0nhacme.mp3")
+        self.wait_playing("0me.mp3")
         deferred = []
         hold = {"selected": True, "optional": True}
 
         def defer_selected_and_optional_probes(route):
             filename = urlparse(route.request.url).path.rsplit("/", 1)[-1]
-            is_selected = filename == "0nhacme.mp3"
+            is_selected = filename == "0me.mp3"
             key = "selected" if is_selected else "optional"
             if route.request.method == "HEAD" and hold[key]:
                 # Retain the actual HTTP route without answering yet; unrelated
@@ -524,11 +529,14 @@ class UpgradeBrowserTests(unittest.TestCase):
             else:
                 self.route_audio(route)
 
-        self.context.route(re.compile(r"/(?:0|19)nhacme\.mp3$"), defer_selected_and_optional_probes)
+        self.context.route(re.compile(r"/(?:0|5)me\.mp3$"), defer_selected_and_optional_probes)
         try:
             self.page.locator("#rescan-music").click()
             expect(self.page.locator("#track-list")).to_have_attribute("aria-busy", "true")
             expect(self.page.locator("#music-status")).to_contain_text("Đang tìm")
+            for _ in range(100):
+                if any(key == "selected" for key, _ in deferred): break
+                self.page.wait_for_timeout(20)
             self.assertTrue(any(key == "selected" for key, _ in deferred))
             hold["selected"] = False
             selected_routes = [route for key, route in deferred if key == "selected"]
@@ -537,11 +545,11 @@ class UpgradeBrowserTests(unittest.TestCase):
                 self.route_audio(route)
             self.page.wait_for_function("""() => {
                 const audio = document.querySelector('#background-music');
-                return audio.readyState >= 2 && audio.currentSrc.endsWith('/0nhacme.mp3');
+                return audio.readyState >= 2 && audio.currentSrc.endsWith('/0me.mp3');
             }""")
             expect(self.page.locator("#track-list")).to_have_attribute("aria-busy", "true")
             self.page.locator("#music-toggle").click()
-            self.wait_playing("0nhacme.mp3")
+            self.wait_playing("0me.mp3")
             self.page.locator("#music-toggle").click()
             self.page.wait_for_function("document.querySelector('#background-music').paused")
             expect(self.page.locator("#music-toggle")).to_have_attribute("aria-pressed", "false")
