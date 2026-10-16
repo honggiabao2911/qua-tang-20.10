@@ -67,7 +67,7 @@ class CardBrowserTests(unittest.TestCase):
     def editor(self, recipient="mom"):
         self.visit()
         self.page.locator("#start-button").click()
-        self.page.locator(f'button[data-recipient="{recipient}"]').click()
+        self.page.locator(f'button[data-recipient="{recipient}"]').first.click()
         expect(self.page.locator("#editor-screen")).to_be_visible()
 
     def open_letter(self):
@@ -94,7 +94,7 @@ class CardBrowserTests(unittest.TestCase):
 
     def serve_valid_audio(self):
         self.context.unroute("**/assets/music.mp3")
-        self.context.route("**/0nhacme.mp3", lambda route: route.fulfill(
+        self.context.route("**/0me.mp3", lambda route: route.fulfill(
             path=str(ROOT / "music_under.mp3"), content_type="audio/mpeg"))
 
     def assert_layout(self, label):
@@ -122,9 +122,9 @@ class CardBrowserTests(unittest.TestCase):
         self.assertTrue(self.page.locator("#background-music").evaluate("el => el.paused"))
         self.page.locator("#start-button").click()
         self.page.wait_for_function("document.querySelector('#recipients').getBoundingClientRect().top < innerHeight")
-        self.assertEqual(6, self.page.locator("button[data-recipient]").count())
+        self.assertEqual(8, self.page.locator("button[data-recipient]").count())
 
-    def test_01_all_recipients_variants_and_three_templates(self):
+    def test_01_all_recipients_variants_and_six_templates(self):
         for recipient in ("mom", "grandma", "teacher", "sister", "friend", "women"):
             with self.subTest(recipient=recipient):
                 self.editor(recipient)
@@ -134,12 +134,12 @@ class CardBrowserTests(unittest.TestCase):
                         if variant:
                             self.page.locator("#variant-field").select_option(variant)
                         greetings = []
-                        for _ in range(3):
+                        for _ in range(6):
                             greeting = self.page.locator("#preview-greeting").inner_text().strip()
                             self.assertTrue(greeting, f"Empty greeting for {recipient}/{variant}")
                             greetings.append(greeting)
                             self.page.locator("#next-greeting").click()
-                        self.assertEqual(3, len(set(greetings)), f"Expected three distinct templates: {recipient}/{variant}")
+                        self.assertEqual(6, len(set(greetings)), f"Expected six distinct templates: {recipient}/{variant}")
                         self.assertEqual(greetings[0], self.page.locator("#preview-greeting").inner_text().strip())
 
     def test_02_text_is_literal_unicode_and_preserved(self):
@@ -179,7 +179,7 @@ class CardBrowserTests(unittest.TestCase):
         self.page.locator("#recipient-name").fill("Em gái yêu")
         self.page.locator("#back-to-recipients").click()
         expect(self.page.locator("#home-screen")).to_be_visible()
-        self.page.locator('button[data-recipient="sister"]').click()
+        self.page.locator('button[data-recipient="sister"][data-variant="younger"]').click()
         expect(self.page.locator("#personal-message")).to_have_value(message)
         expect(self.page.locator("#recipient-name")).to_have_value("Em gái yêu")
         expect(self.page.locator("#variant-field")).to_have_value("younger")
@@ -382,7 +382,7 @@ class CardBrowserTests(unittest.TestCase):
         self.editor()
         expect(self.page.locator("#track-list")).to_have_attribute("aria-busy", "false")
         self.open_letter()
-        expect(self.page.locator("#music-status")).to_contain_text("0nhacme.mp3")
+        expect(self.page.locator("#music-status")).to_contain_text("0me.mp3")
         expect(self.page.locator("#music-toggle")).to_be_enabled()
         expect(self.page.locator("#header-music-toggle")).to_be_enabled()
         expect(self.page.locator("#volume-control")).to_be_enabled()
