@@ -1,6 +1,6 @@
 # Lời thương · Thiệp 20/10
 
-Website thiệp chúc mừng bằng HTML, CSS, JavaScript thuần. Tạo lời chúc theo quan hệ, chọn một trong 22 không gian, xem thử cảnh mở quà, nghe thử nhạc và gửi liên kết giữ nguyên tấm thiệp. Không cần backend, tài khoản, thư viện từ CDN hoặc bước build. Font tiếng Việt nằm trong dự án.
+Website thiệp chúc mừng bằng HTML, CSS, JavaScript thuần. Người nhận được đón bằng bó hoa lớn từ 2.450 hạt sáng (1.250 trên điện thoại) hoặc hoa mọc nở, rồi chạm tấm thiệp nằm trong bó hoa. Tạo lời chúc theo quan hệ, chọn thiết kế từ 22 chủ đề, nghe thử nhạc và chia sẻ nguyên tấm thiệp. Không cần backend, tài khoản, thư viện từ CDN hoặc bước build. Font tiếng Việt nằm trong dự án.
 
 ## Chạy và triển khai
 
@@ -24,6 +24,14 @@ GitHub Pages: trong **Settings → Pages**, chọn **Deploy from a branch → ma
 6. Chỉnh chi tiết, chọn nhạc rồi mở thiệp thật. Người nhận chạm nút hoặc vật thể chính để mở; thao tác đó kích hoạt nhạc nếu bài có tệp và trình duyệt cho phép. Các cảnh quà mới giữ món quà hoàn chỉnh để ngắm đến khi người nhận chọn đọc. Có nút bỏ qua, xem lại và **Giữ lại khoảnh khắc** để tạm dừng chuyển động.
 
 Lời tự viết tối đa 3.000 đơn vị UTF-16, lời nhắn riêng và lời nhắn phụ tối đa 1.000; bộ đếm và giới hạn dùng cùng cách đếm với ô nhập HTML. Tên tối đa 100, cách xưng/cách gọi 30. Câu mở quà tối đa 160; cây lời nhắn cho phép tối đa 5 lời ngắn, mỗi lời tối đa 160. Các lời trên hoa hoàn toàn tùy chọn: để trống thì chỉ có hoa trang trí, không tự sinh kỷ niệm. Nội dung nhập được chuẩn hóa Unicode NFC và hiển thị bằng `textContent`.
+
+## Bó hoa lớn khi nhận thiệp
+
+Thiệp mới mặc định dùng **Bó hoa từ ngàn hạt sáng**. Có thể chọn **Bó hoa mọc lên và bung nở** hoặc **Dùng cảnh mở trong thư viện**. Hai kiểu bó hoa có cùng tấm thiệp chạm được ở giữa bó; khi chạm, hoa tách ra, thiệp bay lên và lá thư mở thành hai cánh giấy.
+
+Phần đón bó hoa dùng canvas điểm sáng định vị theo cánh/nhụy/lá/cành và hình SVG 23 đóa hoa, giấy gói, nơ. Giới hạn DPR 1,5 và giảm mật độ trên thiết bị yếu. Dừng vòng vẽ khi ẩn, chuyển màn hoặc bật giảm chuyển động; bản tĩnh vẫn có đầy đủ bó hoa. Liên kết lưu `design.arrival`; liên kết cũ chưa có trường này giữ cảnh đã chọn.
+
+Nhạc riêng khi làm thiệp lấy từ **`nhac.mp3` ở thư mục gốc**, âm lượng độc lập với nhạc người nhận. Hiện chưa có tệp này: thêm bản thu của bạn để nghe. Thiếu tệp không chặn tạo thiệp. Không tự phát khi tải trang và chỉ có một audio hoạt động. Các dòng gợi ý chọn nhạc đã được bỏ.
 
 ## 22 chủ đề và cảnh mở quà
 
@@ -80,7 +88,7 @@ Các cảnh cũ mở trong khoảng 2–2,8 giây; cảnh quà mới có nhiều
 
 Đã đồng bộ **6 tệp chuẩn cho Mẹ**, từ `assets/music/0me.mp3` đến `5me.mp3`, do bạn tải lên `main`. Cả sáu là MP3 hợp lệ. Ba vị trí khác vẫn nghe được bằng tệp cũ: `ba:0` → `nhac_ba.mp3`, `nu:0` → `music_under.mp3`, `nu:1` → `music_over.mp3`. Tổng cộng 9/36 vị trí có nguồn âm thanh; **27 vị trí chưa có bản thu**: `1–5ba`, `0–5co`, `0–5chi`, `2–5nu`, `0–5yeu` (đều đuôi `.mp3`). Còn 30 đường dẫn chuẩn chưa có tệp vật lý. Giữ nguyên mọi tệp cũ và các tệp `.MP3` bạn đã tải ở thư mục gốc; website ưu tiên bản chữ thường trong `assets/music/`.
 
-Xem [MUSIC.md](MUSIC.md) để có danh sách thiếu, bảng chuyển tên và gợi ý nhạc theo từng nhóm. Tên bài/nghệ sĩ trong `assets/music/catalog.json` chỉ nên điền sau khi xác định đúng bản thu. Các hướng chọn nhạc là gợi ý, không phải tên nội dung của tệp hiện có.
+Xem [MUSIC.md](MUSIC.md) để có danh sách thiếu, bảng chuyển tên và nhạc riêng khi tạo thiệp. Tên bài/nghệ sĩ trong `assets/music/catalog.json` chỉ nên điền sau khi xác định đúng bản thu.
 
 Chỉ có một phần tử audio. Trình phát kiểm tra HEAD cho nhóm được chọn, tải metadata của bài được chọn, không tải trước 36 bài. Có nghe thử, phát/dừng, trước/sau, âm lượng và kiểm tra lại tệp. Không tự phát khi bắt đầu nhập liệu hoặc xem trước cảnh; thiếu nhạc không ngăn mở thiệp. Cảnh hộp nhạc cũng dùng bài người gửi chọn, không tạo nhạc riêng phát chồng. Lựa chọn tắt nhạc được giữ khi xem lại. Nếu hệ điều hành không cho điều chỉnh âm lượng qua web, dùng nút âm lượng điện thoại.
 
@@ -101,12 +109,14 @@ Giới hạn kích thước cả trước và trong giải nén; kiểm tra phi�
 | `assets/js/greetings.js` | 54 lời chúc, sắc thái, cặp xưng hô, các trường template rõ ràng |
 | `assets/js/legacy-greetings.js` | Nguyên văn 24 lời chúc của liên kết cũ |
 | `assets/js/themes.js` | Danh mục chủ đề, 12 không gian cũ và kết nối cảnh quà mới |
+| `assets/js/bouquet-arrival.js`, `assets/css/bouquet-arrival.css` | Bó hoa lớn, hạt sáng, nở hoa, tấm thiệp trong bó và vòng đời canvas |
+| `assets/css/reception.css` | Màn tạo thiệp, nhạc riêng và hiệu ứng mở hai cánh giấy |
 | `assets/js/gift-scenes.js` | Danh mục 10 cảnh quà, bộ dựng dùng chung, trạng thái mở/hoàn chỉnh/đọc và vòng đời xem trước |
 | `assets/js/gift-art-a.js`, `assets/js/gift-art-b.js`, `assets/js/gift-art-c.js` | SVG và tạo hình riêng của các cảnh quà mới |
 | `assets/css/themes.css`, `assets/css/collection.css` | Không gian, chất liệu, chi tiết và bố cục điện thoại |
 | `assets/css/gift-scenes.css`, `assets/css/gift-art-a.css`, `assets/css/gift-art-b.css`, `assets/css/gift-art-c.css` | Thư viện quà, bản xem trước và chuyển động từng cảnh |
 | `assets/js/card-music.js` | Tìm tệp và trình phát duy nhất |
-| `assets/music/catalog.json` | 36 mục ID, đường dẫn, tên hiển thị, nghệ sĩ và gợi ý |
+| `assets/music/catalog.json` | 36 mục ID, đường dẫn, tên hiển thị và nghệ sĩ |
 | `assets/js/card-links.js` | Bộ nén LZ và schema v4, đọc dữ liệu cũ; kèm giấy phép MIT |
 | `assets/fonts/` | Font tự lưu và giấy phép OFL |
 
@@ -122,4 +132,4 @@ Các bộ kiểm thử hiện có gồm luồng tạo/gửi, Unicode và nội d
 
 Kiểm tra bằng Chromium với viewport mô phỏng không thay thế việc xác minh trên iPhone/Safari hay Android thật. Trường hợp `file://` có thể bị chính sách Chromium của môi trường chặn trước khi chạy ứng dụng. GitHub Pages chỉ cập nhật sau khi PR được merge và tác vụ triển khai thành công.
 
-Kết quả kiểm chứng ngày 16/10/2026: 91/92 ca trình duyệt đạt sau khi chạy lại ca thao tác cuộn/bàn phím liên quan; 1 ca file:// bỏ qua do chính sách môi trường. Bộ mới gồm 17 ca, kiểm tra cả 10 cảnh ở 360/390/1440 px. `node tests/test_links.js` đạt 167 kiểm tra liên kết. Đã xác nhận 6 tệp nhạc Mẹ tải lên là MP3 hợp lệ.
+Bản bó hoa và nhạc riêng đã kiểm tra: **102 ca trình duyệt đạt, 1 ca `file://` bỏ qua vì chính sách môi trường**, cùng **197 kiểm tra bộ mã hóa liên kết đạt**. Gồm 11 ca mới về bó hoa, vòng vẽ, chia sẻ và chuyển nguồn nhạc; các bộ hồi quy xác minh 22 cảnh trong chế độ thư viện. Hai ca hồi quy được chạy lại sau khi sửa kiểm tra đường dẫn nhạc riêng và khung hình cảnh ô; kết quả đều đạt. JavaScript qua kiểm tra cú pháp, không trùng ID HTML và đủ các đường dẫn script/CSS.

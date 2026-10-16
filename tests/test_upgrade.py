@@ -122,6 +122,9 @@ class UpgradeBrowserTests(unittest.TestCase):
         ui_recipient = "women" if recipient == "friend" else recipient
         self.page.locator(f'button[data-recipient="{ui_recipient}"]').first.click()
         expect(self.page.locator("#editor-screen")).to_be_visible()
+        # These regression suites exercise the original 22 individual scenes.
+        # The new shared-link bouquet has dedicated arrival acceptance coverage.
+        self.page.locator("#arrival-style").select_option("classic")
         if recipient == "friend":
             self.page.locator("#variant-field").select_option("friend")
 

@@ -28,28 +28,11 @@ Các file cũ **không bị xóa, đổi tên hoặc suy đoán tên bài hát**
 
 Đây là ánh xạ để giữ nhạc cũ hoạt động, không phải xác nhận nội dung hay tên bản thu. Hãy nghe và xác nhận trước khi cập nhật tên bài/nghệ sĩ. Khi có file đúng đường dẫn chuẩn, website ưu tiên file đó. Giữ các file cũ để những liên kết trước đây tiếp tục hoạt động.
 
-## Hướng chọn sáu bài cho mỗi nhóm
+## Nhạc riêng khi tạo thiệp
 
-Đây là **gợi ý sắc thái**, không phải danh sách bản thu đã cài đặt.
+Đặt **`nhac.mp3` ở thư mục gốc**, cùng `index.html`. Nếu cần, có thể đặt tại `assets/music/nhac.mp3`; website ưu tiên đường dẫn gốc. Hiện chưa có tệp này trong repository. Thanh nhạc làm thiệp báo rõ khi thiếu tệp và không lấy bài của người nhận để thay thế.
 
-| Nhóm | Vị trí 0 | Vị trí 1 | Vị trí 2 | Vị trí 3 | Vị trí 4 | Vị trí 5 |
-|---|---|---|---|---|---|---|
-| Mẹ | Ca khúc về mẹ | Ca khúc gia đình ấm áp | Piano dịu | Guitar acoustic | Piano và dây | Không lời tươi sáng |
-| Bà | Giai điệu quê hương | Ca khúc về bà phù hợp | Đàn tranh nhẹ | Guitar mộc | Piano hoài niệm | Hòa tấu ấm áp |
-| Cô giáo | Ca khúc tri ân | Ca khúc tuổi học trò | Piano trong trẻo | Guitar nhẹ | Hòa tấu dây | Không lời trang nhã |
-| Chị/em gái | Pop vui | Acoustic tích cực | Lo-fi sáng | Ukulele | Piano vui | Chill không lời |
-| Bạn nữ/nhóm | Pop tích cực | Acoustic tươi | Lo-fi nhẹ | Bossa nova | Piano sáng | Hòa tấu vui |
-| Người thương | Tình ca ngọt ngào | Tình ca đồng hành | Acoustic lãng mạn | Piano tình cảm | Chill R&B phù hợp | Không lời kiểu điện ảnh |
-
-Một vài tên bài để bạn tìm nghe và cân nhắc bản thu phù hợp:
-
-- **Mẹ:** “Mẹ yêu”; có thể thêm một bản guitar hoặc piano ấm áp không lời.
-- **Bà:** “Cháu yêu bà” nếu muốn nét vui, gần gũi; hoặc một bản hòa tấu đàn tranh giai điệu quê hương.
-- **Cô giáo:** “Bụi phấn”, “Người thầy”; kiểm tra lời của bản thu để chọn cách gọi phù hợp với cô.
-- **Chị/em gái, bạn nữ:** “Sống như những đóa hoa”, hoặc pop/acoustic tươi sáng không mang nội dung tỏ tình.
-- **Người thương:** “Hơn cả yêu”, “Ngày đầu tiên”; chọn bản thu có cách xưng hô phù hợp với người nhận.
-
-Các tên trên chỉ là gợi ý, **chưa có các bản thu này trong dự án**. Dùng bản thu bạn có quyền đưa lên website. Tránh bài chia tay, mất mát hoặc có lời lệch với người nhận, đặc biệt trong thiệp gửi mẹ và bà.
+Nhạc làm thiệp có nút bật/tắt, âm lượng riêng và chỉ bắt đầu sau thao tác của người dùng. Khi mở món quà, nhạc làm thiệp dừng; tấm thiệp dùng đúng bài người gửi đã chọn. Nghe thử bài cho người nhận cũng dừng nhạc làm thiệp. Cả hai chế độ dùng một phần tử audio để tránh phát chồng.
 
 ## Cập nhật danh mục và sử dụng
 

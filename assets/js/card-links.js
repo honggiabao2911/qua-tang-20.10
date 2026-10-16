@@ -431,7 +431,7 @@ const CardLinks = (() => {
   // Positional fields and choice indexes are append-only: shared v4 cards keep
   // their original meaning when more gift experiences become available.
   const designFields = [...legacyDesignFields, 'scene', 'structure', 'ornament', 'intensity',
-    'experience', 'size', 'reveal', 'showDate', 'showSignature', 'secret', 'giftIntro', 'flowerNotes'];
+    'experience', 'size', 'reveal', 'showDate', 'showSignature', 'secret', 'giftIntro', 'flowerNotes', 'arrival'];
   const designChoices = [
     ['rose', 'sage', 'champagne', 'midnight', 'teal', 'lilac'],
     ['serif', 'sans', 'italic', 'handwriting'],
@@ -442,7 +442,8 @@ const CardLinks = (() => {
     ['cinematic', 'medium', 'gentle', 'off'],
     ['galaxy', 'aurora', 'garden', 'rose', 'sunflower', 'lotus', 'moonlake', 'butterfly', 'letter', 'pearl', 'crystal', 'lovegalaxy',
       'umbrella', 'storybook', 'island', 'ocean', 'balloon', 'lantern', 'wishtree', 'silk', 'lightbridge', 'musicbox'],
-    ['small', 'medium', 'large'], ['instant', 'gentle', 'slow'], ['on', 'off'], ['on', 'off'], null, null, null
+    ['small', 'medium', 'large'], ['instant', 'gentle', 'slow'], ['on', 'off'], ['on', 'off'], null, null, null,
+    ['stardust', 'growing', 'classic']
   ];
   const rootFields = new Set(['v', 'target', 'variant', 'recipientName', 'senderName', 'pronoun',
     'sampleIndex', 'message', 'musicId', 'design', 'recipientPronoun', 'tone', 'greeting', 'volume']);
@@ -485,6 +486,10 @@ const CardLinks = (() => {
     return value;
   }
   function designText(value, key) {
+    if (key === 'arrival') {
+      if (!['stardust', 'growing', 'classic'].includes(value)) throw new Error('Invalid bouquet arrival');
+      return value;
+    }
     if (key === 'flowerNotes') {
       // JSON can escape each UTF-16 code unit with six characters. Bound the
       // encoded string before parsing, then validate its small, flat structure.
