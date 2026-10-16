@@ -61,3 +61,26 @@
 @keyframes reading-world-arrive{from{opacity:0;translate:0 18px;scale:.97}to{opacity:1;translate:0 0;scale:1}}
 
 .arrival-choice-preview .icon{width:14px;height:14px;flex:none}
+
+.effect-demo{position:relative;isolation:isolate;overflow:hidden;min-height:130px;background:linear-gradient(145deg,#f5e9ec,#e9e5ef);border:1px solid #dfcdd4;border-radius:12px;margin-top:12px;display:grid;place-items:center}
+.effect-demo-paper{display:flex;flex-direction:column;gap:5px;padding:14px 30px;background:#fffaf1;border:1px solid #d6c19d;transform:rotate(-3deg);font:29px/1.3 var(--serif);color:#85445d}
+.effect-demo-paper>span{font:9px/1.5 var(--sans)}
+#effect-preview-particles{position:absolute;inset:0;pointer-events:none;color:#bb7591}
+#effect-preview-particles>span{position:absolute;left:var(--x);top:12px;width:18px;height:18px;animation:effect-demo-float 2.8s var(--delay) ease-in-out 2 both}
+#effect-preview-particles svg{width:100%;height:100%;fill:currentColor}
+.effect-demo[data-effect=constellation] #effect-preview-particles{color:#c69a50}
+.effect-demo-button{display:block;padding:10px 14px;border:1px solid #d8bec7;background:#fff8ee;color:#85445d;border-radius:7px;min-height:44px;margin-top:10px;font:11px/1.7 var(--sans);cursor:pointer}
+.effect-demo[data-intensity=off] #effect-preview-particles>span{animation:none}
+body:not([data-screen=editor]) #effect-preview-particles>span{animation-play-state:paused}
+@keyframes effect-demo-float{from{opacity:.1;translate:0 0;rotate:var(--turn)}30%{opacity:1}to{opacity:.35;translate:9px 85px;rotate:calc(var(--turn) + 60deg)}}
+.create-card-invite{position:relative;z-index:3;width:min(740px,calc(100% - 32px));margin:28px auto 12px;display:flex;align-items:center;justify-content:space-between;gap:20px;background:#fff8ee;color:#644452;border:1px solid #dcb9c4;border-radius:15px;padding:23px}
+.create-card-invite strong{font:600 16px/1.5 var(--sans)}
+.create-card-invite p{font:12px/1.8 var(--sans);margin-top:6px;max-width:400px}
+#create-another{flex:none;font-size:13px;background:#86435e;color:#fff8ee;border-color:#86435e;min-height:52px}
+#create-another:hover{background:#71304c}
+@media(max-width:620px){.create-card-invite{width:calc(100% - 16px);flex-direction:column;align-items:stretch;gap:15px;padding:20px;margin-top:24px}.create-card-invite strong{font-size:15px}.create-card-invite p{font-size:11px}#create-another{width:100%;justify-content:center}}
+@media(prefers-reduced-motion:reduce){#effect-preview-particles>span{animation:none!important}}
+.letter-screen[data-ambient=butterflies] .reading-ambience i{background:none;border-radius:0;width:15px;height:15px;color:#cb99c4}
+.reading-ambience i svg{width:100%;height:100%;fill:currentColor}
+/* The bouquet already contains its greeting; avoid repeating a second title above it. */
+.has-bouquet-arrival>h1,.has-bouquet-arrival>.intro{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}

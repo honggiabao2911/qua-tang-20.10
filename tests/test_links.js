@@ -10,8 +10,8 @@ const source = fs.readFileSync(path.join(__dirname, '../assets/js/card-links.js'
 const context = vm.createContext({});
 // Expose only the existing compressor for malformed wire fixtures. Production
 // exports stay limited to encode/decode.
-vm.runInContext(source.replace('return Object.freeze({ encode, decode });',
-  'return Object.freeze({ encode, decode, raw: source => "#c=" + compress(source, 6, n => alphabet.charAt(n)) });') +
+vm.runInContext(source.replace('return Object.freeze({ encode, decode, encodeCompact });',
+  'return Object.freeze({ encode, decode, encodeCompact, raw: source => "#c=" + compress(source, 6, n => alphabet.charAt(n)) });') +
   '\nglobalThis.codec = CardLinks;', context);
 const { codec } = context;
 const plain = value => JSON.parse(JSON.stringify(value));
@@ -105,5 +105,39 @@ const explicitArrival = plain(codec.decode(codec.raw(JSON.stringify([4, null, nu
   [...Array(19).fill(null), 0]]))));
 assert.equal(explicitArrival.design.arrival, 'stardust');
 checks++;
+
+// v5 is optional and never longer; snapshots, Unicode and old wire formats survive.
+const compactSamples=[
+  '20/10, con chúc mẹ khỏe, ngủ ngon và có thật nhiều niềm vui. Hôm nay, mong mẹ dành một chút thời gian cho điều mình thích. Gửi mẹ một tấm thiệp nhỏ và thật nhiều thương.',
+  'Anh chúc em bình yên, hạnh phúc nhé ❤️',
+  Array.from({length:256},(_,i)=>String.fromCharCode(i)).join(''),
+  'ĂăĐđĨĩŨũƠơƯư'+Array.from({length:90},(_,i)=>String.fromCharCode(0x1ea0+i)).join(''),
+  'Dịu dàng, hạnh phúc, yêu thương 🌸 中文 日本語 한글 العربية'.normalize('NFD'),
+  'ÿýþæç ÀÄ ß ü \" \\ \n 🧑‍🤝‍🧑'
+];
+for(const greeting of compactSamples){
+  const payload={target:'lover',recipientName:'An',greeting,design:{arrival:'growing',scene:'orbits',experience:'lovegalaxy',body:greeting}};
+  const legacy=codec.encode(payload),compact=codec.encodeCompact(payload);
+  assert.ok(compact.length<=legacy.length);
+  assert.deepEqual(plain(codec.decode(compact)),plain(codec.decode(legacy)));
+  checks++;
+}
+const shorter={greeting:compactSamples[0]};
+assert.ok(codec.encodeCompact(shorter).length<codec.encode(shorter).length*.9);
+for(const malformed of ['[5,"ÿ"]','[5,"ÿA"]','[5,"'+'æ'.repeat(4000)+'"]'])assert.throws(()=>codec.decode(codec.raw(malformed)));
+checks+=4;
+const latinBoundary={greeting:'é'.repeat(3000),design:{body:'é'.repeat(3000),secret:'\u0001'.repeat(1000)},message:'\u0001'.repeat(1000)};
+assert.equal(codec.encodeCompact(latinBoundary),codec.encode(latinBoundary));
+assert.deepEqual(plain(codec.decode(codec.encodeCompact(latinBoundary))),plain(codec.decode(codec.encode(latinBoundary))));
+checks++;
+let seed=26;
+const next=()=>{seed=(seed*1664525+1013904223)>>>0;return seed;};
+const alphabetWide=compactSamples.join('');
+for(let i=0;i<100;i++){
+  let greeting='';for(let j=0;j<300;j++)greeting+=alphabetWide[next()%alphabetWide.length];
+  const payload={greeting};
+  assert.deepEqual(plain(codec.decode(codec.encodeCompact(payload))),plain(codec.decode(codec.encode(payload))));
+  checks++;
+}
 
 console.log(`CardLinks: ${checks} compatibility, Unicode, gift, arrival and malformed-input checks passed.`);

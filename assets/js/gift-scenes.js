@@ -43,7 +43,7 @@
       if(id==='ocean'){
         const touch=document.createElement('button');touch.type='button';touch.className='gift-touch-zone';touch.textContent='Chạm mặt nước';touch.setAttribute('aria-label','Tạo gợn nước và phù du phát sáng');this.node.append(touch);
       }
-      if(kind==='reading')this.setPhase('reading');
+      if(kind==='reading'){const welcome=document.createElement('div');welcome.className='tx-interaction-layer';welcome.setAttribute('aria-hidden','true');this.node.append(welcome);this.setPhase('reading');}
     }
     update(design){
       this.design={...design};this.node.dataset.intensity=design.intensity || 'cinematic';this.node.classList.toggle('gift-low-power',lowPower);
