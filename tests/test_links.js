@@ -33,6 +33,7 @@ for (const [hash, payload] of previousV4) {
   for (const [key, value] of Object.entries(payload)) assert.deepEqual(decoded[key], value);
   assert.ok(!Object.hasOwn(decoded.design, 'giftIntro'));
   assert.ok(!Object.hasOwn(decoded.design, 'flowerNotes'));
+  assert.ok(!Object.hasOwn(decoded.design, 'arrival'));
   checks++;
 }
 
@@ -83,4 +84,26 @@ assert.throws(() => codec.decode(codec.raw('x'.repeat(1000000))));
 assert.equal({}.polluted, undefined);
 checks += 3;
 
-console.log(`CardLinks: ${checks} compatibility, Unicode, gift and malformed-input checks passed.`);
+// Bouquet reception is appended after the existing v4 gift fields; older
+// payloads must remain byte-identical and carry no implicit arrival default.
+for (const arrival of ['stardust', 'growing', 'classic']) for (const target of targets) {
+  const design = { scene: 'musicbox', experience: 'musicbox', giftIntro: 'Mở một điều dịu dàng 🌸',
+    flowerNotes: JSON.stringify(['Cảm ơn bạn', 'Mãi thương nhé ❤️']), arrival };
+  assert.deepEqual(roundtrip({ target, musicId: `${target}:5`, design }).design, design);
+  checks++;
+}
+for (const value of ['', 'unknown', null, false, {}, [], 3, -1]) {
+  assert.throws(() => codec.encode({ design: { arrival: value } }));
+  if (value !== null) {
+    const packedDesign = Array(20).fill(null);
+    packedDesign[19] = value;
+    assert.throws(() => codec.decode(codec.raw(JSON.stringify([4, null, null, null, null, null, null, null, null, packedDesign]))));
+  }
+  checks++;
+}
+const explicitArrival = plain(codec.decode(codec.raw(JSON.stringify([4, null, null, null, null, null, null, null, null,
+  [...Array(19).fill(null), 0]]))));
+assert.equal(explicitArrival.design.arrival, 'stardust');
+checks++;
+
+console.log(`CardLinks: ${checks} compatibility, Unicode, gift, arrival and malformed-input checks passed.`);

@@ -207,7 +207,12 @@ class CollectionBrowserTests(unittest.TestCase):
                 paths = {path for method, path, _ in self.audio_requests if method == "HEAD"}
                 canonical = {f"/assets/music/{index}{stem}.mp3" for index in range(6)}
                 self.assertTrue(canonical.issubset(paths), (group, paths))
-                self.assertEqual(canonical, {path for path in paths if "/assets/music/" in path})
+                # The editor's separate nhac.mp3 soundtrack may also be probed
+                # here; every recipient-track probe must still belong to this
+                # group's six canonical files.
+                recipient_paths = {path for path in paths if "/assets/music/" in path
+                                   and path != "/assets/music/nhac.mp3"}
+                self.assertEqual(canonical, recipient_paths)
                 self.assertTrue(self.page.locator("#background-music").evaluate("el => el.paused"),
                                 "Selecting a song must not autoplay while editing")
                 self.open_letter()

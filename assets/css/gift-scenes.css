@@ -7,7 +7,6 @@
 
 .tx-paper-mark.gift-scene{border-radius:50%;overflow:hidden}.tx-paper-mark.gift-scene svg{mask-image:radial-gradient(ellipse at 50% 50%,black 40%,transparent 74%);-webkit-mask-image:radial-gradient(ellipse at 50% 50%,black 40%,transparent 74%)}
 .gift-reading-backdrop .gift-object>svg{mask-image:linear-gradient(180deg,transparent,black 23%,black 88%,transparent);-webkit-mask-image:linear-gradient(180deg,transparent,black 23%,black 88%,transparent)}
-.gift-host .gift-umbrella .gift-object>svg{transform:scale(1.12);transform-origin:50% 55%}
 
 .gift-flower-notes{visibility:hidden}.gift-scene:is([data-phase=ready],[data-phase=reading]) .gift-flower-notes{visibility:visible}
 

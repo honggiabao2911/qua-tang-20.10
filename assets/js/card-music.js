@@ -10,14 +10,6 @@ const CardMusic = (() => {
     women: { stem: 'nu', oldStem: 'nhacphunu' },
     lover: { stem: 'yeu', oldStem: 'nhacyeu' }
   });
-  const suggestions = Object.freeze({
-    me: ['Ca khúc về mẹ', 'Ca khúc gia đình ấm áp', 'Piano dịu', 'Guitar acoustic', 'Piano và dây', 'Nhạc không lời tươi sáng'],
-    ba: ['Giai điệu quê hương', 'Ca khúc về bà phù hợp', 'Đàn tranh nhẹ', 'Guitar mộc', 'Piano hoài niệm', 'Hòa tấu ấm áp'],
-    co: ['Ca khúc tri ân', 'Ca khúc tuổi học trò', 'Piano trong trẻo', 'Guitar nhẹ', 'Hòa tấu dây', 'Nhạc không lời trang nhã'],
-    chi: ['Pop vui', 'Acoustic tích cực', 'Lo-fi sáng', 'Ukulele', 'Piano vui', 'Chill không lời'],
-    nu: ['Pop tích cực', 'Acoustic tươi', 'Lo-fi nhẹ', 'Bossa nova', 'Piano sáng', 'Hòa tấu vui'],
-    yeu: ['Tình ca ngọt ngào', 'Tình ca đồng hành', 'Acoustic lãng mạn', 'Piano tình cảm', 'Chill R&B phù hợp', 'Không lời kiểu điện ảnh']
-  });
   // Tệp cũ được giữ nguyên, không đoán tên bài hoặc sao chép thành nhiều bản.
   const legacyRecordings = Object.freeze({
     'me:0': ['nhac_me.mp3', 'assets/nhac_me.mp3'],
@@ -48,6 +40,17 @@ const CardMusic = (() => {
   let statusOverride = '';
   let openingIntent = null;
   let volume = 30;
+  // Hai không gian dùng chung một audio; nhạc làm thiệp không đi theo liên kết.
+  let mode = 'card';
+  let studioTrack = null;
+  let studioDiscovery = null;
+  let studioLoading = false;
+  let studioDesired = false;
+  let studioPending = false;
+  let studioUserPaused = false;
+  let studioRevision = 0;
+  let studioStatusOverride = '';
+  let studioVolume = 24;
 
   if (audio) {
     audio.loop = true;
@@ -58,7 +61,8 @@ const CardMusic = (() => {
   const notice = message => document.dispatchEvent(new CustomEvent('cardmusicnotice', { detail: { message } }));
   const emitSelection = () => document.dispatchEvent(new CustomEvent('cardmusicchange', { detail: { id: selectedId } }));
   const canonicalURL = path => new URL(path, document.baseURI).href;
-  const actualPlaying = () => Boolean(audio && selectedTrack?.available && desired && !audio.paused && !audio.ended && !audio.error);
+  const actualPlaying = () => Boolean(mode === 'card' && audio && selectedTrack?.available && desired && !audio.paused && !audio.ended && !audio.error);
+  const studioPlaying = () => Boolean(mode === 'studio' && audio && studioTrack && studioDesired && !audio.paused && !audio.ended && !audio.error);
   const labelFor = index => `Bản nhạc ${String(index + 1).padStart(2, '0')}`;
   const expectedFile = (target, index) => `${MUSIC_ROOT}${index}${definitions[target].stem}.mp3`;
   const titleFor = track => track.displayName || labelFor(track.index);
@@ -69,8 +73,7 @@ const CardMusic = (() => {
     return {
       catalogId: `${stem}:${index}`,
       displayName: entry?.displayName || labelFor(index),
-      artist: entry?.artist || '',
-      suggestion: entry?.suggestion || suggestions[stem]?.[index] || ''
+      artist: entry?.artist || ''
     };
   }
 
@@ -88,8 +91,7 @@ const CardMusic = (() => {
           if (!match || entry.path !== `${MUSIC_ROOT}${match[2]}${match[1]}.mp3`) continue;
           metadata.set(entry.id, {
             displayName: typeof entry.displayName === 'string' ? entry.displayName.slice(0, 120) : '',
-            artist: typeof entry.artist === 'string' ? entry.artist.slice(0, 100) : '',
-            suggestion: typeof entry.suggestion === 'string' ? entry.suggestion.slice(0, 160) : ''
+            artist: typeof entry.artist === 'string' ? entry.artist.slice(0, 100) : ''
           });
         }
       } catch (_) {
@@ -187,17 +189,46 @@ const CardMusic = (() => {
     return `${titleFor(selectedTrack)} đã sẵn sàng. Chạm để bật nhạc.`;
   }
 
+  function studioStatus() {
+    if (studioStatusOverride) return studioStatusOverride;
+    if (studioLoading) return 'Đang tìm nhạc cho lúc làm thiệp…';
+    if (!studioTrack) return 'Chưa có nhac.mp3. Thêm tệp này ở thư mục gốc để nghe nhạc khi làm thiệp.';
+    if (studioPlaying()) return 'Nhạc làm thiệp đang phát.';
+    if (studioPending && studioDesired) return 'Đang mở nhạc làm thiệp…';
+    if (mode !== 'studio') return 'Nhạc làm thiệp sẽ phát riêng khi bạn quay lại thiết kế.';
+    if (studioUserPaused) return 'Nhạc làm thiệp đã tạm dừng.';
+    return 'Nhạc làm thiệp đã sẵn sàng. Chạm để nghe.';
+  }
+
+  function studioState() {
+    return { active: mode === 'studio', available: Boolean(studioTrack), loading: studioLoading,
+      playing: studioPlaying(), pending: studioPending, file: studioTrack, volume: studioVolume,
+      status: studioStatus() };
+  }
+
   function syncUI() {
     const playing = actualPlaying();
+    const mainPlaying = mode === 'studio' ? studioPlaying() : playing;
     for (const button of buttons) {
       button.disabled = false;
-      button.setAttribute('aria-pressed', String(playing));
-      button.setAttribute('aria-label', playing ? 'Tạm dừng nhạc nền' : 'Bật nhạc nền');
+      button.setAttribute('aria-pressed', String(mainPlaying));
+      button.setAttribute('aria-label', mainPlaying ? 'Tạm dừng nhạc nền' : 'Bật nhạc nền');
       const label = button.querySelector('[data-music-label]');
       const icon = button.querySelector('[data-music-icon] use');
-      if (label) label.textContent = playing ? 'Tắt nhạc' : 'Bật nhạc';
-      if (icon) icon.setAttribute('href', playing ? '#i-volume' : '#i-volume-off');
+      if (label) label.textContent = mainPlaying ? 'Tắt nhạc' : 'Bật nhạc';
+      if (icon) icon.setAttribute('href', mainPlaying ? '#i-volume' : '#i-volume-off');
     }
+    const studioButton = $('studio-music-toggle');
+    if (studioButton) {
+      const on = studioPlaying();
+      studioButton.disabled = false;
+      studioButton.setAttribute('aria-pressed', String(on));
+      studioButton.setAttribute('aria-label', on ? 'Tạm dừng nhạc làm thiệp' : 'Bật nhạc làm thiệp');
+      const label = studioButton.querySelector('[data-studio-music-label]');
+      if (label) label.textContent = on ? 'Tạm dừng' : 'Bật nhạc làm thiệp';
+      else studioButton.textContent = on ? 'Tạm dừng' : 'Bật nhạc làm thiệp';
+    }
+    if ($('studio-music-status')) $('studio-music-status').textContent = studioStatus();
     if ($('music-status')) $('music-status').textContent = currentStatus();
     if ($('volume-control')) $('volume-control').disabled = false;
     document.querySelectorAll('#track-list [data-track-id]').forEach(button => {
@@ -241,10 +272,7 @@ const CardMusic = (() => {
         const detail = document.createElement('small');
         detail.className = 'track-state';
         detail.textContent = track.available ? `${track.legacy ? 'Đang dùng tệp cũ' : 'Có sẵn'} · ${track.file}` : `Chưa có tệp nhạc · ${track.expected}`;
-        const suggestion = document.createElement('small');
-        suggestion.className = 'track-suggestion';
-        suggestion.textContent = track.suggestion ? `Gợi ý chọn nhạc: ${track.suggestion}` : '';
-        select.append(title, detail, suggestion);
+        select.append(title, detail);
         const preview = document.createElement('button');
         preview.type = 'button';
         preview.className = 'track-preview';
@@ -299,21 +327,157 @@ const CardMusic = (() => {
     syncUI();
   }
 
-  function pause(userInitiated = true) {
+  function applyAudioVolume(value) {
+    if (audio) {
+      try { audio.volume = value / 100; } catch (_) { /* iOS dùng nút âm lượng của thiết bị. */ }
+    }
+  }
+
+  function setStudioVolume(value) {
+    const numeric = Number(value);
+    if (!Number.isFinite(numeric)) return studioVolume;
+    studioVolume = Math.round(Math.min(100, Math.max(0, numeric)));
+    if (mode === 'studio') applyAudioVolume(studioVolume);
+    for (const id of ['studio-volume', 'studio-volume-control']) {
+      if ($(id)) $(id).value = String(studioVolume);
+    }
+    for (const id of ['studio-volume-value']) {
+      if ($(id)) $(id).textContent = `${studioVolume}%`;
+    }
+    return studioVolume;
+  }
+
+  function discoverStudio() {
+    if (!studioDiscovery) {
+      studioLoading = true;
+      studioDiscovery = (async () => {
+        for (const path of ['nhac.mp3', `${MUSIC_ROOT}nhac.mp3`]) {
+          const found = await probe(path);
+          if (found) { studioTrack = found; return found; }
+        }
+        studioTrack = null;
+        return null;
+      })().finally(() => { studioLoading = false; syncUI(); });
+    }
+    return studioDiscovery;
+  }
+
+  function playStudio() {
+    if (!audio || mode !== 'studio' || !studioTrack) return Promise.resolve(false);
+    desired = false;
+    pendingPlay = false;
+    openingIntent = null;
+    studioDesired = true;
+    studioPending = true;
+    studioStatusOverride = '';
+    if (audio.getAttribute('src') !== studioTrack) {
+      audio.pause();
+      audio.src = studioTrack;
+      audio.load();
+    }
+    applyAudioVolume(studioVolume);
+    const attempt = ++requestId;
+    let result;
+    try { result = audio.play(); } catch (error) { result = Promise.reject(error); }
+    syncUI();
+    return Promise.resolve(result).then(() => {
+      if (attempt !== requestId || mode !== 'studio') return false;
+      studioPending = false;
+      syncUI();
+      return studioPlaying();
+    }).catch(error => {
+      if (attempt !== requestId || mode !== 'studio') return false;
+      studioDesired = false;
+      studioPending = false;
+      if (error?.name !== 'AbortError') studioStatusOverride = error?.name === 'NotAllowedError'
+        ? 'Chạm “Bật nhạc làm thiệp” để trình duyệt cho phép phát nhạc.'
+        : 'Chưa phát được nhac.mp3. Chạm nút để thử lại.';
+      syncUI();
+      return false;
+    });
+  }
+
+  function enterStudio({ gesture = false } = {}) {
+    const changed = mode !== 'studio';
+    if (changed) {
+      requestId += 1;
+      userActionRevision += 1;
+      desired = false;
+      pendingPlay = false;
+      openingIntent = null;
+      if (audio) audio.pause();
+      mode = 'studio';
+      applyAudioVolume(studioVolume);
+    }
+    const revision = changed || gesture ? ++studioRevision : studioRevision;
+    if (gesture && !studioUserPaused) {
+      studioDesired = true;
+      studioPending = true;
+      studioStatusOverride = '';
+      if (studioTrack) return playStudio();
+    }
+    // Đọc tệp có thể chạy sớm; chỉ thao tác chạm rõ ràng mới tạo ý định phát.
+    const shouldPlay = gesture && !studioUserPaused;
+    const result = discoverStudio().then(found => {
+      if (revision !== studioRevision || mode !== 'studio') return false;
+      if (found && shouldPlay && studioDesired && !studioUserPaused) return playStudio();
+      if (!found) { studioDesired = false; studioPending = false; }
+      syncUI();
+      return false;
+    });
+    syncUI();
+    return result;
+  }
+
+  function leaveStudio() {
+    if (mode !== 'studio') return;
+    studioRevision += 1;
     requestId += 1;
+    studioDesired = false;
+    studioPending = false;
+    if (audio) audio.pause();
+    mode = 'card';
+    loadTrack(selectedTrack);
+    applyAudioVolume(volume);
+    syncUI();
+  }
+
+  function toggleStudio() {
+    if (mode === 'studio' && (studioDesired || studioPlaying() || studioPending)) {
+      studioRevision += 1;
+      requestId += 1;
+      studioUserPaused = true;
+      studioDesired = false;
+      studioPending = false;
+      studioStatusOverride = '';
+      if (audio) audio.pause();
+      syncUI();
+      return Promise.resolve(false);
+    }
+    studioUserPaused = false;
+    studioStatusOverride = '';
+    if (!studioTrack && !studioLoading) {
+      for (const path of ['nhac.mp3', `${MUSIC_ROOT}nhac.mp3`]) probeCache.delete(path);
+      studioDiscovery = null;
+    }
+    return enterStudio({ gesture: true });
+  }
+
+  function pause(userInitiated = true) {
+    if (mode === 'card') requestId += 1;
     desired = false;
     pendingPlay = false;
     if (userInitiated) { userPaused = true; userActionRevision += 1; openingIntent = null; }
-    if (audio) audio.pause();
+    if (audio && mode === 'card') audio.pause();
     statusOverride = '';
     syncUI();
   }
 
   function loadTrack(track) {
-    requestId += 1;
+    if (mode === 'card') requestId += 1;
     pendingPlay = false;
     selectedTrack = track || null;
-    if (!audio) return;
+    if (!audio || mode !== 'card') return;
     audio.pause();
     if (track?.available) {
       if (audio.getAttribute('src') !== track.url) {
@@ -327,11 +491,14 @@ const CardMusic = (() => {
   }
 
   function play(userInitiated = true) {
+    if (mode !== 'card') leaveStudio();
     if (!audio || !selectedTrack?.available) {
       syncUI();
       return Promise.resolve(false);
     }
     if (userInitiated) { userPaused = false; userActionRevision += 1; }
+    if (audio.getAttribute('src') !== selectedTrack.url) loadTrack(selectedTrack);
+    applyAudioVolume(volume);
     desired = true;
     pendingPlay = true;
     statusOverride = '';
@@ -372,7 +539,8 @@ const CardMusic = (() => {
       return true;
     }
     userActionRevision += 1;
-    const continuePlaying = desired && !userPaused;
+    const inEditor = $('editor-screen') && !$('editor-screen').hidden;
+    const continuePlaying = mode === 'card' && desired && !userPaused && !inEditor;
     selectedId = id;
     statusOverride = '';
     desired = false;
@@ -414,9 +582,9 @@ const CardMusic = (() => {
     const found = await Promise.all(order.map(async index => {
       const track = await findTrack(target, index);
       if (generation === scanId && group === target && index === requestedIndex) {
-        loadTrack(track);
+        if (selectedId === track.id) loadTrack(track);
         syncUI();
-        if (track.available && openingIntent && openingIntent.group === target && openingIntent.id === selectedId && openingIntent.revision === userActionRevision && !userPaused) {
+        if (mode === 'card' && track.available && openingIntent && openingIntent.group === target && openingIntent.id === selectedId && openingIntent.revision === userActionRevision && !userPaused) {
           openingIntent = null;
           autoAttempted = true;
           void play(false);
@@ -431,7 +599,7 @@ const CardMusic = (() => {
     renderCatalogue();
     if (selectedId !== previousId) emitSelection();
     // Không để kết quả quét đến muộn ghi đè thao tác tắt/đổi bài mới của người dùng.
-    if (shouldContinue && !userPaused && userActionRevision === actionAtScanStart && selectedTrack.available) void play(false);
+    if (mode === 'card' && shouldContinue && !userPaused && userActionRevision === actionAtScanStart && selectedTrack.available) void play(false);
     return tracks.map(track => ({ ...track }));
   }
 
@@ -446,6 +614,7 @@ const CardMusic = (() => {
   }
 
   function openGesture() {
+    leaveStudio();
     if (userPaused || autoAttempted) {
       syncUI();
       return Promise.resolve(false);
@@ -461,6 +630,7 @@ const CardMusic = (() => {
   }
 
   async function toggle() {
+    if (mode === 'studio') return toggleStudio();
     if (desired || actualPlaying() || pendingPlay) {
       pause(true);
       return;
@@ -505,9 +675,7 @@ const CardMusic = (() => {
     const numeric = Number(value);
     if (!Number.isFinite(numeric)) return volume;
     volume = Math.round(Math.min(100, Math.max(0, numeric)));
-    if (audio) {
-      try { audio.volume = volume / 100; } catch (_) { /* iOS điều khiển âm lượng bằng nút thiết bị. */ }
-    }
+    if (mode === 'card') applyAudioVolume(volume);
     for (const id of ['volume-control', 'editor-volume-control']) {
       if ($(id)) $(id).value = String(volume);
     }
@@ -520,15 +688,36 @@ const CardMusic = (() => {
   for (const id of ['volume-control', 'editor-volume-control']) {
     $(id)?.addEventListener('input', event => setVolume(event.target.value));
   }
+  $('studio-music-toggle')?.addEventListener('click', () => { void toggleStudio(); });
+  for (const id of ['studio-volume', 'studio-volume-control']) {
+    $(id)?.addEventListener('input', event => setStudioVolume(event.target.value));
+  }
+  setStudioVolume(studioVolume);
+  void discoverStudio();
   setVolume(30, false);
   if (audio) {
     audio.addEventListener('playing', () => {
-      if (!desired || !selectedTrack?.available) audio.pause();
+      if (mode === 'studio') {
+        if (!studioDesired || !studioTrack) audio.pause();
+        else studioPending = false;
+      } else if (!desired || !selectedTrack?.available) audio.pause();
       else pendingPlay = false;
       syncUI();
     });
     for (const event of ['pause', 'loadedmetadata', 'ended', 'emptied']) audio.addEventListener(event, syncUI);
     audio.addEventListener('error', () => {
+      if (mode === 'studio') {
+        if (!audio.error || !studioTrack || (audio.currentSrc && audio.currentSrc !== canonicalURL(studioTrack))) return;
+        studioDesired = false;
+        studioPending = false;
+        requestId += 1;
+        audio.pause();
+        studioStatusOverride = 'Không đọc được nhac.mp3. Kiểm tra tệp MP3 rồi chạm để thử lại.';
+        studioDiscovery = null;
+        studioTrack = null;
+        syncUI();
+        return;
+      }
       if (!audio.error || !selectedTrack?.available) return;
       if (audio.currentSrc && audio.currentSrc !== canonicalURL(selectedTrack.url)) return;
       const failed = selectedTrack;
@@ -544,7 +733,17 @@ const CardMusic = (() => {
       notice(statusOverride);
     });
   }
-  function stopOnPageHide() { openingIntent = null; autoAttempted = false; userActionRevision += 1; pause(false); }
+  function stopOnPageHide() {
+    openingIntent = null;
+    autoAttempted = false;
+    userActionRevision += 1;
+    studioRevision += 1;
+    studioDesired = false;
+    studioPending = false;
+    requestId += 1;
+    if (audio) audio.pause();
+    pause(false);
+  }
   function resumeUI() { syncUI(); }
   window.addEventListener('pagehide', stopOnPageHide);
   window.addEventListener('pageshow', resumeUI);
@@ -553,6 +752,11 @@ const CardMusic = (() => {
     setGroup,
     setVolume,
     currentVolume: () => volume,
+    enterStudio,
+    leaveStudio,
+    toggleStudio,
+    studioState,
+    setStudioVolume,
     currentId: () => selectedId,
     openGesture,
     stopOnPageHide,
