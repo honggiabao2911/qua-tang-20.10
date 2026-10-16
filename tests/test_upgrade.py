@@ -125,7 +125,7 @@ class UpgradeBrowserTests(unittest.TestCase):
     def open_letter(self):
         self.page.locator("#open-card-button").click()
         expect(self.page.locator("#envelope-screen")).to_be_visible()
-        self.page.locator("#open-envelope").click()
+        self.page.locator("#envelope-open-button").click()
         expect(self.page.locator("#letter-screen")).to_be_visible(timeout=4000)
 
     def wait_playing(self, expected_filename=None):
@@ -281,7 +281,7 @@ class UpgradeBrowserTests(unittest.TestCase):
         self.page.locator("#music-toggle").click()
         self.page.wait_for_function("document.querySelector('#background-music').paused")
         self.page.locator("#replay-card").click()
-        self.page.locator("#open-envelope").click()
+        self.page.locator("#envelope-open-button").click()
         expect(self.page.locator("#letter-screen")).to_be_visible()
         self.assertTrue(self.page.locator("#background-music").evaluate("el => el.paused"))
         expect(self.page.locator("#music-toggle")).to_have_attribute("aria-pressed", "false")
@@ -291,7 +291,7 @@ class UpgradeBrowserTests(unittest.TestCase):
     def test_09_all_design_choices_update_preview_letter_and_reset(self):
         self.editor()
         self.open_design()
-        preview = self.page.locator("#editor-screen .paper")
+        preview = self.page.locator("#preview-card")
         for theme in ("rose", "sage", "midnight", "champagne"):
             self.page.locator(f'[data-theme-choice="{theme}"]').click()
             expect(preview).to_have_attribute("data-theme", theme)
@@ -333,12 +333,12 @@ class UpgradeBrowserTests(unittest.TestCase):
         self.page.locator("#personal-message").fill("Một tấm thiệp có thiết kế riêng.\nYêu mẹ ♥")
         self.open_letter()
         link = self.copy_link()
-        payload = json.loads(unquote(urlparse(link).fragment.removeprefix("card=")))
+        payload = self.page.evaluate("link => CardLinks.decode(new URL(link).hash)", link)
         self.assertEqual(2, payload["v"])
         second = self.new_page()
         second.goto(link)
         expect(second.locator("#envelope-screen")).to_be_visible()
-        second.locator("#open-envelope").click()
+        second.locator("#envelope-open-button").click()
         expect(second.locator("#letter-screen")).to_be_visible(timeout=4000)
         expect(second.locator("#letter-greeting")).to_have_text(VIETNAMESE)
         paper = second.locator("#letter-screen .paper")
@@ -356,7 +356,7 @@ class UpgradeBrowserTests(unittest.TestCase):
         payload = {"v": 1, "target": "grandma", "recipientName": "Ngoại", "senderName": "Bảo", "message": VIETNAMESE}
         self.page.goto(BASE_URL + "#card=" + quote(json.dumps(payload, ensure_ascii=False)))
         expect(self.page.locator("#envelope-screen")).to_be_visible()
-        self.page.locator("#open-envelope").click()
+        self.page.locator("#envelope-open-button").click()
         expect(self.page.locator("#letter-screen")).to_be_visible(timeout=4000)
         expect(self.page.locator("#letter-message")).to_have_text(VIETNAMESE)
         expect(self.page.locator("#letter-screen .paper")).to_have_attribute("data-theme", "rose")
@@ -366,7 +366,7 @@ class UpgradeBrowserTests(unittest.TestCase):
         self.clipboard()
         self.editor()
         self.open_letter()
-        payload = json.loads(unquote(urlparse(self.copy_link()).fragment.removeprefix("card=")))
+        payload = self.page.evaluate("link => CardLinks.decode(new URL(link).hash)", self.copy_link())
         # Validate new data structurally using field names from the actual public format.
         self.assertIn("musicId", payload)
         self.assertIn("design", payload)
@@ -460,13 +460,13 @@ class UpgradeBrowserTests(unittest.TestCase):
         self.open_letter()
         for _ in range(3):
             self.page.locator("#replay-card").click()
-            self.page.locator("#open-envelope").click()
+            self.page.locator("#envelope-open-button").click()
             expect(self.page.locator("#letter-screen")).to_be_visible(timeout=1500)
         # Accessibility preference must suppress transient particle effects.
         expect(self.page.locator("#petal-burst")).to_be_empty()
         self.page.emulate_media(reduced_motion="no-preference")
         self.page.locator("#replay-card").click()
-        self.page.locator("#open-envelope").click()
+        self.page.locator("#envelope-open-button").click()
         expect(self.page.locator("#skip-animation")).to_be_visible()
         self.page.locator("#skip-animation").click()
         expect(self.page.locator("#letter-screen")).to_be_visible(timeout=1500)
