@@ -140,4 +140,14 @@ for(let i=0;i<100;i++){
   checks++;
 }
 
+// Optional bé B settings are appended after arrival, preserving all older indexes.
+for(const welcome of ['none','bebe'])for(const target of targets){
+  const design={arrival:'growing',welcome,welcomeText:'Bé B mang chút nắng đến nhé! 🌸'};
+  const payload={target,greeting:'Chúc một ngày bình yên.',design};
+  assert.deepEqual(plain(codec.decode(codec.encodeCompact(payload))).design,design);checks++;
+}
+for(const welcome of ['',null,[],{},false,9,'tiny']){assert.throws(()=>codec.encode({design:{welcome}}));checks++;}
+assert.throws(()=>codec.encodeCompact({design:{welcomeText:'x'.repeat(161)}}));checks++;
+assert.equal(plain(codec.decode(codec.encode({design:{arrival:'growing'}}))).design.welcome,undefined);checks++;
+
 console.log(`CardLinks: ${checks} compatibility, Unicode, gift, arrival and malformed-input checks passed.`);

@@ -1,0 +1,78 @@
+/* Original expressive light character. All motion is CSS plus one story timer. */
+#bebe-welcome{width:min(100%,1040px);margin:0 auto;position:relative;min-width:0}
+#bebe-welcome[hidden]{display:none!important}
+.bb-root{--bb-night:#111827;position:relative;isolation:isolate;overflow:hidden;border-radius:28px;background:radial-gradient(ellipse at 50% 38%,#163444,#111827 56%,#10121d);color:#effff9;border:1px solid #6ea9b33b;box-shadow:0 25px 70px #15203322}
+.bb-root[data-palette=midnight]{background:radial-gradient(ellipse at 50% 35%,#292746,#101329 65%)}
+.bb-root[data-palette=sage],.bb-root[data-palette=teal]{background:radial-gradient(ellipse at 50% 35%,#163e37,#101f27 65%)}
+.bb-stage{position:relative;z-index:1;display:grid;grid-template-columns:1fr;justify-items:center;align-content:center;min-height:620px;padding:95px 40px 65px;gap:30px}
+.bb-brand{position:absolute;top:25px;left:29px;display:flex;align-items:center;gap:9px;font:600 19px/1.6 var(--sans);color:#befff0}
+.bb-brand>span:last-child{font:10px/1.6 var(--sans);color:#9db8bb;letter-spacing:.3px}
+.bb-brand-dot{width:7px;height:7px;border-radius:50%;background:#8fffe6;box-shadow:0 0 13px #6df9d0}
+.bb-skip{position:absolute;right:22px;top:22px;display:flex;align-items:center;justify-content:center;gap:10px;border:1px solid #a9c9d050;border-radius:24px;padding:11px 16px;min-height:44px;color:#e9fff9;background:#101b2490;font:11px/1.6 var(--sans);cursor:pointer;z-index:5}
+.bb-skip svg{width:14px;height:14px;flex:none}.bb-skip:hover{background:#29414a}.bb-skip:focus-visible{outline:3px solid #d1ffed;outline-offset:4px}
+.bb-character{position:relative;width:300px;height:210px;flex:none;filter:none}
+.bb-eye-pair{position:absolute;inset:36px 20px 35px;display:flex;align-items:center;justify-content:space-between;gap:45px;transition:translate .65s ease,rotate .65s ease}
+.bb-eye-slot{width:94px;height:102px;position:relative;flex:none}
+.bb-blink{width:100%;height:100%;transform-origin:50% 50%;animation:bb-blink 6.4s .15s infinite}
+.bb-eye-light{position:absolute;inset:0;background:linear-gradient(145deg,#acfff6,#37f4d5 35%,#23cfcc);border:2px solid #b0fff3;border-radius:26px;box-shadow:0 0 7px #bcfff9,0 0 23px #56ffe28c,0 0 57px #2ad4e03d,inset 0 0 17px #ddfff580;transform-origin:center;transition:transform .65s cubic-bezier(.2,.8,.2,1),border-radius .5s,opacity .5s;overflow:hidden}
+.bb-eye-light i{position:absolute;left:12%;top:8%;width:66%;height:30%;background:linear-gradient(#e5fff8b0,transparent);border-radius:50%;opacity:.7}
+.bb-eye-light::after{content:'';position:absolute;inset:45% -10% -45%;border-radius:50% 50% 0 0;background:#152c39;opacity:0;transition:opacity .4s,translate .4s}
+.bb-mouth{position:absolute;left:calc(50% - 10px);bottom:32px;width:20px;height:9px;border:2px solid #7af4d7;border-top:0;border-radius:0 0 20px 20px;opacity:.35;transition:opacity .5s,scale .5s}
+.bb-cheek{position:absolute;bottom:55px;width:28px;height:9px;border-radius:50%;background:#efa8c5;box-shadow:0 0 18px #ffa6c855;opacity:0;transition:opacity .6s}
+.bb-cheek.left{left:15px;rotate:9deg}.bb-cheek.right{right:15px;rotate:-9deg}
+.bb-sleep{position:absolute;right:4px;top:2px;font:22px/1 var(--serif);color:#7eb7c2;opacity:0;transition:opacity .5s}
+.bb-sleep span{font-size:15px;position:absolute;left:22px;top:-19px}
+.bb-root[data-mood=sleep] .bb-eye-light{transform:scaleY(.075);opacity:.45}.bb-root[data-mood=sleep] .bb-blink{animation:none}.bb-root[data-mood=sleep] .bb-sleep{opacity:.7}.bb-root[data-mood=sleep] .bb-mouth{opacity:0}
+.bb-root[data-mood=awake] .bb-eye-pair{translate:0 -3px}
+.bb-root[data-mood=curious] .bb-eye-pair{translate:9px 0;rotate:-3deg}
+.bb-root[data-mood=curious] .left .bb-eye-light{transform:scaleY(1.05) rotate(-4deg)}
+.bb-root[data-mood=curious] .right .bb-eye-light{transform:scaleY(.68) rotate(5deg)}
+.bb-root[data-mood=happy] .bb-eye-light{transform:scaleY(.76);border-radius:48% 48% 28% 28%}
+.bb-root[data-mood=happy] .bb-eye-light::after{opacity:1;translate:0 12%}
+.bb-root[data-mood=happy] .bb-mouth{opacity:1;scale:1.25}
+.bb-root[data-mood=shy] .bb-eye-pair{translate:0 9px;rotate:3deg}.bb-root[data-mood=shy] .bb-eye-light{transform:scaleY(.7)}.bb-root[data-mood=shy] .bb-cheek{opacity:.8}
+.bb-root[data-mood=offering] .bb-eye-pair{translate:0 10px}.bb-root[data-mood=offering] .bb-cheek{opacity:.5}
+.bb-root[data-mood=waiting] .bb-eye-pair{animation:bb-wait-look 8s ease-in-out infinite}.bb-root[data-mood=waiting] .bb-mouth{opacity:.8}
+.bb-hands{position:absolute;inset:auto 0 0;height:32px;opacity:0;transition:opacity .8s;pointer-events:none}
+.bb-hands i{position:absolute;bottom:0;width:46px;height:18px;border:2px solid #81ffe0;border-top:0;border-radius:0 0 50% 50%;background:#67eec526;box-shadow:0 0 15px #4bffe133}
+.bb-hands i:first-child{left:0;rotate:17deg}.bb-hands i:last-child{right:0;rotate:-17deg}
+.bb-root[data-phase=flowers] .bb-hands{opacity:1}
+.bb-dialogue{max-width:710px;width:100%;text-align:center;min-width:0}
+#bebe-dialogue{font:400 clamp(21px,2.4vw,29px)/1.65 var(--serif);min-height:3.3em;overflow-wrap:anywhere;text-wrap:pretty;color:#ecfff9;white-space:pre-wrap}
+.bb-footnote{font:11px/1.8 var(--sans);color:#a4b6c4;margin-top:22px;letter-spacing:.15px}
+.bb-line-in{animation:bb-line-in .6s ease-out both}
+.bb-stars{position:absolute;inset:0;pointer-events:none;overflow:hidden}.bb-stars i{position:absolute;left:var(--x);top:var(--y);width:2px;height:2px;border-radius:50%;background:#d1fff0;box-shadow:0 0 9px #9bffe670;opacity:.3;animation:bb-twinkle 5s var(--delay) ease-in-out infinite alternate}
+.bb-root[data-phase=flowers]{border-radius:22px;margin-bottom:12px}
+.bb-root[data-phase=flowers] .bb-stage{grid-template-columns:130px minmax(0,1fr);min-height:0;padding:62px 26px 15px;gap:15px;align-items:center}
+.bb-root[data-phase=flowers] .bb-brand{top:10px;left:19px;font-size:14px}.bb-root[data-phase=flowers] .bb-brand>span:last-child{font-size:8px}
+.bb-root[data-phase=flowers] .bb-skip{top:9px;right:12px;font-size:10px;min-height:44px;padding:8px 11px}
+.bb-root[data-phase=flowers] .bb-character{width:130px;height:110px;transform-origin:center}
+.bb-root[data-phase=flowers] .bb-eye-pair{inset:16px 7px 34px;gap:16px}.bb-root[data-phase=flowers] .bb-eye-slot{width:43px;height:49px}
+.bb-root[data-phase=flowers] .bb-eye-light{border-radius:13px;box-shadow:0 0 6px #bcfff9,0 0 19px #56ffe269}
+.bb-root[data-phase=flowers] .bb-mouth{bottom:28px;width:12px;left:calc(50% - 6px);height:6px}
+.bb-root[data-phase=flowers] .bb-cheek{width:13px;bottom:38px;height:5px}.bb-root[data-phase=flowers] .bb-cheek.left{left:4px}.bb-root[data-phase=flowers] .bb-cheek.right{right:4px}
+.bb-root[data-phase=flowers] .bb-hands i{width:24px;height:10px}
+.bb-root[data-phase=flowers] #bebe-dialogue{font:15px/1.8 var(--sans);min-height:0;text-align:left}.bb-root[data-phase=flowers] .bb-footnote{display:none}
+.bb-paused *{animation-play-state:paused!important}.bb-motion-off *{animation:none!important;transition:none!important}
+@keyframes bb-line-in{from{opacity:0;translate:0 8px}to{opacity:1;translate:0 0}}
+@keyframes bb-blink{0%,6%,10%,100%{transform:scaleY(1)}7%,8%{transform:scaleY(.07)}}
+@keyframes bb-wait-look{0%,30%,100%{translate:0 0}45%,60%{translate:0 6px}75%,88%{translate:4px 0}}
+@keyframes bb-twinkle{from{opacity:.15}to{opacity:.65}}
+@media(max-width:620px){#bebe-welcome{width:calc(100% + 28px);margin-left:-14px}.bb-root{border-radius:23px}.bb-stage{min-height:calc(100svh - 145px);padding:108px 22px 40px;gap:25px}.bb-brand{top:21px;left:19px;font-size:17px}.bb-brand>span:last-child{display:none}.bb-skip{right:15px;top:17px;padding:11px 12px;font-size:10px}.bb-character{width:250px;height:195px}.bb-eye-pair{inset:35px 17px 39px;gap:30px}.bb-eye-slot{width:80px;height:88px}.bb-eye-light{border-radius:23px}.bb-cheek{bottom:53px}.bb-footnote{font-size:10px;line-height:1.8}#bebe-dialogue{font-size:22px;line-height:1.7}.bb-root[data-phase=flowers] .bb-stage{grid-template-columns:100px minmax(0,1fr);padding:62px 13px 15px;gap:10px}.bb-root[data-phase=flowers] .bb-character{width:100px;height:105px}.bb-root[data-phase=flowers] .bb-eye-slot{width:34px;height:44px}.bb-root[data-phase=flowers] .bb-eye-pair{gap:9px;inset:18px 5px 32px}.bb-root[data-phase=flowers] #bebe-dialogue{font-size:12px;line-height:1.8}.bb-root[data-phase=flowers] .bb-skip{font-size:9px;min-height:44px}}
+@media(prefers-reduced-motion:reduce){.bb-root *{animation:none!important;transition:none!important}}
+.welcome-settings{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);gap:25px 40px;padding:28px;margin:0 0 24px;background:linear-gradient(135deg,#edf7f1,#f4e8ef);border:1px solid #cbd9cf;border-radius:18px}
+.welcome-settings h2{font-size:30px;line-height:1.4;letter-spacing:-.5px}.welcome-settings>div>p:not(.studio-overline){font:12px/1.9 var(--sans);color:#747079;margin-top:14px;max-width:430px}
+.welcome-settings-fields{display:grid;gap:13px;min-width:0}.welcome-settings label{font:600 12px/1.8 var(--sans);color:#5f535e}.welcome-settings label>span{font-size:10px;font-weight:400;color:#887987}
+.welcome-settings select,.welcome-settings textarea{margin-top:7px}.welcome-settings textarea{font-size:12px;min-height:82px}.welcome-settings textarea:disabled{opacity:.55}
+#welcome-text-help{font:10px/1.8 var(--sans);color:#877c83;margin-top:-6px}.welcome-dialogue-sample{font:italic 13px/1.9 var(--serif);color:#63776e;padding:13px 15px;border-left:2px solid #8bb5a0;background:#ffffff65;overflow-wrap:anywhere}
+.welcome-dialogue-sample[hidden]{display:none}
+.welcome-settings .button{justify-self:start;font-size:11px;min-height:45px;padding:12px 16px}
+.ba-flower-touch{display:block;padding:0;border:0;background:transparent;color:inherit;cursor:pointer;touch-action:manipulation;appearance:none;min-width:0}
+.ba-flower-touch:focus-visible{outline:3px solid #b889a8;outline-offset:-10px;border-radius:30px}.ba-flower-touch:disabled{cursor:default}
+@media(max-width:620px){.welcome-settings{grid-template-columns:1fr;padding:23px 20px;gap:20px}.welcome-settings h2{font-size:27px}.welcome-settings>div>p:not(.studio-overline){font-size:11px}.welcome-settings .button{width:100%;justify-content:center}}
+/* Keep the whole interactive bouquet inside the viewport, including on phones. */
+.ba-flower-touch{width:100%;margin-inline:auto}
+/* In the handover, bé B already supplies the greeting and invitation. */
+#envelope-screen:has(#bebe-welcome:not([hidden])) #bouquet-arrival .ba-greeting,
+#envelope-screen:has(#bebe-welcome:not([hidden])) #bouquet-arrival .ba-invitation{display:none}
+@media(max-width:620px){.bb-root[data-phase=flowers] .bb-stage{padding-top:58px;padding-bottom:12px}.bb-root[data-phase=flowers] .bb-character{height:96px}#envelope-screen:has(#bebe-welcome:not([hidden])) .ba-flower-touch{min-height:0}}

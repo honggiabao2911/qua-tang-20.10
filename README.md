@@ -1,6 +1,6 @@
 # Lời thương · Thiệp 20/10
 
-Website thiệp chúc mừng bằng HTML, CSS, JavaScript thuần. Người nhận được đón bằng bó hoa lớn từ 2.450 hạt sáng (1.250 trên điện thoại) hoặc hoa mọc nở, kèm lời tặng hoa nhân ngày 20/10, rồi nhấn **Nhận hoa và mở lời chúc** để tiếp tục. Màn đầu không hiển thị tấm thiệp. Tạo lời chúc theo quan hệ, chọn thiết kế từ 22 chủ đề, nghe thử nhạc và chia sẻ nguyên tấm thiệp. Không cần backend, tài khoản, thư viện từ CDN hoặc bước build. Font tiếng Việt nằm trong dự án.
+Website thiệp chúc mừng bằng HTML, CSS, JavaScript thuần. Thiệp mới đón người nhận bằng **bé B**: đôi mắt ánh sáng thức dậy, nói lời chúc riêng theo quan hệ rồi trao bó hoa lớn từ 2.450 hạt sáng (1.250 trên điện thoại) hoặc hoa mọc nở. Chạm cả bó hoa hoặc nút **Nhận hoa và mở lời chúc** để mở đúng thiệp đã chuẩn bị. Màn đầu không hiển thị tấm thiệp. Tạo lời chúc theo quan hệ, chọn thiết kế từ 22 chủ đề, nghe thử nhạc và chia sẻ nguyên tấm thiệp. Không cần backend, tài khoản, thư viện từ CDN hoặc bước build. Font tiếng Việt nằm trong dự án.
 
 ## Chạy và triển khai
 
@@ -25,9 +25,21 @@ GitHub Pages: trong **Settings → Pages**, chọn **Deploy from a branch → ma
 
 Lời tự viết tối đa 3.000 đơn vị UTF-16, lời nhắn riêng và lời nhắn phụ tối đa 1.000; bộ đếm và giới hạn dùng cùng cách đếm với ô nhập HTML. Tên tối đa 100, cách xưng/cách gọi 30. Câu mở quà tối đa 160; cây lời nhắn cho phép tối đa 5 lời ngắn, mỗi lời tối đa 160. Các lời trên hoa hoàn toàn tùy chọn: để trống thì chỉ có hoa trang trí, không tự sinh kỷ niệm. Nội dung nhập được chuẩn hóa Unicode NFC và hiển thị bằng `textContent`.
 
+## bé B mang quà đến
+
+Trong **Màn chào đón**, chọn **bé B tặng hoa** (mặc định cho thiệp mới) hoặc **Mở thiệp trực tiếp**. Chọn trực tiếp sẽ vào cảnh chủ đề, không có đoạn bé B. Các lựa chọn bó hoa độc lập vẫn dùng được khi không muốn nhân vật.
+
+Bé B là người đưa quà: mắt ngủ, thức dậy, tò mò, vui, ngại rồi nhìn về bó hoa. Lời thoại thay đổi theo Mẹ, Bà, Cô giáo, Chị/em gái, Bạn nữ/nhóm phụ nữ và Người thương; dùng đúng cách gọi, số ít/số nhiều và tên người nhận. Nếu có tên người gửi, bé B nhắc người đó nhờ chuyển quà; không có tên thì dùng câu trung tính, không tự điền tên chủ dự án. Không dùng đại từ của người gửi làm vai của bé B.
+
+Nhịp dẫn dài khoảng 12 giây trước khi trao hoa, hoa thành hình ở khoảng giây 15 rồi giữ chờ. Có **Mở thiệp ngay** ở mọi nhịp. Khi nhận hoa, bé B vui lên; chuyển cảnh 0,85–1,25 giây rồi đọc thiệp. Ở chế độ này, không phát nối thêm đoạn mở quà 4 giây; cảnh chủ đề vẫn hiện lớn và giữ tương tác cạnh lời chúc. Khi không dùng bé B, toàn bộ luồng cảnh quà trước đây vẫn hoạt động.
+
+Có thể thêm một câu tối đa 160 ký tự trong lời dẫn; **Xem bé B → hoa → thiệp** dùng chính nội dung, tên, xưng hô, chủ đề, kiểu chữ, chữ ký và bài nhạc đang chọn. Cấu hình lưu ở `design.welcome` và `design.welcomeText`, thêm sau các trường URL cũ. Liên kết trước đây không có hai trường này mở như trước.
+
+Nhân vật được dựng bằng CSS/SVG và một bộ hẹn giờ theo các nhịp, không tải tài nguyên từ trang tham khảo, không nhúng trang bằng iframe. Tạm dừng thời gian và chuyển động khi ẩn tab; hủy hẹn giờ khi đọc, quay lại sửa hoặc rời trang. Giảm/tắt chuyển động hiện ngay bé B cùng hoa hoàn chỉnh, lời chúc nhóm và câu tùy chỉnh. Nếu module nhân vật không tải được, ứng dụng chuyển sang màn bó hoa vốn có. Màn chào tự chạy yên lặng; âm nhạc dùng duy nhất bộ phát của thiệp và bắt đầu từ thao tác hợp lệ, không phát lại từ đầu khi chuyển sang phần đọc.
+
 ## Bó hoa lớn khi nhận thiệp
 
-Thiệp mới mặc định dùng **Bó hoa từ ngàn hạt sáng**. Có thể chọn **Bó hoa mọc lên và bung nở** hoặc **Dùng cảnh mở trong thư viện**. Hai kiểu bó hoa chỉ hiện hoa và lời tặng 20/10, không đặt tấm thiệp ở giữa bó. Khi nhấn **Nhận hoa và mở lời chúc**, cả bó hoa rung nhẹ như một khối rồi **cảnh chủ đề đã chọn tiếp tục mở đầy đủ**: đảo hoa, cây lời nhắn, ngân hà hoặc một trong 22 chủ đề. Nhạc bắt đầu từ thao tác chạm ban đầu và tiếp tục xuyên suốt, không phát lại khi chuyển cảnh. Với 10 cảnh quà có trạng thái hoàn chỉnh, người nhận tự chọn đọc sau khi ngắm món quà.
+Trong màn bé B, chủ đề thiên nhiên gợi ý **Hoa mọc lên và bung nở**, chủ đề đêm/vũ trụ gợi ý **Bó hoa từ ngàn hạt sáng**. Người gửi có thể chọn lại cách hoa xuất hiện. Có thể chọn **Bó hoa mọc lên và bung nở** hoặc **Dùng cảnh mở trong thư viện**. Hai kiểu bó hoa chỉ hiện hoa và lời tặng 20/10, không đặt tấm thiệp ở giữa bó. Khi không dùng bé B, nhấn **Nhận hoa và mở lời chúc**, cả bó hoa rung nhẹ như một khối rồi **cảnh chủ đề đã chọn tiếp tục mở đầy đủ**: đảo hoa, cây lời nhắn, ngân hà hoặc một trong 22 chủ đề. Nhạc bắt đầu từ thao tác chạm ban đầu và tiếp tục xuyên suốt, không phát lại khi chuyển cảnh. Với 10 cảnh quà có trạng thái hoàn chỉnh, người nhận tự chọn đọc sau khi ngắm món quà.
 
 Khi đọc, cảnh chủ đề hiện lớn cạnh lời chúc trên desktop, phía trên thiệp trên điện thoại; cây/hoa/quỹ đạo vẫn ở lại, giữ chuyển động nhẹ và tương tác. Không giấu cảnh trong một dấu nhỏ trên giấy hay chỉ đặt tận cuối trang. Phần lựa chọn màn đón có hình minh họa, mô tả chuỗi mở, hình chủ đề cập nhật trực tiếp và nút **Xem trọn luồng này** cho cả ba lựa chọn. Chế độ giảm/tắt chuyển động vẫn hiện đầy đủ món quà tĩnh.
 
@@ -88,7 +100,7 @@ Các cảnh cũ mở trong khoảng 2–2,8 giây; cảnh quà mới có nhiều
 | Bạn nữ/nhóm phụ nữ | `0nu.mp3`, `1nu.mp3`, `2nu.mp3`, `3nu.mp3`, `4nu.mp3`, `5nu.mp3` |
 | Người thương | `0yeu.mp3`, `1yeu.mp3`, `2yeu.mp3`, `3yeu.mp3`, `4yeu.mp3`, `5yeu.mp3` |
 
-Đã đồng bộ **6 tệp chuẩn cho Mẹ**, từ `assets/music/0me.mp3` đến `5me.mp3`, do bạn tải lên `main`. Cả sáu là MP3 hợp lệ. Ba vị trí khác vẫn nghe được bằng tệp cũ: `ba:0` → `nhac_ba.mp3`, `nu:0` → `music_under.mp3`, `nu:1` → `music_over.mp3`. Tổng cộng 9/36 vị trí có nguồn âm thanh; **27 vị trí chưa có bản thu**: `1–5ba`, `0–5co`, `0–5chi`, `2–5nu`, `0–5yeu` (đều đuôi `.mp3`). Còn 30 đường dẫn chuẩn chưa có tệp vật lý. Giữ nguyên mọi tệp cũ và các tệp `.MP3` bạn đã tải ở thư mục gốc; website ưu tiên bản chữ thường trong `assets/music/`.
+Đã đồng bộ **11 tệp chuẩn** bạn tải lên `main`: 6 tệp cho Mẹ (`0me.mp3` đến `5me.mp3`) và 5 tệp cho Bà (`0ba.mp3` đến `4ba.mp3`) trong `assets/music/`. Các tệp đều được kiểm tra là MP3 hợp lệ. Hai vị trí khác nghe được bằng tệp cũ: `nu:0` → `music_under.mp3`, `nu:1` → `music_over.mp3`. Tổng cộng 13/36 vị trí có nguồn âm thanh; **23 vị trí chưa có bản thu**: `5ba`, `0–5co`, `0–5chi`, `2–5nu`, `0–5yeu` (đều đuôi `.mp3`). Còn 25 đường dẫn chuẩn chưa có tệp vật lý. Giữ nguyên mọi tệp cũ và các tệp `.MP3` bạn đã tải ở thư mục gốc; website ưu tiên bản chữ thường trong `assets/music/`.
 
 Xem [MUSIC.md](MUSIC.md) để có danh sách thiếu, bảng chuyển tên và nhạc riêng khi tạo thiệp. Tên bài/nghệ sĩ trong `assets/music/catalog.json` chỉ nên điền sau khi xác định đúng bản thu.
 
@@ -111,6 +123,7 @@ Giới hạn kích thước cả trước và trong giải nén; kiểm tra phi�
 | `assets/js/greetings.js` | 54 lời chúc, sắc thái, cặp xưng hô, các trường template rõ ràng |
 | `assets/js/legacy-greetings.js` | Nguyên văn 24 lời chúc của liên kết cũ |
 | `assets/js/themes.js` | Danh mục chủ đề, 12 không gian cũ và kết nối cảnh quà mới |
+| `assets/js/bebe-welcome.js`, `assets/css/bebe-welcome.css` | Nhân vật bé B, lời thoại sáu nhóm, nhịp dẫn, biểu cảm và dọn bộ hẹn giờ |
 | `assets/js/bouquet-arrival.js`, `assets/css/bouquet-arrival.css` | Bó hoa lớn, lời tặng 20/10, cành và hoa chuyển động liền nhau, vòng đời canvas |
 | `assets/css/reception.css` | Màn tạo thiệp, nhạc riêng và hiệu ứng mở hai cánh giấy |
 | `assets/js/gift-scenes.js` | Danh mục 10 cảnh quà, bộ dựng dùng chung, trạng thái mở/hoàn chỉnh/đọc và vòng đời xem trước |
@@ -137,3 +150,5 @@ Kiểm tra bằng Chromium với viewport mô phỏng không thay thế việc x
 Đợt khôi phục nhịp xuất hiện đã chạy **26 ca trình duyệt đạt** trong các bộ `test_arrival.py`, `test_journey.py`, `test_refinements.py`: hai kiểu bó hoa và 22 chủ đề, cánh hoa mở khác thời điểm, tâm cánh khớp đầu cành trong lúc nở/rung, nhạc và chia sẻ, cache quầng sáng, nhịp vẽ, giảm/tắt chuyển động và xem lại. Bộ kiểm tra liên kết riêng nằm ở `tests/test_links.js`. JavaScript qua kiểm tra cú pháp và `git diff --check` đạt. Có video ghi lại trực tiếp bằng Chromium ở viewport 390 px để kiểm tra nhịp nở, không chỉ ảnh tĩnh.
 
 Phần chọn hoa/sao/bướm bay khi đọc có bản xem thử dùng cùng nét vẽ với hiệu ứng thật. Cảnh quà cũng có lớp đón hiệu ứng này. Khối **Tạo thiệp của bạn** nổi bật sau lời chúc; tạo mới xóa dữ liệu thiệp nhận và đưa về sáu nhóm người nhận.
+
+Bản bé B có bộ `tests/test_bebe.py` kiểm tra nhịp dẫn thật, sáu nhóm/biến thể, dữ liệu chia sẻ, nhạc liên tục, bỏ qua, bàn phím, chống mở lặp, ẩn/hiện tab, khôi phục trang, giảm chuyển động, tên dài và fallback khi module nhân vật thiếu. Các bộ hồi quy cũ chọn rõ màn không dùng bé B để tiếp tục kiểm tra từng cảnh gốc. Kết quả bản hiện tại: **129 ca trình duyệt đạt, 1 ca `file://` bị bỏ qua do chính sách Chromium**, gồm đủ 12 ca bé B và hồi quy các bộ browser, upgrade, collection, wow, gifts, arrival, journey, refinements. Ca bố cục bó hoa được chạy lại đạt sau khi chỉnh vùng nút cho điện thoại. Bộ liên kết đạt **331/331** kiểm tra. Kiểm tra cú pháp JavaScript, đường dẫn tài nguyên, ID HTML và `git diff --check` đều đạt. Video ghi trực tiếp ở viewport điện thoại 390 × 844 thể hiện trọn luồng bé B → hoa → thiệp.
