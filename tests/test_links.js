@@ -150,4 +150,14 @@ for(const welcome of ['',null,[],{},false,9,'tiny']){assert.throws(()=>codec.enc
 assert.throws(()=>codec.encodeCompact({design:{welcomeText:'x'.repeat(161)}}));checks++;
 assert.equal(plain(codec.decode(codec.encode({design:{arrival:'growing'}}))).design.welcome,undefined);checks++;
 
+// Named characters and greeting sound append fields without changing old cards.
+for(const welcomeName of ['', 'Mây nhỏ', 'Bé Mây 🌷', '<b>Mây</b>', 'a'.repeat(30)])for(const welcomeMusic of ['on','off']){
+  const payload={target:'mom',greeting:'Chúc mẹ bình yên.',design:{welcome:'bebe',welcomeName,welcomeMusic}};
+  assert.deepEqual(plain(codec.decode(codec.encodeCompact(payload))).design,payload.design);checks++;
+}
+for(const welcomeName of ['a'.repeat(31),null,[],{},4]){assert.throws(()=>codec.encode({design:{welcomeName}}));checks++;}
+for(const welcomeMusic of ['',null,[],{},false,9,'auto']){assert.throws(()=>codec.encodeCompact({design:{welcomeMusic}}));checks++;}
+const legacyWelcome=plain(codec.decode(codec.encode({design:{welcome:'bebe',welcomeText:'Lời riêng.'}})));
+assert.equal(legacyWelcome.design.welcomeName,undefined);assert.equal(legacyWelcome.design.welcomeMusic,undefined);checks+=2;
+
 console.log(`CardLinks: ${checks} compatibility, Unicode, gift, arrival and malformed-input checks passed.`);

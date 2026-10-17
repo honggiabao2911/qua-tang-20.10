@@ -61,7 +61,7 @@
   BouquetArrival.mount($('bouquet-arrival'),{onOpen:openEnvelope});
   const hasArrival=()=>state.design.arrival!=='classic';
   let bebePhase='idle',arrivalEdited=false;
-  const bebe=window.BebeWelcome?.mount($('bebe-welcome'),{onFlowers:presentBebeFlowers,onSkip:skipBebe});
+  const bebe=window.BebeWelcome?.mount($('bebe-welcome'),{onFlowers:presentBebeFlowers,onSkip:skipBebe,onSound:()=>CardMusic.toggleWelcome(),onGreet:()=>CardMusic.greetWelcome()});
   const hasBebe=()=>Boolean(bebe)&&state.design.welcome==='bebe'&&hasArrival();
   const flowersVisible=()=>arrivalActive()&&(!hasBebe()||bebePhase==='flowers');
   let arrivalPassed=false;
@@ -74,14 +74,14 @@
     scene: ['bouquet', 'galaxy', 'envelope', 'stardust', 'aurora', 'bloom', 'rose', 'sunrise', 'lotus', 'moonlight', 'butterflies', 'layers', 'crystal', 'orbits', ...Object.keys(GiftScenes.catalog)],
     structure: ['letter', 'arch', 'postcard', 'folded'], ornament: ['botanical', 'orbit', 'pressed'],
     intensity: ['cinematic', 'medium', 'gentle', 'off'], experience: ['', ...Object.keys(CardThemes.catalog)],
-    arrival:['stardust','growing','classic'],welcome:['none','bebe'],
+    arrival:['stardust','growing','classic'],welcome:['none','bebe'],welcomeMusic:['on','off'],
     size: ['small', 'medium', 'large'], reveal: ['instant', 'gentle', 'slow'], showDate: ['on', 'off'], showSignature: ['on', 'off']
   });
   const TONES = { all: 'Tất cả lời gợi ý', short: 'Ngắn gọn', warm: 'Ấm áp', playful: 'Vui vẻ', moving: 'Xúc động', sweet: 'Ngọt ngào', romantic: 'Lãng mạn' };
   const OPENING_NAMES = { bouquet:'Bó hoa bung nở',galaxy:'Vườn sao',envelope:'Mở phong thư',stardust:'Bụi sao hội tụ',aurora:'Dải sáng cực quang',bloom:'Cành lá hé mở',rose:'Nụ hồng bung nở',sunrise:'Nắng qua khung cửa',lotus:'Cánh sen trên nước',moonlight:'Trăng soi mặt hồ',butterflies:'Cánh bướm hé lời thương',layers:'Các lớp ngọc trai',crystal:'Trái tim pha lê',orbits:'Hai quỹ đạo gặp nhau' };
   const DESIGN_NAMES = { structure: {letter:'Thư tay',arch:'Thiệp đứng',postcard:'Toàn cảnh',folded:'Thiệp gập'}, theme: {rose:'Hồng sương',sage:'Vườn xanh',champagne:'Champagne',midnight:'Đêm ánh kim',teal:'Ngọc xanh',lilac:'Tím thạch anh'} };
   function defaultDesign(legacy = false) {
-    return { theme:'rose',font:'serif',layout:'classic',decoration:'botanical',effect:'petals',dedication:'',body:'',scene:'bouquet',structure:'arch',ornament:'botanical',intensity:'cinematic',experience:legacy?'':'sunflower',size:'medium',reveal:'gentle',showDate:'on',showSignature:'on',secret:'',giftIntro:'',flowerNotes:'[]',arrival:legacy?'classic':'growing',welcome:legacy?'none':'bebe',welcomeText:'' };
+    return { theme:'rose',font:'serif',layout:'classic',decoration:'botanical',effect:'petals',dedication:'',body:'',scene:'bouquet',structure:'arch',ornament:'botanical',intensity:'cinematic',experience:legacy?'':'sunflower',size:'medium',reveal:'gentle',showDate:'on',showSignature:'on',secret:'',giftIntro:'',flowerNotes:'[]',arrival:legacy?'classic':'growing',welcome:legacy?'none':'bebe',welcomeText:'',welcomeName:'bé B',welcomeMusic:'on' };
   }
   function recommendedArrival(id){return ['galaxy','lovegalaxy','aurora','moonlake','ocean','lantern','lightbridge','crystal'].includes(id)?'stardust':'growing';}
   function themeDesign(id) {
@@ -198,9 +198,8 @@
     Object.entries(screens).forEach(([key, element]) => { element.hidden = key !== next; });
     document.body.dataset.screen = next;
     CardThemes.setScreen(arrivalActive() && next==='envelope'?'editor':next);
-    if(next==='envelope'&&hasBebe())bebe.show(bebeSettings());
-    else if(next==='envelope'&&arrivalActive())showBouquet();
-    else BouquetArrival.hide();
+    if(next==='envelope'&&hasBebe()){bebe.show(bebeSettings());CardMusic.enterWelcome({enabled:state.design.welcomeMusic==='on'});}
+    else {CardMusic.leaveWelcome();if(next==='envelope'&&arrivalActive())showBouquet();else BouquetArrival.hide();}
     if(next==='editor')CardMusic.enterStudio();
     if (next !== 'letter') { $('secret-content').hidden = true; $('secret-reveal-button').setAttribute('aria-expanded','false'); }
     window.scrollTo({ top: 0, behavior: 'auto' });
@@ -296,6 +295,8 @@
     $('arrival-style').value=state.design.arrival;
     $('welcome-mode').value=state.design.welcome;
     $('welcome-text').value=state.design.welcomeText;
+    $('welcome-name').value=state.design.welcomeName;
+    $('welcome-music').checked=state.design.welcomeMusic==='on';
     $('card-dedication').value = state.design.dedication;
     $('custom-greeting').value = state.design.body;
     $('decoration-field').value = state.design.decoration;
@@ -383,7 +384,7 @@
   }
 
   function setArrival(value){arrivalEdited=true;state.design.arrival=value;if(value==='classic')state.design.welcome='none';renderDesignControls();renderCard();}
-  function bebeSettings(){return {target:state.target,variant:state.variant,recipientName:state.recipientName,senderName:state.senderName,recipientPronoun:state.recipientPronoun,welcomeText:state.design.welcomeText,theme:state.design.theme,intensity:state.design.intensity};}
+  function bebeSettings(){return {target:state.target,variant:state.variant,recipientName:state.recipientName,senderName:state.senderName,recipientPronoun:state.recipientPronoun,welcomeText:state.design.welcomeText,welcomeName:state.design.welcomeName,theme:state.design.theme,intensity:state.design.intensity};}
   function showBouquet(){BouquetArrival.show({style:state.design.arrival,intensity:state.design.intensity,recipient:cardText().envelopeRecipient,sender:state.senderName.trim()});}
   function presentBebeFlowers(){
     if(screen!=='envelope'||!hasBebe()||bebePhase==='flowers')return;
@@ -392,9 +393,12 @@
   function skipBebe(){if(screen!=='envelope')return;CardMusic.openGesture();revealLetter();}
   function renderWelcomeGuide(){
     const enabled=state.design.welcome==='bebe';
-    $('welcome-text').disabled=!enabled;$('welcome-dialogue-sample').hidden=!enabled;
-    if(enabled&&window.BebeWelcome){const lines=window.BebeWelcome.linesFor(bebeSettings());$('welcome-dialogue-sample').textContent=`Bé B sẽ nói: “${lines[0]}” “${lines[2]}”`;}
-    $('preview-welcome').textContent=enabled?'Xem bé B → hoa → thiệp':'Xem cách mở thiệp đã chọn';
+    $('welcome-text').disabled=!enabled;$('welcome-name').disabled=!enabled;$('welcome-music').disabled=!enabled;
+    const character=window.BebeWelcome?.nameFor(bebeSettings())||'bé B';
+    $('welcome-name-label').textContent=character;$('welcome-settings-title').textContent=character+' mang lời thương đến.';
+    $('welcome-option').textContent=character+' tặng hoa';$('welcome-dialogue-sample').hidden=!enabled;
+    if(enabled&&window.BebeWelcome){const lines=window.BebeWelcome.linesFor(bebeSettings());$('welcome-dialogue-sample').textContent=`${character} sẽ nói: “${lines[0]}” “${lines[2]}”`;}
+    $('preview-welcome').textContent=enabled?`Xem ${character} → hoa → thiệp`:'Xem cách mở thiệp đã chọn';
   }
 
   const EFFECT_DESCRIPTIONS={
@@ -447,7 +451,7 @@
     for(const style of ['stardust','growing']){const host=$(`arrival-${style}-picture`);if(!host.firstChild)host.innerHTML=BouquetArrival.thumbnail(style);}
     const id=state.design.experience,theme=CardThemes.catalog[id];
     const description=READING_NOTES[id]||'Cảnh đã chọn ở lại cùng lời chúc.';
-    $('journey-description').textContent=theme?`${hasBebe()?'bé B → Bó hoa → Lời chúc trong '+theme.name:((hasArrival()?'Bó hoa → ':'')+theme.name+' → Lời chúc')}. ${description}`:'Mở món quà rồi đọc lời chúc.';
+    $('journey-description').textContent=theme?`${hasBebe()?(window.BebeWelcome.nameFor(bebeSettings())+' → Bó hoa → Lời chúc trong '+theme.name):((hasArrival()?'Bó hoa → ':'')+theme.name+' → Lời chúc')}. ${description}`:'Mở món quà rồi đọc lời chúc.';
     $('reading-world-caption').hidden=!theme;
     $('reading-world-title').textContent=theme?.name||'';
     $('reading-world-description').textContent=description;
@@ -517,7 +521,7 @@
         return false;
       }
     }
-    const designFields = [['body', 'custom-greeting', CONFIG.maxCustomGreetingLength], ['dedication', 'card-dedication', CONFIG.maxDedicationLength], ['secret', 'secret-message', 1000], ['giftIntro', 'gift-intro', 160], ['welcomeText','welcome-text',160]];
+    const designFields = [['body', 'custom-greeting', CONFIG.maxCustomGreetingLength], ['dedication', 'card-dedication', CONFIG.maxDedicationLength], ['secret', 'secret-message', 1000], ['giftIntro', 'gift-intro', 160], ['welcomeText','welcome-text',160], ['welcomeName','welcome-name',30]];
     for (const [key, id, limit] of designFields) {
       if (state.design[key].length > limit) {
         showToast(`Nội dung thiết kế vượt ${limit.toLocaleString('vi-VN')} ký tự. Hãy rút ngắn rồi thử lại.`, true);
@@ -694,7 +698,7 @@
     }
     result.musicId = `${target}:0`;
     result.design = defaultDesign(data.v !== 4);
-    result.design.arrival='classic';result.design.welcome='none';
+    result.design.arrival='classic';result.design.welcome='none';result.design.welcomeMusic='off';
     if (data.v === 2 || data.v === 4) {
       if (Object.hasOwn(data, 'musicId')) {
         if (typeof data.musicId !== 'string' || !new RegExp(`^${target}:(?:[0-9]|1[0-9])$`).test(data.musicId)) throw new Error('Invalid song');
@@ -714,6 +718,7 @@
         result.design.secret = stringProperty(design,'secret','',1000);
         result.design.giftIntro=stringProperty(design,'giftIntro','',160);
         result.design.welcomeText=stringProperty(design,'welcomeText','',160);
+        result.design.welcomeName=stringProperty(design,'welcomeName','bé B',30);
         result.design.flowerNotes=stringProperty(design,'flowerNotes','[]',5000);
         const notes=JSON.parse(result.design.flowerNotes);
         if(!Array.isArray(notes)||notes.length>5||notes.some(note=>typeof note!=='string'||note.length>160))throw new Error('Invalid flower notes');
@@ -903,6 +908,9 @@
   $('theme-stage').addEventListener('click',event=>{if(event.target.closest('#open-theme-card'))openEnvelope();});
   $('arrival-style').addEventListener('change',event=>{setArrival(event.target.value);});
   $('welcome-mode').addEventListener('change',event=>{state.design.welcome=event.target.value;arrivalEdited=false;state.design.arrival=event.target.value==='bebe'?recommendedArrival(state.design.experience):'classic';renderDesignControls();renderCard();});
+  $('welcome-name').addEventListener('input',event=>{state.design.welcomeName=normalizeText(event.target.value);renderCard();});
+  $('welcome-music').addEventListener('change',event=>{state.design.welcomeMusic=event.target.checked?'on':'off';renderCard();});
+  document.addEventListener('cardmusicwelcome',event=>bebe?.setSound(event.detail));
   $('welcome-text').addEventListener('input',event=>{state.design.welcomeText=normalizeText(event.target.value);renderCard();});
   $('preview-welcome').addEventListener('click',()=>{if(!validateFields())return;shared=false;renderCard();showScreen('envelope');});
   document.querySelectorAll('[data-arrival-choice]').forEach(button=>button.addEventListener('click',()=>{setArrival(button.dataset.arrivalChoice);}));
@@ -923,7 +931,7 @@
     renderCard();
   });
   $('reset-design').addEventListener('click', () => {
-    state.design = { ...defaultDesign(), ...themeDesign(state.design.experience || CardThemes.defaults[state.target]), body: state.design.body, dedication:state.design.dedication,secret:state.design.secret,giftIntro:state.design.giftIntro,flowerNotes:state.design.flowerNotes,arrival:state.design.arrival,welcome:state.design.welcome,welcomeText:state.design.welcomeText };
+    state.design = { ...defaultDesign(), ...themeDesign(state.design.experience || CardThemes.defaults[state.target]), body: state.design.body, dedication:state.design.dedication,secret:state.design.secret,giftIntro:state.design.giftIntro,flowerNotes:state.design.flowerNotes,arrival:state.design.arrival,welcome:state.design.welcome,welcomeText:state.design.welcomeText,welcomeName:state.design.welcomeName,welcomeMusic:state.design.welcomeMusic };
     renderDesignControls();
     renderCard();
   });

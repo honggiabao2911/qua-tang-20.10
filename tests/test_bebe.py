@@ -8,9 +8,14 @@ import test_upgrade as regression
 BASE_URL=regression.BASE_URL
 
 class BebeBrowserTests(unittest.TestCase):
-    setUpClass=classmethod(regression.UpgradeBrowserTests.setUpClass.__func__)
+    @classmethod
+    def setUpClass(cls):
+        regression.UpgradeBrowserTests.setUpClass.__func__(cls)
+        cls.audio_bytes['loichao.mp3']=(regression.ROOT/'assets/music/loichao.mp3').read_bytes()
     tearDownClass=classmethod(regression.UpgradeBrowserTests.tearDownClass.__func__)
-    setUp=regression.UpgradeBrowserTests.setUp
+    def setUp(self):
+        regression.UpgradeBrowserTests.setUp(self)
+        self.available['loichao.mp3']='loichao.mp3'
     tearDown=regression.UpgradeBrowserTests.tearDown
     new_page=regression.UpgradeBrowserTests.new_page
     route_audio=regression.UpgradeBrowserTests.route_audio
@@ -89,7 +94,7 @@ class BebeBrowserTests(unittest.TestCase):
         self.assertGreater(time.monotonic()-start,11)
         self.assertLess(time.monotonic()-start,18)
         expect(self.page.locator('#bouquet-arrival')).to_be_visible()
-        self.assertTrue(self.page.locator('#background-music').evaluate('a=>a.paused'))
+        self.wait_playing('loichao.mp3')
         start=time.monotonic();self.receive()
         self.assertLess(time.monotonic()-start,3)
         expect(self.page.locator('#theme-backdrop .gift-wishtree')).to_be_visible()
@@ -142,7 +147,7 @@ class BebeBrowserTests(unittest.TestCase):
         self.assertEqual(1,self.page.locator('audio').evaluate_all('els=>els.filter(a=>!a.paused).length'))
 
     def test_06_keyboard_flower_opens_once_and_music_does_not_restart(self):
-        self.add_group_audio('mom');self.editor();self.settle_library();self.welcome()
+        self.add_group_audio('mom');self.editor();self.page.locator('#welcome-music').uncheck();self.settle_library();self.welcome()
         self.page.emulate_media(reduced_motion='no-preference')
         self.page.locator('#header-music-toggle').click();self.wait_playing('0me.mp3')
         self.page.wait_for_timeout(600)

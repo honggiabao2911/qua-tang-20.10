@@ -40,8 +40,10 @@ const CardMusic = (() => {
   let statusOverride = '';
   let openingIntent = null;
   let volume = 30;
-  // Hai không gian dùng chung một audio; nhạc làm thiệp không đi theo liên kết.
+  // Ba không gian (làm thiệp, lời chào, đọc thiệp) dùng chung một audio; nhạc làm thiệp không đi theo liên kết.
   let mode = 'card';
+  const welcomeFile = `${MUSIC_ROOT}loichao.mp3`;
+  let welcomeEnabled=false,welcomeDesired=false,welcomePending=false,welcomeUserPaused=false,welcomeStatusOverride='',welcomeHiddenPause=false;
   let studioTrack = null;
   let studioDiscovery = null;
   let studioLoading = false;
@@ -62,6 +64,7 @@ const CardMusic = (() => {
   const emitSelection = () => document.dispatchEvent(new CustomEvent('cardmusicchange', { detail: { id: selectedId } }));
   const canonicalURL = path => new URL(path, document.baseURI).href;
   const actualPlaying = () => Boolean(mode === 'card' && audio && selectedTrack?.available && desired && !audio.paused && !audio.ended && !audio.error);
+  const welcomePlaying = () => Boolean(mode==='welcome' && audio && welcomeDesired && !audio.paused && !audio.ended && !audio.error);
   const studioPlaying = () => Boolean(mode === 'studio' && audio && studioTrack && studioDesired && !audio.paused && !audio.ended && !audio.error);
   const labelFor = index => `Bản nhạc ${String(index + 1).padStart(2, '0')}`;
   const expectedFile = (target, index) => `${MUSIC_ROOT}${index}${definitions[target].stem}.mp3`;
@@ -200,6 +203,57 @@ const CardMusic = (() => {
     return 'Nhạc làm thiệp đã sẵn sàng. Chạm để nghe.';
   }
 
+  function welcomeState() {
+    return {active:mode==='welcome',enabled:welcomeEnabled,playing:welcomePlaying(),pending:welcomePending,
+      status:welcomeStatusOverride||(welcomePlaying()?'Nhạc chào đang phát':welcomeUserPaused?'Nhạc chào đã tắt.':'Chạm để nghe nhạc chào')};
+  }
+
+  function playWelcome() {
+    if(!audio||mode!=='welcome'||!welcomeEnabled||document.hidden)return Promise.resolve(false);
+    welcomeDesired=true;welcomePending=true;welcomeStatusOverride='';welcomeHiddenPause=false;
+    if(audio.getAttribute('src')!==welcomeFile||audio.error){audio.pause();audio.src=welcomeFile;audio.load();}
+    applyAudioVolume(Math.min(volume,38));
+    const attempt=++requestId;
+    let result;try{result=audio.play();}catch(error){result=Promise.reject(error);}
+    syncUI();
+    return Promise.resolve(result).then(()=>{
+      if(attempt!==requestId||mode!=='welcome')return false;
+      welcomePending=false;syncUI();return welcomePlaying();
+    }).catch(error=>{
+      if(attempt!==requestId||mode!=='welcome')return false;
+      welcomeDesired=false;welcomePending=false;
+      welcomeStatusOverride=error?.name==='NotAllowedError'?'Chạm Bật nhạc chào để nghe.':'Chưa phát được nhạc chào. Chạm để thử lại; bạn vẫn có thể nhận hoa.';
+      syncUI();return false;
+    });
+  }
+
+  function enterWelcome({enabled=true}={}) {
+    leaveStudio();leaveWelcome();
+    welcomeEnabled=enabled;welcomeStatusOverride='';
+    if(!enabled){syncUI();return Promise.resolve(false);}
+    requestId++;userActionRevision++;openingIntent=null;autoAttempted=false;desired=false;pendingPlay=false;
+    if(audio)audio.pause();mode='welcome';
+    if(audio){audio.src=welcomeFile;audio.load();}
+    syncUI();
+    // Try immediately; browsers that require a gesture keep a visible retry button.
+    return welcomeUserPaused||userPaused?Promise.resolve(false):playWelcome();
+  }
+
+  function leaveWelcome() {
+    if(mode!=='welcome')return;
+    requestId++;welcomeDesired=false;welcomePending=false;welcomeHiddenPause=false;
+    if(audio)audio.pause();mode='card';loadTrack(selectedTrack);applyAudioVolume(volume);syncUI();
+  }
+
+  function toggleWelcome() {
+    if(mode!=='welcome')return Promise.resolve(false);
+    if(welcomeDesired||welcomePending||welcomePlaying()){
+      requestId++;welcomeDesired=false;welcomePending=false;welcomeUserPaused=true;userPaused=true;welcomeHiddenPause=false;welcomeStatusOverride='';
+      if(audio)audio.pause();syncUI();return Promise.resolve(false);
+    }
+    welcomeUserPaused=false;userPaused=false;return playWelcome();
+  }
+
   function studioState() {
     return { active: mode === 'studio', available: Boolean(studioTrack), loading: studioLoading,
       playing: studioPlaying(), pending: studioPending, file: studioTrack, volume: studioVolume,
@@ -208,7 +262,7 @@ const CardMusic = (() => {
 
   function syncUI() {
     const playing = actualPlaying();
-    const mainPlaying = mode === 'studio' ? studioPlaying() : playing;
+    const mainPlaying = mode === 'welcome' ? welcomePlaying() : mode === 'studio' ? studioPlaying() : playing;
     for (const button of buttons) {
       button.disabled = false;
       button.setAttribute('aria-pressed', String(mainPlaying));
@@ -228,6 +282,7 @@ const CardMusic = (() => {
       if (label) label.textContent = on ? 'Tạm dừng' : 'Bật nhạc làm thiệp';
       else studioButton.textContent = on ? 'Tạm dừng' : 'Bật nhạc làm thiệp';
     }
+    document.dispatchEvent(new CustomEvent('cardmusicwelcome',{detail:welcomeState()}));
     if ($('studio-music-status')) $('studio-music-status').textContent = studioStatus();
     if ($('music-status')) $('music-status').textContent = currentStatus();
     if ($('volume-control')) $('volume-control').disabled = false;
@@ -398,6 +453,7 @@ const CardMusic = (() => {
   }
 
   function enterStudio({ gesture = false } = {}) {
+    leaveWelcome();
     const changed = mode !== 'studio';
     if (changed) {
       requestId += 1;
@@ -491,7 +547,7 @@ const CardMusic = (() => {
   }
 
   function play(userInitiated = true) {
-    if (mode !== 'card') leaveStudio();
+    if (mode !== 'card') {leaveStudio();leaveWelcome();}
     if (!audio || !selectedTrack?.available) {
       syncUI();
       return Promise.resolve(false);
@@ -614,7 +670,7 @@ const CardMusic = (() => {
   }
 
   function openGesture() {
-    leaveStudio();
+    leaveStudio();leaveWelcome();
     if (userPaused || autoAttempted) {
       syncUI();
       return Promise.resolve(false);
@@ -630,6 +686,7 @@ const CardMusic = (() => {
   }
 
   async function toggle() {
+    if(mode==='welcome')return toggleWelcome();
     if (mode === 'studio') return toggleStudio();
     if (desired || actualPlaying() || pendingPlay) {
       pause(true);
@@ -675,7 +732,7 @@ const CardMusic = (() => {
     const numeric = Number(value);
     if (!Number.isFinite(numeric)) return volume;
     volume = Math.round(Math.min(100, Math.max(0, numeric)));
-    if (mode === 'card') applyAudioVolume(volume);
+    if(mode==='welcome')applyAudioVolume(Math.min(volume,38));else if (mode === 'card') applyAudioVolume(volume);
     for (const id of ['volume-control', 'editor-volume-control']) {
       if ($(id)) $(id).value = String(volume);
     }
@@ -697,7 +754,9 @@ const CardMusic = (() => {
   setVolume(30, false);
   if (audio) {
     audio.addEventListener('playing', () => {
-      if (mode === 'studio') {
+      if (mode === 'welcome') {
+        if(!welcomeDesired||document.hidden)audio.pause();else welcomePending=false;
+      } else if (mode === 'studio') {
         if (!studioDesired || !studioTrack) audio.pause();
         else studioPending = false;
       } else if (!desired || !selectedTrack?.available) audio.pause();
@@ -706,6 +765,11 @@ const CardMusic = (() => {
     });
     for (const event of ['pause', 'loadedmetadata', 'ended', 'emptied']) audio.addEventListener(event, syncUI);
     audio.addEventListener('error', () => {
+      if(mode==='welcome'){
+        if(!audio.error||(audio.currentSrc&&audio.currentSrc!==canonicalURL(welcomeFile)))return;
+        requestId++;welcomeDesired=false;welcomePending=false;audio.pause();
+        welcomeStatusOverride='Chưa tải được nhạc chào. Chạm để thử lại; bạn vẫn có thể nhận hoa.';syncUI();return;
+      }
       if (mode === 'studio') {
         if (!audio.error || !studioTrack || (audio.currentSrc && audio.currentSrc !== canonicalURL(studioTrack))) return;
         studioDesired = false;
@@ -740,15 +804,23 @@ const CardMusic = (() => {
     studioRevision += 1;
     studioDesired = false;
     studioPending = false;
+    welcomeDesired=false;welcomePending=false;welcomeHiddenPause=false;
     requestId += 1;
     if (audio) audio.pause();
     pause(false);
   }
+  document.addEventListener('visibilitychange',()=>{
+    if(mode!=='welcome')return;
+    if(document.hidden){welcomeHiddenPause=welcomeDesired&&!welcomeUserPaused;requestId++;welcomePending=false;if(audio)audio.pause();syncUI();}
+    else if(welcomeHiddenPause){welcomeHiddenPause=false;void playWelcome();}
+  });
   function resumeUI() { syncUI(); }
   window.addEventListener('pagehide', stopOnPageHide);
   window.addEventListener('pageshow', resumeUI);
   syncUI();
   return Object.freeze({
+    enterWelcome,leaveWelcome,toggleWelcome,welcomeState,
+    greetWelcome:()=>mode==='welcome'&&!welcomePlaying()&&!welcomePending?toggleWelcome():Promise.resolve(false),
     setGroup,
     setVolume,
     currentVolume: () => volume,

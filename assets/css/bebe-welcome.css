@@ -76,3 +76,55 @@
 #envelope-screen:has(#bebe-welcome:not([hidden])) #bouquet-arrival .ba-greeting,
 #envelope-screen:has(#bebe-welcome:not([hidden])) #bouquet-arrival .ba-invitation{display:none}
 @media(max-width:620px){.bb-root[data-phase=flowers] .bb-stage{padding-top:58px;padding-bottom:12px}.bb-root[data-phase=flowers] .bb-character{height:96px}#envelope-screen:has(#bebe-welcome:not([hidden])) .ba-flower-touch{min-height:0}}
+
+/* Expressive greeting: gaze, wake-up light, word rhythm and a tap response. */
+.bb-character{display:block;padding:0;border:0;background:transparent;color:inherit;appearance:none;cursor:pointer;touch-action:manipulation;isolation:isolate}
+.bb-character:focus-visible{outline:2px solid #94ffe2;outline-offset:9px;border-radius:28px}
+.bb-brand{max-width:calc(100% - 195px);min-width:0}.bb-brand strong{font:inherit;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}.bb-brand>span:last-child{flex-shrink:0}
+.bb-stage{padding-bottom:110px}.bb-nebula{position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse at 26% 63%,#20dcb716,transparent 49%),radial-gradient(ellipse at 80% 30%,#a770e51f,transparent 48%);animation:bb-nebula-breathe 9s ease-in-out infinite alternate}
+.bb-eye-slot{translate:var(--look-x,0px) var(--look-y,0px);transition:translate .22s ease-out}
+.bb-eye-light::before{content:'';position:absolute;inset:0;background:linear-gradient(180deg,transparent 28%,#edfff918 49%,transparent 65%);translate:0 -100%;animation:bb-eye-sheen 6s 1s ease-in-out infinite}
+.bb-root[data-mood=awake] .bb-eye-pair{animation:bb-look-around 2.5s ease-in-out both}
+.bb-root[data-mood=curious] .bb-character{animation:bb-curious-tilt 2.8s ease-in-out both}
+.bb-root[data-mood=happy] .bb-character{animation:bb-happy-bob 2.6s ease-in-out both}
+.bb-root[data-mood=happy] .bb-mouth,.bb-root[data-mood=curious] .bb-mouth{animation:bb-talk .5s ease-in-out 5 alternate}
+.bb-root[data-mood=shy] .bb-character{animation:bb-shy-tilt 2.8s ease-in-out both}
+.bb-root[data-mood=offering] .bb-hands i{animation:bb-hand-offer 1.4s ease-out both}
+.bb-root[data-mood=waiting] .bb-blink{animation:bb-double-blink 6s ease-in-out infinite}
+.bb-wake-ring{position:absolute;inset:-18% -9%;border:1px solid #7affd02c;border-radius:50%;opacity:0;pointer-events:none}
+.bb-root[data-mood=awake] .bb-wake-ring{animation:bb-wake-ring 2s ease-out both}
+.bb-magic{position:absolute;inset:-6% -10%;font:30px/1 var(--serif);color:#c8ffe3;letter-spacing:14px;opacity:0;pointer-events:none;white-space:nowrap}
+.bb-magic i{font-style:normal;position:absolute;right:8%;top:62%}
+.bb-root[data-mood=happy] .bb-magic,.bb-root[data-mood=offering] .bb-magic{animation:bb-magic-rise 2s ease-out both}
+.bb-root[data-relationship=lover] .bb-magic::after{content:'♡';position:absolute;left:5%;top:55%;color:#ffb4d0;font-size:26px}
+.bb-character.bb-coucou{animation:bb-wave .9s ease-out both!important}.bb-coucou .right .bb-blink{animation:bb-wink .85s ease-in-out both!important}.bb-coucou .bb-magic{animation:bb-magic-rise 1s ease-out both!important}
+.bb-line-in{animation:none}.bb-word{display:inline;animation:bb-word-in .35s var(--word-delay) ease-out both}
+.bb-meteors{position:absolute;inset:0;overflow:hidden;pointer-events:none}.bb-meteors i{position:absolute;left:70%;top:7%;width:100px;height:1px;border-radius:50%;background:linear-gradient(90deg,transparent,#baffee);rotate:-35deg;opacity:0;animation:bb-meteor 11s 2s linear infinite}.bb-meteors i+ i{left:90%;top:35%;width:65px;animation-delay:6s;animation-duration:13s}
+.bb-sound{position:absolute;bottom:22px;left:25px;right:25px;display:flex;align-items:center;justify-content:center;gap:10px;min-width:0}.bb-sound button{flex:none;min-height:44px;padding:10px 13px;border:1px solid #8edbd24d;border-radius:24px;color:#c4fff0;background:#18313c9c;cursor:pointer;font:11px/1.6 var(--sans)}.bb-sound button:hover{background:#234c54}.bb-sound button:focus-visible{outline:2px solid #b6ffe9;outline-offset:3px}.bb-sound span{font:10px/1.7 var(--sans);color:#a6c4c9;min-width:0;overflow-wrap:anywhere}
+.bb-sound button[hidden]{display:none}.bb-root:has(.bb-sound button[hidden]) .bb-sound{display:none}
+.bb-music-on .bb-brand-dot{animation:bb-music-pulse 1.5s ease-in-out infinite alternate}
+.bb-root[data-phase=flowers] .bb-stage{row-gap:8px}.bb-root[data-phase=flowers] .bb-sound{position:static;grid-column:1/-1;grid-row:3;justify-self:stretch;justify-content:flex-end}.bb-root[data-phase=flowers] .bb-brand{max-width:calc(100% - 160px)}.bb-root[data-phase=flowers] .bb-sound button{font-size:10px}.bb-root[data-phase=flowers] .bb-sound span{font-size:9px}
+#welcome-name-help,.welcome-sound-help{font:10px/1.8 var(--sans);color:#7d727c;margin-top:-5px}.welcome-settings input[type=text],#welcome-name{width:100%;margin-top:7px;font-size:13px}.welcome-settings .welcome-music-choice{display:flex;align-items:center;gap:10px;min-height:44px}.welcome-music-choice input{width:18px;height:18px;accent-color:#89516d;flex:none}.welcome-music-choice+ .welcome-sound-help{margin-top:-10px}
+@keyframes bb-word-in{from{opacity:0}to{opacity:1}}
+@keyframes bb-nebula-breathe{from{opacity:.4;transform:scale(1)}to{opacity:1;transform:scale(1.12)}}
+@keyframes bb-look-around{0%,100%{translate:0 0}22%,40%{translate:-12px 3px}62%,80%{translate:11px -2px}}
+@keyframes bb-curious-tilt{0%,100%{rotate:0deg}35%,65%{rotate:-4deg}}
+@keyframes bb-happy-bob{0%,100%{translate:0 0}22%,62%{translate:0 -8px}42%,80%{translate:0 2px}}
+@keyframes bb-shy-tilt{0%,100%{rotate:0deg}35%,70%{rotate:5deg}}
+@keyframes bb-talk{from{scale:.8 .6;opacity:.6}to{scale:1.3 1.2;opacity:1}}
+@keyframes bb-eye-sheen{0%,65%{translate:0 -100%}90%,100%{translate:0 100%}}
+@keyframes bb-double-blink{0%,15%,24%,32%,100%{transform:scaleY(1)}18%,20%,27%,29%{transform:scaleY(.1)}}
+@keyframes bb-hand-offer{from{translate:0 12px;opacity:0}70%{translate:0 -5px;opacity:1}to{translate:0 0;opacity:1}}
+@keyframes bb-wake-ring{0%{opacity:0;scale:.65}20%{opacity:.9}100%{opacity:0;scale:1.3}}
+@keyframes bb-magic-rise{0%{opacity:0;translate:0 15px;scale:.7}25%{opacity:.9}100%{opacity:0;translate:0 -25px;scale:1.12}}
+@keyframes bb-wave{0%,100%{rotate:0deg;translate:0 0}25%{rotate:-6deg;translate:0 -6px}60%{rotate:5deg;translate:0 -3px}}
+@keyframes bb-wink{0%,30%,85%,100%{transform:scaleY(1)}43%,67%{transform:scaleY(.08)}}
+@keyframes bb-meteor{0%,6%{opacity:0;transform:translate(0,0)}9%{opacity:.75}18%{opacity:0;transform:translate(-330px,0)}100%{opacity:0;transform:translate(-330px,0)}}
+@keyframes bb-music-pulse{from{opacity:.5;scale:.8}to{opacity:1;scale:1.15}}
+@media(max-width:620px){.bb-stage{padding-bottom:115px}.bb-brand{max-width:calc(100% - 170px)}.bb-sound{left:19px;right:19px;bottom:19px;gap:9px}.bb-sound button{font-size:10px;padding:10px 12px}.bb-sound span{font-size:9px}.bb-root[data-phase=flowers] .bb-stage{padding-top:58px;padding-bottom:9px;gap:6px 10px}.bb-root[data-phase=flowers] .bb-character{height:83px}.bb-root[data-phase=flowers] .bb-sound{justify-content:center}.bb-root[data-phase=flowers] .bb-brand{max-width:calc(100% - 145px)}.bb-magic{font-size:22px;letter-spacing:5px}}
+.bb-motion-off *{animation:none!important;transition:none!important}.bb-paused *{animation-play-state:paused!important}
+@media(prefers-reduced-motion:reduce){.bb-root *{animation:none!important;transition:none!important}}
+/* Include pseudo-element sheen and tap reactions in pause/motion preferences. */
+#bebe-welcome .bb-motion-off *,#bebe-welcome .bb-motion-off *::before,#bebe-welcome .bb-motion-off *::after{animation:none!important;transition:none!important}
+#bebe-welcome .bb-paused *,#bebe-welcome .bb-paused *::before,#bebe-welcome .bb-paused *::after{animation-play-state:paused!important}
+@media(prefers-reduced-motion:reduce){#bebe-welcome *,#bebe-welcome *::before,#bebe-welcome *::after{animation:none!important;transition:none!important}}
