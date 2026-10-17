@@ -188,3 +188,42 @@
 
 #welcome-reception:has(#bebe-welcome:not([hidden])):has(#bouquet-arrival:not([hidden])) .bb-nebula{display:none}
 #welcome-reception .bb-skip,#welcome-reception #welcome-music-toggle{min-height:46px}
+
+/* The recipient sets the pace. No extra animation loop or per-letter timer. */
+.bb-reading-panel{max-width:550px;margin:25px auto 0;text-align:left}
+.bb-reading-panel[hidden]{display:none!important}
+.bb-reading-position{display:flex;justify-content:space-between;gap:12px;color:#a5d4d2;font:10px/1.7 var(--sans);letter-spacing:.4px}
+#bebe-step-count{font-variant-numeric:tabular-nums;color:#c3e3db;flex:none}
+.bb-reading-meter{height:2px;margin:11px 0 16px;background:#b5e6db1f;border-radius:5px;overflow:hidden}
+.bb-reading-meter i{display:block;width:100%;height:100%;background:linear-gradient(90deg,#7ef0d7,#e9e5b8);transform-origin:left;animation:bb-reading-progress var(--read-duration,6s) linear both}
+.bb-reading-controls{display:flex;justify-content:center;align-items:center;gap:9px}
+.bb-reading-controls button{min-height:46px;padding:10px 14px;border:1px solid #b3d9d037;border-radius:24px;background:#d4ffe609;color:#d3eee8;font:11px/1.6 var(--sans);cursor:pointer;touch-action:manipulation}
+.bb-reading-controls button:hover{background:#c3ffe21c;border-color:#b3d9d078}
+.bb-reading-controls button:focus-visible{outline:2px solid #c5ffeb;outline-offset:3px}
+.bb-reading-controls button:disabled{opacity:.35;cursor:default}
+#bebe-next{background:#d9f9e8;color:#214b46;border-color:#d9f9e8;min-width:100px}
+#bebe-hold[aria-pressed=true]{background:#ffebce;color:#5f4a39;border-color:#ffebce}
+.bb-reading-held .bb-reading-meter i{animation-play-state:paused}
+.bb-reading-held .bb-mouth{animation-play-state:paused!important}
+.bb-text-settled .bb-word{animation:none!important;opacity:1}
+.bb-word{animation-duration:.65s}
+.bb-root[data-phase=story] .bb-dialogue{padding:22px 25px 18px;border:1px solid #b6f6df24;border-radius:24px;background:linear-gradient(145deg,#b0f8dc0c,#c8b5f50a);box-shadow:0 12px 35px #06121b12}
+.bb-root[data-phase=story] #bebe-dialogue{font-size:clamp(22px,2.2vw,28px);line-height:1.8;min-height:3.6em}
+.bb-root[data-mood=happy] .bb-mouth,.bb-root[data-mood=curious] .bb-mouth{animation-duration:.85s;animation-iteration-count:7}
+.bb-root[data-phase=story] .bb-footnote{font-size:10px;color:#9cb5be;margin-top:18px}
+@keyframes bb-reading-progress{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+@media(max-width:620px){
+ .bb-root[data-phase=story] .bb-stage{padding:87px 17px 100px;gap:17px}
+ .bb-root[data-phase=story] .bb-character{width:230px;height:178px}
+ .bb-root[data-phase=story] .bb-eye-pair{inset:30px 14px 31px;gap:24px}
+ .bb-root[data-phase=story] .bb-eye-slot{width:76px;height:83px}
+ .bb-root[data-phase=story] .bb-dialogue{padding:18px 15px 16px;border-radius:20px}
+ .bb-root[data-phase=story] #bebe-dialogue{font-size:21px;line-height:1.75;min-height:3.5em}
+ .bb-reading-panel{margin-top:19px}.bb-reading-position{font-size:9px}
+ .bb-reading-controls{gap:6px}.bb-reading-controls button{font-size:10px;padding:10px 11px;white-space:nowrap}
+ #bebe-next{min-width:88px}.bb-root[data-phase=story] .bb-footnote{font-size:9px;line-height:1.8;margin-top:16px}
+}
+#bebe-welcome .bb-reading-held .bb-reading-meter i{animation-play-state:paused!important}
+#bebe-welcome .bb-motion-off *,#bebe-welcome .bb-motion-off *::before,#bebe-welcome .bb-motion-off *::after{animation:none!important;transition:none!important}
+#bebe-welcome .bb-paused *,#bebe-welcome .bb-paused *::before,#bebe-welcome .bb-paused *::after{animation-play-state:paused!important}
+@media(prefers-reduced-motion:reduce){#bebe-welcome *,#bebe-welcome *::before,#bebe-welcome *::after{animation:none!important;transition:none!important}}
