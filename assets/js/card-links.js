@@ -431,19 +431,19 @@ const CardLinks = (() => {
   // Positional fields and choice indexes are append-only: shared v4 cards keep
   // their original meaning when more gift experiences become available.
   const designFields = [...legacyDesignFields, 'scene', 'structure', 'ornament', 'intensity',
-    'experience', 'size', 'reveal', 'showDate', 'showSignature', 'secret', 'giftIntro', 'flowerNotes', 'arrival', 'welcome', 'welcomeText', 'welcomeName', 'welcomeMusic'];
+    'experience', 'size', 'reveal', 'showDate', 'showSignature', 'secret', 'giftIntro', 'flowerNotes', 'arrival', 'welcome', 'welcomeText', 'welcomeName', 'welcomeMusic', 'signatureText', 'signatureInk', 'signatureStyle'];
   const designChoices = [
     ['rose', 'sage', 'champagne', 'midnight', 'teal', 'lilac'],
     ['serif', 'sans', 'italic', 'handwriting'],
     ...legacyDesignChoices.slice(2), null, null,
     ['stardust', 'aurora', 'bloom', 'rose', 'sunrise', 'lotus', 'moonlight', 'butterflies', 'envelope', 'layers', 'crystal', 'orbits', 'bouquet', 'galaxy',
-      'umbrella', 'storybook', 'island', 'ocean', 'balloon', 'lantern', 'wishtree', 'silk', 'lightbridge', 'musicbox'],
+      'umbrella', 'storybook', 'island', 'ocean', 'balloon', 'lantern', 'wishtree', 'silk', 'lightbridge', 'musicbox', 'glassgarden', 'wisteria', 'lotusmoon', 'sunmail', 'lavender', 'heartgarden'],
     ['letter', 'arch', 'postcard', 'folded'], ['botanical', 'orbit', 'pressed'],
     ['cinematic', 'medium', 'gentle', 'off'],
     ['galaxy', 'aurora', 'garden', 'rose', 'sunflower', 'lotus', 'moonlake', 'butterfly', 'letter', 'pearl', 'crystal', 'lovegalaxy',
-      'umbrella', 'storybook', 'island', 'ocean', 'balloon', 'lantern', 'wishtree', 'silk', 'lightbridge', 'musicbox'],
+      'umbrella', 'storybook', 'island', 'ocean', 'balloon', 'lantern', 'wishtree', 'silk', 'lightbridge', 'musicbox', 'glassgarden', 'wisteria', 'lotusmoon', 'sunmail', 'lavender', 'heartgarden'],
     ['small', 'medium', 'large'], ['instant', 'gentle', 'slow'], ['on', 'off'], ['on', 'off'], null, null, null,
-    ['stardust', 'growing', 'classic'], ['none','bebe'], null, null, ['on','off']
+    ['stardust', 'growing', 'classic'], ['none','bebe'], null, null, ['on','off'], null, null, ['classic','script','minimal','seal']
   ];
   const rootFields = new Set(['v', 'target', 'variant', 'recipientName', 'senderName', 'pronoun',
     'sampleIndex', 'message', 'musicId', 'design', 'recipientPronoun', 'tone', 'greeting', 'volume']);
@@ -486,6 +486,12 @@ const CardLinks = (() => {
     return value;
   }
   function designText(value, key) {
+    if(key==='signatureInk'){
+      const ink=limitedText(value,1215);if(!ink)return ink;const alphabet='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_-',strokes=ink.split('.');let points=0;
+      if(strokes.length>16)throw new Error('Too many signature strokes');
+      for(const stroke of strokes){if(stroke.length<6||stroke.length%3||!/^[A-Za-z0-9_-]+$/.test(stroke))throw new Error('Invalid signature');for(let i=0;i<stroke.length;i+=3){const n=alphabet.indexOf(stroke[i])*4096+alphabet.indexOf(stroke[i+1])*64+alphabet.indexOf(stroke[i+2]);if((n>>8)>600||(n&255)>180||++points>400)throw new Error('Invalid signature point');}}return ink;
+    }
+    if(key==='signatureStyle'){if(!['classic','script','minimal','seal'].includes(value))throw new Error('Invalid signature style');return value;}
     if(key==='welcomeMusic'){if(!['on','off'].includes(value))throw new Error('Invalid welcome music');return value;}
     if(key==='welcome'){if(!['none','bebe'].includes(value))throw new Error('Invalid welcome');return value;}
     if (key === 'arrival') {
@@ -503,7 +509,7 @@ const CardLinks = (() => {
       }
       return source;
     }
-    const limit = key === 'welcomeName' ? 30 : key === 'body' ? 3000 : key === 'secret' ? 1000 :
+    const limit = key==='signatureText'?80:key === 'welcomeName' ? 30 : key === 'body' ? 3000 : key === 'secret' ? 1000 :
       (key === 'giftIntro'||key==='welcomeText') ? 160 : key === 'dedication' ? 100 : 40;
     return limitedText(value, limit);
   }

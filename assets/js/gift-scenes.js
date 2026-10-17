@@ -6,7 +6,7 @@
   const catalog = Object.freeze(Object.fromEntries(Object.entries(parts).map(([id,part]) => [id,Object.freeze({
     ...part.meta,id,palette:palettes.includes(part.meta.palette)?part.meta.palette:id==='ocean'?'teal':'champagne',
     opening:id,compatibleOpenings:[id],ornament:['umbrella','ocean','lantern','lightbridge'].includes(id)?'orbit':'botanical',
-    effect:['umbrella','ocean','lantern','lightbridge'].includes(id)?'constellation':'petals',
+    effect:part.meta.effect||(['umbrella','ocean','lantern','lightbridge'].includes(id)?'constellation':'petals'),
     invitation:'Một món quà đang đợi bạn tự tay mở.',interaction:'Chạm để món quà sáng lên',
     duration:4200,moods:part.meta.moods || ['gentle','fantasy']
   })])));
@@ -89,7 +89,7 @@
     refs.stage.style.setProperty('--tx-bg',catalog[id].background);refs.stage.style.setProperty('--tx-color',catalog[id].color);
     refs.backdrop.style.setProperty('--tx-bg',catalog[id].background);refs.backdrop.style.setProperty('--tx-color',catalog[id].color);
     refs.backdrop.closest('#letter-screen').dataset.experience=id;refs.backdrop.closest('#letter-screen').classList.add('has-theme-experience');
-    refs.backdrop.closest('#letter-screen').dataset.giftDark=String(['umbrella','ocean','lantern','lightbridge'].includes(id));
+    refs.backdrop.closest('#letter-screen').dataset.giftDark=String(['umbrella','ocean','lantern','lightbridge'].includes(id)||catalog[id].palette==='midnight');
     document.querySelectorAll('.paper .paper-heading').forEach(heading=>{
       let mark=heading.querySelector('.tx-paper-mark');if(!mark){mark=document.createElement('span');mark.className='tx-paper-mark';mark.setAttribute('aria-hidden','true');heading.prepend(mark);}
       if(mark.dataset.experience!==id){mark.dataset.experience=id;mark.classList.add('gift-scene','gift-motion-off');mark.dataset.phase='ready';mark.innerHTML=art(id,'reading');}

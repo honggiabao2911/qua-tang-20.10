@@ -102,9 +102,10 @@
   function renderGallery() {
     if (!refs.gallery) return;
     refs.gallery.classList.add('theme-gallery');
-    refs.gallery.innerHTML = Object.entries(catalog).map(([id,t]) => {
+    const entries=Object.entries(catalog).sort(([,a],[,b])=>Number(Boolean(b.fresh))-Number(Boolean(a.fresh)));
+    refs.gallery.innerHTML = entries.map(([id,t]) => {
       const artwork=GiftScenes.has(id)?`<span class="gift-scene gift-motion-off" data-phase="ready">${art(id,'thumb')}</span>`:art(id,'thumb');
-      return `<div class="theme-entry" data-entry-id="${id}"><button type="button" class="theme-tile" data-theme-preset="${id}" aria-pressed="false"><span class="theme-thumbnail" data-experience="${id}" style="--tx-bg:${t.background};--tx-color:${t.color}">${artwork}<span class="theme-check" aria-hidden="true">✓</span></span><span class="theme-tile-name">${t.name}</span><span class="theme-tile-description">${t.description}</span></button><button type="button" class="gift-preview-button" data-preview-theme="${id}" aria-label="Xem cảnh mở ${t.name}">Xem cảnh mở</button></div>`;
+      return `<div class="theme-entry" data-entry-id="${id}"><button type="button" class="theme-tile" data-theme-preset="${id}" aria-pressed="false"><span class="theme-thumbnail" data-experience="${id}" style="--tx-bg:${t.background};--tx-color:${t.color}">${artwork}<span class="theme-check" aria-hidden="true">✓</span></span><span class="theme-tile-name">${t.name}${t.fresh?'<small class="theme-new">Mới</small>':''}</span><span class="theme-tile-description">${t.description}</span></button><button type="button" class="gift-preview-button" data-preview-theme="${id}" aria-label="Xem cảnh mở ${t.name}">Xem cảnh mở</button></div>`;
     }).join('');
   }
   function stopBurst() {

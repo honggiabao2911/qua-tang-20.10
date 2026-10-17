@@ -1,0 +1,24 @@
+.signature-studio{border:1px solid #ddccca;border-radius:18px;padding:25px;margin-top:28px;display:grid;grid-template-columns:1.4fr 1fr;gap:18px;background:linear-gradient(145deg,#fffaf3,#f5ece9)}
+.signature-intro{grid-column:1/-1}.signature-intro h3{font:400 30px/1.4 var(--serif);color:var(--wine)}.signature-intro p:last-child{font:11px/1.8 var(--sans);color:var(--muted);margin-top:6px}
+.signature-studio label{font:600 11px/1.8 var(--sans)}.signature-studio input,.signature-studio select{margin-top:8px;font-size:12px}
+.signature-pad-area{grid-column:1/-1;min-width:0}.signature-pad-heading{display:flex;justify-content:space-between;gap:10px;font:11px/1.8 var(--sans);margin-bottom:9px;color:#765d68}.signature-pad-heading small,.signature-pad-heading>span:last-child{font-size:9px;color:#9a858b}
+#signature-pad{display:block;width:100%;height:auto;aspect-ratio:10/3;touch-action:none;cursor:crosshair;user-select:none;background:linear-gradient(transparent calc(78% - 1px),#dccbc780 78%,transparent calc(78% + 1px)),#fffefa;border:1px dashed #cdb6b9;border-radius:12px}
+#signature-pad path,.signature-ink path{fill:none;stroke:currentColor;stroke-width:2.8;stroke-linecap:round;stroke-linejoin:round}
+#signature-pad{color:#86516a}.signature-pad-footer{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:10px}.signature-pad-footer p{font:9px/1.8 var(--sans);color:#8b747c;max-width:65%}.signature-pad-footer>div{display:flex;gap:8px;flex-shrink:0}.signature-pad-footer button{min-height:44px;padding:8px 10px;background:#fff9f3;color:#87516b;border:1px solid #d9c5c8;border-radius:10px;font-size:10px}.signature-pad-footer button:disabled{opacity:.4}.signature-pad-footer button:focus-visible{outline:2px solid #9b627c;outline-offset:2px}
+#signature-visibility-note{grid-column:1/-1;font:11px/1.8 var(--sans);color:#8e5970}
+.paper-sign .signature-ink{display:block;width:min(100%,240px);height:auto;aspect-ratio:10/3;margin:8px 0 0 auto;overflow:visible;color:inherit}
+.signature-ink[hidden]{display:none!important}
+.paper .paper-sign[data-signature-style=script] strong{font-family:'Dancing Script',var(--serif);font-style:normal;font-size:32px;font-weight:500}
+.paper .paper-sign[data-signature-style=minimal] strong{font:500 16px/1.8 var(--sans);letter-spacing:1px}
+.paper .paper-sign[data-signature-style=seal] strong{display:inline-block;font:500 16px/1.6 var(--serif);border:1px solid currentColor;padding:10px 19px;border-radius:45% 45% 38% 38%;rotate:-3deg;margin-top:6px}
+.paper .paper-sign[data-signature-style=classic] strong{font:italic 400 26px/1.65 var(--serif)}
+.mini-paper .paper-sign strong{font-size:12px}.mini-paper .signature-ink{max-width:90px;margin-top:2px}.mini-paper .paper-sign[data-signature-style=seal] strong{padding:3px 6px;font-size:9px}
+#letter-screen:not([hidden]) .signature-ink path{stroke-dasharray:1;animation:signature-write 1.8s .5s ease-out both}
+@keyframes signature-write{from{stroke-dashoffset:1;opacity:.3}to{stroke-dashoffset:0;opacity:1}}
+@media(max-width:620px){.signature-studio{padding:21px 17px;grid-template-columns:1fr;gap:16px}.signature-intro h3{font-size:27px}.signature-pad-heading{flex-wrap:wrap}.signature-pad-footer{flex-direction:column;align-items:stretch}.signature-pad-footer p{max-width:none}.signature-pad-footer>div{justify-content:flex-end}.paper-sign .signature-ink{max-width:220px}}
+@media(prefers-reduced-motion:reduce){#letter-screen .signature-ink path{animation:none!important;stroke-dashoffset:0}}
+@media print{.signature-ink path{animation:none!important;stroke-dashoffset:0}}
+
+.signature-text-help{display:block;font:9px/1.8 var(--sans);color:#8f7a83;margin-top:7px}
+
+.mini-paper .paper-sign[data-signature-style] strong{font-size:12px;line-height:1.6}.mini-paper .paper-sign[data-signature-style=seal] strong{padding:3px 6px;font-size:9px}

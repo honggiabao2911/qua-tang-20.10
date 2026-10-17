@@ -10,7 +10,7 @@ import test_upgrade as regression
 
 BASE_URL = regression.BASE_URL
 GIFTS = ('umbrella', 'storybook', 'island', 'ocean', 'balloon', 'lantern',
-         'wishtree', 'silk', 'lightbridge', 'musicbox')
+         'wishtree', 'silk', 'lightbridge', 'musicbox', 'glassgarden', 'wisteria', 'lotusmoon', 'sunmail', 'lavender', 'heartgarden')
 
 
 class JourneyBrowserTests(unittest.TestCase):
@@ -31,10 +31,10 @@ class JourneyBrowserTests(unittest.TestCase):
     clipboard = regression.UpgradeBrowserTests.clipboard
     copy_link = regression.UpgradeBrowserTests.copy_link
 
-    def test_01_both_bouquets_keep_all_22_selected_scenes_and_reading_art(self):
+    def test_01_both_bouquets_keep_all_28_selected_scenes_and_reading_art(self):
         self.editor()
         scenes = self.page.evaluate('Object.keys(CardThemes.catalog)')
-        self.assertEqual(22, len(scenes))
+        self.assertEqual(28, len(scenes))
         for style in ('stardust', 'growing'):
             for scene in scenes:
                 with self.subTest(style=style, scene=scene):
