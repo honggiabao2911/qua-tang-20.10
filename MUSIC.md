@@ -6,7 +6,7 @@ Mỗi thiệp dùng một trong **6 nhóm nhạc**, mỗi nhóm có **6 vị tr�
 
 ## Danh sách file cần bổ sung
 
-Đã có **6 file chuẩn cho Mẹ**, từ `assets/music/0me.mp3` đến `5me.mp3`, do bạn tải lên `main`; cả sáu đã kiểm tra là MP3 hợp lệ. Còn **30 đường dẫn chuẩn chưa có file**. Ba vị trí trong các nhóm khác nghe được nhờ file cũ, nên còn **27 vị trí chưa có bản nhạc**: `1–5ba`, `0–5co`, `0–5chi`, `2–5nu`, `0–5yeu` (đều đuôi `.mp3`). Không suy đoán tên bản thu từ số thứ tự.
+Đã có **11 file chuẩn** bạn tải lên `main`: 6 file cho Mẹ (`0me.mp3` đến `5me.mp3`) và 5 file cho Bà (`0ba.mp3` đến `4ba.mp3`), đều trong `assets/music/` và đã kiểm tra là MP3 hợp lệ. Còn **25 đường dẫn chuẩn chưa có file**. Hai vị trí trong nhóm `nu` nghe được nhờ file cũ, nên còn **23 vị trí chưa có bản nhạc**: `5ba`, `0–5co`, `0–5chi`, `2–5nu`, `0–5yeu` (đều đuôi `.mp3`). Không suy đoán tên bản thu từ số thứ tự.
 
 | Thiệp | Sáu tên file trong `assets/music/` |
 |---|---|

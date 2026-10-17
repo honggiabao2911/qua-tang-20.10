@@ -72,6 +72,7 @@ class CardBrowserTests(unittest.TestCase):
         expect(self.page.locator("#editor-screen")).to_be_visible()
         # Keep these existing flow checks on their explicitly chosen classic
         # opening; the new bouquet-first arrival is covered independently.
+        self.page.locator("#welcome-mode").select_option("none")
         self.page.locator("#arrival-style").select_option("classic")
         if recipient == "friend":
             self.page.locator("#variant-field").select_option("friend")
@@ -346,6 +347,7 @@ class CardBrowserTests(unittest.TestCase):
                 self.skipTest("Managed Chromium policy blocks file:// navigation before app execution")
             raise
         self.page.locator('button[data-recipient="mom"]').click()
+        self.page.locator("#welcome-mode").select_option("none")
         self.page.locator("#arrival-style").select_option("classic")
         self.open_letter()
         self.page.locator("#copy-link").click()
@@ -479,6 +481,7 @@ class CardBrowserTests(unittest.TestCase):
                 self.visit()
                 self.assert_layout(f"{width}x{height} home")
                 self.page.locator('button[data-recipient="women"]').click()
+                self.page.locator("#welcome-mode").select_option("none")
                 self.page.locator("#arrival-style").select_option("classic")
                 self.page.locator("#variant-field").select_option("friend")
                 self.page.locator("#personal-message").fill(message)

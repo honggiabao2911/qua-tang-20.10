@@ -42,6 +42,9 @@ class ArrivalBrowserTests(unittest.TestCase):
         ui_recipient = "women" if recipient == "friend" else recipient
         self.page.locator(f'button[data-recipient="{ui_recipient}"]').first.click()
         expect(self.page.locator("#editor-screen")).to_be_visible()
+        # This suite verifies the standalone bouquet. Bé B has its own coverage.
+        self.page.locator("#welcome-mode").select_option("none")
+        self.page.locator("#arrival-style").select_option("stardust")
         if recipient == "friend":
             self.page.locator("#variant-field").select_option("friend")
 
