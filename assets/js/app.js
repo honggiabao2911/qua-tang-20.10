@@ -414,7 +414,7 @@
     if(!replay&&demo.dataset.previewKey===key)return;
     demo.dataset.previewKey=key;demo.dataset.effect=effect;demo.dataset.intensity=state.design.intensity;
     const particles=$('effect-preview-particles');particles.replaceChildren();
-    document.querySelectorAll('.reading-ambience i').forEach(node=>{node.innerHTML=effect==='butterflies'?`<svg viewBox="0 0 48 48" aria-hidden="true">${CardThemes.effectGlyph(effect)}</svg>`:'';});
+    document.querySelectorAll('.reading-ambience i').forEach((node,i)=>{node.style.setProperty('--x',`${i%2?94+(i%5):1+(i%5)}%`);node.innerHTML=['butterflies','constellation'].includes(effect)?`<svg viewBox="0 0 48 48" aria-hidden="true">${CardThemes.effectGlyph(effect)}</svg>`:'';});
     if(effect==='none')return;
     const glyph=CardThemes.effectGlyph(effect);
     for(let i=0;i<6;i++){
@@ -451,7 +451,7 @@
     for(const style of ['stardust','growing']){const host=$(`arrival-${style}-picture`);if(!host.firstChild)host.innerHTML=BouquetArrival.thumbnail(style);}
     const id=state.design.experience,theme=CardThemes.catalog[id];
     const description=READING_NOTES[id]||'Cảnh đã chọn ở lại cùng lời chúc.';
-    $('journey-description').textContent=theme?`${hasBebe()?(window.BebeWelcome.nameFor(bebeSettings())+' → Bó hoa → Lời chúc trong '+theme.name):((hasArrival()?'Bó hoa → ':'')+theme.name+' → Lời chúc')}. ${description}`:'Mở món quà rồi đọc lời chúc.';
+    $('journey-description').textContent=theme?`${hasBebe()?(window.BebeWelcome.nameFor(bebeSettings())+' → Bó hoa → '+theme.name+' → Lời chúc'):((hasArrival()?'Bó hoa → ':'')+theme.name+' → Lời chúc')}. ${description}`:'Mở món quà rồi đọc lời chúc.';
     $('reading-world-caption').hidden=!theme;
     $('reading-world-title').textContent=theme?.name||'';
     $('reading-world-description').textContent=description;
@@ -599,18 +599,19 @@
     if(screen!=='envelope')return;
     clearTimeout(openingTimer);openingTimer=0;opening=false;
     arrivalPassed=true;BouquetArrival.hide();
-    if(hasBebe()){revealLetter();return;}
+    bebe?.hide();bebePhase='theme';
     renderCard();
     $('envelope-screen').dataset.journeyPhase='theme';
     CardThemes.setScreen('envelope');
     // Commit the selected scene's initial frame before starting its own motion.
     void $('theme-stage').offsetWidth;
+    window.scrollTo({top:0,behavior:'auto'});
     openEnvelope(false);
     focusElement($('envelope-title'));
   }
 
   function openEnvelope(withMusic=true) {
-    if (screen !== 'envelope' || opening || (hasBebe()&&bebePhase!=='flowers')) return;
+    if (screen !== 'envelope' || opening || (hasBebe()&&arrivalActive()&&bebePhase!=='flowers')) return;
     if(arrivalActive()){
       CardMusic.openGesture();if(hasBebe())bebe.open();opening=true;
       if($('bouquet-letter-open'))$('bouquet-letter-open').disabled=true;
@@ -646,6 +647,7 @@
 
   function finishGift() {
     clearTimeout(openingTimer);openingTimer=0;opening=false;GiftScenes.complete();
+    if(hasBebe()){revealLetter();return;}
     $('envelope-open-button').disabled=false;$('envelope-open-button').textContent=state.design.experience==='umbrella'?'Có lời nhắn dành cho bạn':'Đọc lời chúc đầy đủ';
     $('skip-animation').hidden=true;$('gift-freeze').hidden=false;
     focusElement($('envelope-open-button'));

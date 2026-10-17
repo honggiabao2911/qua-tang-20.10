@@ -128,3 +128,63 @@
 #bebe-welcome .bb-motion-off *,#bebe-welcome .bb-motion-off *::before,#bebe-welcome .bb-motion-off *::after{animation:none!important;transition:none!important}
 #bebe-welcome .bb-paused *,#bebe-welcome .bb-paused *::before,#bebe-welcome .bb-paused *::after{animation-play-state:paused!important}
 @media(prefers-reduced-motion:reduce){#bebe-welcome *,#bebe-welcome *::before,#bebe-welcome *::after{animation:none!important;transition:none!important}}
+
+/* One gift scene: the messenger stands beside the bouquet, within its sky. */
+#welcome-reception{width:min(100%,1040px);margin:0 auto;position:relative;min-width:0}
+#welcome-reception:has(#bebe-welcome:not([hidden])){isolation:isolate;border-radius:30px;overflow:hidden;background:radial-gradient(ellipse at 65% 55%,#365b5c 0%,#1c3947 28%,#152333 57%,#111723 90%);box-shadow:0 24px 70px #1d29342a;border:1px solid #7aabad40}
+#welcome-reception:has(#bebe-welcome:not([hidden])) #bebe-welcome{width:100%;margin:0;z-index:2}
+#welcome-reception:has(#bebe-welcome:not([hidden])) .bb-root{border:0;border-radius:0;background:transparent;box-shadow:none}
+#welcome-reception:has(#bebe-welcome:not([hidden])):has(#bouquet-arrival:not([hidden])){display:grid;grid-template-columns:minmax(0,.43fr) minmax(0,.57fr);align-items:stretch;min-height:650px;background:radial-gradient(ellipse at 73% 48%,#536b64 0%,#25444a 27%,#172a38 55%,#111723 90%)}
+#welcome-reception:has(#bebe-welcome:not([hidden])) #bouquet-arrival{width:100%;min-width:0;align-self:center;margin:0;position:relative;z-index:1}
+#welcome-reception:has(#bebe-welcome:not([hidden])) .bouquet-arrival{background:transparent;box-shadow:none;border:0;border-radius:0;padding:14px 12px 24px;color:#f9f0df}
+#welcome-reception:has(#bebe-welcome:not([hidden])) .ba-aura{background:radial-gradient(ellipse,#d8ffe728,transparent 60%)}
+#welcome-reception:has(#bebe-welcome:not([hidden])) .ba-scene{min-height:0;aspect-ratio:1000/1050}
+#welcome-reception:has(#bebe-welcome:not([hidden])) .ba-gift-open{background:#fff0d9;color:#70455f;border:1px solid #ffe8bd;box-shadow:0 7px 27px #030e1640}
+#welcome-reception:has(#bebe-welcome:not([hidden])) .ba-gift-open:hover{background:#fff8e9}
+#welcome-reception .bb-root[data-phase=flowers]{height:100%;margin:0;border-radius:0}
+#welcome-reception .bb-root[data-phase=flowers] .bb-stage{height:100%;min-height:650px;grid-template-columns:1fr;align-content:center;gap:20px;padding:90px 25px 45px}
+#welcome-reception .bb-root[data-phase=flowers] .bb-character{width:240px;height:195px;grid-column:1;grid-row:1}
+#welcome-reception .bb-root[data-phase=flowers] .bb-eye-pair{inset:35px 17px 39px;gap:30px}
+#welcome-reception .bb-root[data-phase=flowers] .bb-eye-slot{width:76px;height:86px}
+#welcome-reception .bb-root[data-phase=flowers] .bb-eye-light{border-radius:23px;box-shadow:0 0 7px #bcfff9,0 0 24px #56ffe27a,0 0 50px #2ad4e02d}
+#welcome-reception .bb-root[data-phase=flowers] .bb-mouth{bottom:32px;width:20px;left:calc(50% - 10px);height:9px}
+#welcome-reception .bb-root[data-phase=flowers] .bb-cheek{width:28px;height:9px;bottom:55px}
+#welcome-reception .bb-root[data-phase=flowers] .bb-hands i{width:36px;height:16px}
+#welcome-reception .bb-root[data-phase=flowers] .bb-brand{top:22px;left:24px;font-size:16px}
+#welcome-reception .bb-root[data-phase=flowers] .bb-brand>span:last-child{display:none}
+#welcome-reception .bb-root[data-phase=flowers] .bb-skip{top:17px;right:12px}
+#welcome-reception .bb-root[data-phase=flowers] #bebe-dialogue{font:21px/1.7 var(--serif);text-align:center;min-height:0}
+#welcome-reception .bb-root[data-phase=flowers] .bb-dialogue{grid-row:2;padding:20px 15px;background:linear-gradient(135deg,#b8ffe70b,#c8daf20a);border:1px solid #c3ece71b;border-radius:20px}
+#welcome-reception .bb-root[data-phase=flowers] .bb-sound{grid-row:3;grid-column:1;flex-wrap:wrap;justify-content:center}
+.bb-orbit{position:absolute;inset:-8% -8% 1%;border-radius:50%;border:1px solid #a7ffde20;rotate:-23deg;pointer-events:none;animation:bb-orbit-turn 18s linear infinite;z-index:-1}
+.bb-orbit::before{content:'';position:absolute;inset:13% -7%;border:1px solid #7cdbeb18;border-radius:50%;rotate:58deg;background:radial-gradient(ellipse,#67e8d00b,transparent 68%)}
+.bb-orbit i{position:absolute;width:5px;height:5px;border-radius:50%;background:#d0ffe8;box-shadow:0 0 12px #a3ffe8;top:22%;left:7%}.bb-orbit i:nth-child(2){top:80%;left:81%;width:3px;height:3px}.bb-orbit i:nth-child(3){top:1%;left:58%;width:3px;height:3px;background:#ffdbbc}
+.bb-root[data-mood=sleep] .bb-orbit{opacity:.25}.bb-root[data-mood=offering] .bb-orbit{border-color:#caffdf60}
+@keyframes bb-orbit-turn{to{rotate:337deg}}
+@media(max-width:620px){
+ #welcome-reception:has(#bebe-welcome:not([hidden])){width:calc(100% + 28px);margin-left:-14px;border-radius:24px}
+ #welcome-reception:has(#bebe-welcome:not([hidden])):has(#bouquet-arrival:not([hidden])){grid-template-columns:1fr;min-height:0;background:radial-gradient(ellipse at 55% 65%,#496960,#233e49 40%,#111c2b 85%)}
+ #welcome-reception .bb-root[data-phase=flowers] .bb-stage{min-height:0;padding:59px 14px 8px;grid-template-columns:96px minmax(0,1fr);gap:8px 10px}
+ #welcome-reception .bb-root[data-phase=flowers] .bb-character{width:96px;height:84px;grid-column:1;grid-row:1}
+ #welcome-reception .bb-root[data-phase=flowers] .bb-eye-pair{inset:15px 5px 27px;gap:9px}
+ #welcome-reception .bb-root[data-phase=flowers] .bb-eye-slot{width:33px;height:42px}
+ #welcome-reception .bb-root[data-phase=flowers] .bb-eye-light{border-radius:12px;box-shadow:0 0 6px #bcfff9,0 0 17px #56ffe269}
+ #welcome-reception .bb-root[data-phase=flowers] .bb-mouth{bottom:20px;width:12px;left:calc(50% - 6px);height:6px}
+ #welcome-reception .bb-root[data-phase=flowers] .bb-cheek{width:13px;height:5px;bottom:30px}
+ #welcome-reception .bb-root[data-phase=flowers] .bb-hands i{width:22px;height:9px}
+ #welcome-reception .bb-root[data-phase=flowers] .bb-dialogue{grid-row:1;grid-column:2;padding:10px 12px;border-radius:15px}
+ #welcome-reception .bb-root[data-phase=flowers] #bebe-dialogue{font:12px/1.8 var(--sans);text-align:left}
+ #welcome-reception .bb-root[data-phase=flowers] .bb-brand{top:16px;left:18px;font-size:14px}
+ #welcome-reception .bb-root[data-phase=flowers] .bb-skip{top:10px;right:12px}
+ #welcome-reception .bb-root[data-phase=flowers] .bb-sound{grid-column:1/-1;grid-row:2;gap:8px}
+ #welcome-reception:has(#bebe-welcome:not([hidden])) .bouquet-arrival{padding:0 14px 20px}
+ #welcome-reception:has(#bebe-welcome:not([hidden])) .ba-scene{aspect-ratio:1000/1050}
+ #welcome-reception .bb-root[data-phase=flowers] .bb-orbit{inset:0 -8% -5%;opacity:.6}
+}
+/* These also cover the new orbit's pseudo-element. */
+#bebe-welcome .bb-motion-off *,#bebe-welcome .bb-motion-off *::before,#bebe-welcome .bb-motion-off *::after{animation:none!important;transition:none!important}
+#bebe-welcome .bb-paused *,#bebe-welcome .bb-paused *::before,#bebe-welcome .bb-paused *::after{animation-play-state:paused!important}
+@media(prefers-reduced-motion:reduce){#bebe-welcome *,#bebe-welcome *::before,#bebe-welcome *::after{animation:none!important;transition:none!important}}
+
+#welcome-reception:has(#bebe-welcome:not([hidden])):has(#bouquet-arrival:not([hidden])) .bb-nebula{display:none}
+#welcome-reception .bb-skip,#welcome-reception #welcome-music-toggle{min-height:46px}
