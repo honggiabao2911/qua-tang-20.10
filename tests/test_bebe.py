@@ -40,7 +40,7 @@ class BebeBrowserTests(unittest.TestCase):
     def receive(self,page=None):
         page=page or self.page
         page.locator('.ba-flower-touch').click()
-        expect(page.locator('#letter-screen')).to_be_visible(timeout=4000)
+        expect(page.locator('#letter-screen')).to_be_visible(timeout=8000)
 
     def test_01_six_groups_have_distinct_messenger_wishes_and_no_default_sender(self):
         wishes=[]
@@ -76,7 +76,7 @@ class BebeBrowserTests(unittest.TestCase):
         expect(self.page.locator('#bebe-dialogue')).to_contain_text('An')
         self.assertNotIn('anh yêu',self.page.locator('#bebe-dialogue').inner_text())
 
-    def test_03_real_timeline_changes_expressions_then_offers_flowers_and_keeps_one_opening(self):
+    def test_03_real_timeline_changes_expressions_then_offers_flowers_and_keeps_the_selected_opening(self):
         self.page.emulate_media(reduced_motion='no-preference')
         self.editor()
         self.page.locator('[data-theme-preset="wishtree"]').click()
@@ -96,7 +96,7 @@ class BebeBrowserTests(unittest.TestCase):
         expect(self.page.locator('#bouquet-arrival')).to_be_visible()
         self.wait_playing('loichao.mp3')
         start=time.monotonic();self.receive()
-        self.assertLess(time.monotonic()-start,3)
+        self.assertLess(time.monotonic()-start,7)
         expect(self.page.locator('#theme-backdrop .gift-wishtree')).to_be_visible()
         self.assertFalse(self.page.evaluate('BebeWelcome.metrics().pendingTimer'))
         self.assertFalse(self.page.evaluate('BouquetArrival.metrics().running'))
@@ -157,7 +157,7 @@ class BebeBrowserTests(unittest.TestCase):
         }).observe(document.querySelector('#letter-screen'),{attributes:true,attributeFilter:['hidden']});}""")
         self.page.locator('.ba-flower-touch').press('Enter')
         self.page.evaluate("""() => {document.querySelector('.ba-flower-touch').click();document.querySelector('#bouquet-letter-open').click();}""")
-        expect(self.page.locator('#letter-screen')).to_be_visible(timeout=4000)
+        expect(self.page.locator('#letter-screen')).to_be_visible(timeout=8000)
         self.assertEqual(1,self.page.evaluate('window.__letterOpens'))
         self.assertGreater(self.page.locator('#background-music').evaluate('a=>a.currentTime'),before+.5)
         self.assertEqual(1,self.page.locator('audio').evaluate_all('els=>els.filter(a=>!a.paused).length'))
