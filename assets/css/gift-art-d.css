@@ -1,0 +1,43 @@
+.gd-art{width:100%;height:100%;display:block;overflow:hidden}.gd-reveal{transform-box:fill-box;transform-origin:50% 100%}.gd-sprig{transform-box:fill-box;transform-origin:50% 100%}.gd-hanging{transform-box:fill-box;transform-origin:50% 0}.gd-glimmer{animation:gd-glimmer 5s var(--gd-delay,0s) ease-in-out infinite alternate}.gd-clouds{animation:gd-cloud-drift 18s ease-in-out infinite alternate}.gd-lavender-stem{transform-box:fill-box;transform-origin:50% 100%;animation:gd-lavender-sway 7s ease-in-out infinite alternate}.gd-hanging{animation:gd-hang-sway 8s var(--gd-delay,0s) ease-in-out infinite alternate}.gd-water{transform-origin:450px 490px;animation:gd-water-breathe 6s ease-in-out infinite alternate}.gd-heart-float{animation:gd-heart-breathe 7s ease-in-out infinite alternate}
+.gift-scene[data-phase=initial] .gd-reveal{opacity:0;transform:scale(.16)}
+.gift-scene[data-phase=opening] .gd-reveal{animation:gd-garden-reveal 2.8s .6s cubic-bezier(.2,.7,.25,1) both}
+.gift-scene[data-phase=opening] .gd-sprig{animation:gd-sprig-grow 2s calc(.7s + var(--gd-delay,0s)) cubic-bezier(.2,.7,.3,1) both}
+.gift-scene[data-phase=opening] .gd-cloche{animation:gd-lift-glass 3.5s ease-in-out both;transform-origin:450px 480px}
+.gift-scene[data-phase=opening] .gd-wisteria-left{animation:gd-canopy-left 3.4s ease both;transform-origin:240px 150px}
+.gift-scene[data-phase=opening] .gd-wisteria-right{animation:gd-canopy-right 3.4s ease both;transform-origin:670px 150px}
+.gift-scene[data-phase=opening] .gd-lotus-petal{animation:gd-lotus-open 2.9s var(--gd-delay,0s) ease both;transform-origin:0 0}
+.gift-scene[data-phase=opening] .gd-moon{animation:gd-moon-arrive 3.2s ease both}
+.gift-scene[data-phase=opening] .gd-mailbox-door{animation:gd-mailbox-open 3.7s ease both;transform-origin:405px 375px}
+.gift-scene[data-phase=opening] .gd-lavender-field{animation:gd-field-arrive 3s ease both}
+.gift-scene[data-phase=opening] .gd-heart-left{animation:gd-heart-open-left 3.4s ease both;transform-origin:450px 320px}
+.gift-scene[data-phase=opening] .gd-heart-right{animation:gd-heart-open-right 3.4s ease both;transform-origin:450px 320px}
+.gift-scene[data-phase=reading] .gd-body{animation:gd-keepsake-float 8s ease-in-out infinite alternate}
+.gift-scene[data-phase=reading] .gd-sprig{animation:gd-sprig-sway 8s var(--gd-delay,0s) ease-in-out infinite alternate}
+.gift-scene[data-phase=ready] .gd-reveal,.gift-scene[data-phase=reading] .gd-reveal{opacity:1;transform:none}
+@keyframes gd-glimmer{from{opacity:.2;scale:.85}to{opacity:.8;scale:1.06}}
+@keyframes gd-garden-reveal{from{opacity:0;transform:translateY(30px) scale(.16)}45%{opacity:1}to{opacity:1;transform:none}}
+@keyframes gd-sprig-grow{from{opacity:0;transform:scale(.15)}to{opacity:1;transform:scale(1)}}
+@keyframes gd-lift-glass{0%,10%{transform:none}50%,75%{transform:translateY(-95px);opacity:.6}100%{transform:none;opacity:1}}
+@keyframes gd-canopy-left{0%{opacity:0;transform:rotate(-12deg) translateX(-50px)}to{opacity:1;transform:none}}
+@keyframes gd-canopy-right{0%{opacity:0;transform:rotate(12deg) translateX(50px)}to{opacity:1;transform:none}}
+@keyframes gd-lotus-open{from{opacity:.2;transform:scaleX(.12) scaleY(.35)}to{opacity:1;transform:scale(1)}}
+@keyframes gd-moon-arrive{from{opacity:0;transform:translateY(45px)}to{opacity:1;transform:none}}
+@keyframes gd-mailbox-open{0%,10%{transform:none}48%,80%{transform:translateY(46px) scaleY(.35)}to{transform:none}}
+@keyframes gd-field-arrive{from{opacity:.25;transform:translateY(80px)}to{opacity:1;transform:none}}
+@keyframes gd-heart-open-left{from{transform:none}to{transform:translateX(-55px) rotate(-13deg)}}
+@keyframes gd-heart-open-right{from{transform:none}to{transform:translateX(55px) rotate(13deg)}}
+@keyframes gd-cloud-drift{from{translate:-8px 0}to{translate:12px 0}}
+@keyframes gd-lavender-sway{from{rotate:-1.5deg}to{rotate:1.5deg}}
+@keyframes gd-hang-sway{from{rotate:-2deg}to{rotate:2deg}}
+@keyframes gd-water-breathe{from{opacity:.18;scale:.96 1}to{opacity:.4;scale:1.04 1}}
+@keyframes gd-heart-breathe{from{opacity:.35;translate:0 3px}to{opacity:.9;translate:0 -5px}}
+@keyframes gd-keepsake-float{from{translate:0 2px}to{translate:0 -4px}}
+@keyframes gd-sprig-sway{from{rotate:-1deg}to{rotate:1deg}}
+.gift-paused .gd-art *,.gift-held .gd-art *{animation-play-state:paused!important}.gift-motion-off .gd-art *{animation:none!important;transition:none!important}
+@media(prefers-reduced-motion:reduce){.gd-art *{animation:none!important;transition:none!important}}
+.gd-glimmer{transform-box:fill-box;transform-origin:center}
+.gd-heart-left,.gd-heart-right{transform-origin:450px 320px}
+.gift-scene:is([data-phase=ready],[data-phase=reading]) .gd-heart-left{transform:translateX(-55px) rotate(-13deg)}
+.gift-scene:is([data-phase=ready],[data-phase=reading]) .gd-heart-right{transform:translateX(55px) rotate(13deg)}
+
+.theme-new{display:inline-block;margin-left:7px;padding:3px 7px;border:1px solid #b7ccbb;border-radius:12px;background:#e9f2e8;color:#567261;font:600 8px/1.5 var(--sans);vertical-align:middle;letter-spacing:.4px}

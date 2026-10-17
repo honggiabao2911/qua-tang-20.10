@@ -21,7 +21,7 @@ import test_upgrade as regression
 
 BASE_URL = regression.BASE_URL
 SCENES = ("umbrella", "storybook", "island", "ocean", "balloon", "lantern",
-          "wishtree", "silk", "lightbridge", "musicbox")
+          "wishtree", "silk", "lightbridge", "musicbox", "glassgarden", "wisteria", "lotusmoon", "sunmail", "lavender", "heartgarden")
 HOME_GROUPS = ("mom", "grandma", "teacher", "sister", "women", "lover")
 MOODS = ("bright", "gentle", "romantic", "elegant", "fantasy")
 VIEWPORTS = ((360, 800), (390, 844), (1440, 1000))
@@ -121,13 +121,13 @@ class GiftBrowserTests(unittest.TestCase):
         expect(self.page.locator("#recipient-pronoun")).to_have_value("bạn")
         expect(self.page.locator("#sender-name")).to_have_value("")
 
-    def test_02_library_has_twenty_two_real_previews_and_feeling_filters(self):
+    def test_02_library_has_twenty_eight_real_previews_and_feeling_filters(self):
         self.editor()
         self.assertEqual(set(SCENES), set(self.page.evaluate("Object.keys(GiftScenes.catalog)")))
-        self.assertEqual(22, self.page.evaluate("Object.keys(CardThemes.catalog).length"))
+        self.assertEqual(28, self.page.evaluate("Object.keys(CardThemes.catalog).length"))
         buttons = self.page.locator("#theme-gallery [data-theme-preset]")
-        expect(buttons).to_have_count(22)
-        expect(self.page.locator("#theme-gallery [data-preview-theme]")).to_have_count(22)
+        expect(buttons).to_have_count(28)
+        expect(self.page.locator("#theme-gallery [data-preview-theme]")).to_have_count(28)
         options = self.page.locator("#theme-filter option").evaluate_all("els => els.map(el=>el.value)")
         self.assertEqual({"all", *MOODS}, set(options))
         for mood in MOODS:
@@ -137,7 +137,7 @@ class GiftBrowserTests(unittest.TestCase):
                 self.assertGreater(count, 0)
                 self.assertLess(count, 22)
         self.page.locator("#theme-filter").select_option("all")
-        expect(self.page.locator("#theme-gallery [data-theme-preset]:visible")).to_have_count(22)
+        expect(self.page.locator("#theme-gallery [data-theme-preset]:visible")).to_have_count(28)
         artworks = []
         for scene in SCENES:
             svg = self.page.locator(f'[data-theme-preset="{scene}"] svg').first
@@ -148,9 +148,9 @@ class GiftBrowserTests(unittest.TestCase):
             # must represent the real object used by the opening scene.
             self.assertIsNotNone(svg.get_attribute("viewBox"))
             artworks.append(svg.inner_html())
-        self.assertEqual(10, len(set(artworks)))
+        self.assertEqual(16, len(set(artworks)))
 
-    def test_03_all_ten_gifts_fit_mobile_and_desktop_and_hold_before_reading(self):
+    def test_03_all_sixteen_gifts_fit_mobile_and_desktop_and_hold_before_reading(self):
         for width, height in VIEWPORTS:
             self.page.set_viewport_size({"width": width, "height": height})
             for scene in SCENES:

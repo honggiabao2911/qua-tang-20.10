@@ -160,4 +160,23 @@ for(const welcomeMusic of ['',null,[],{},false,9,'auto']){assert.throws(()=>code
 const legacyWelcome=plain(codec.decode(codec.encode({design:{welcome:'bebe',welcomeText:'Lời riêng.'}})));
 assert.equal(legacyWelcome.design.welcomeName,undefined);assert.equal(legacyWelcome.design.welcomeMusic,undefined);checks+=2;
 
+// Six new worlds append enum indexes; vector ink stores only bounded coordinates.
+const signatureContext=vm.createContext({window:{}});
+vm.runInContext(fs.readFileSync(path.join(__dirname,'../assets/js/card-signature.js'),'utf8'),signatureContext);
+const signature=signatureContext.window.CardSignature;
+const ink=signature.encode([[[20,100],[100,20],[140,110],[210,60]],[[230,100],[390,110],[600,180]]]);
+assert.deepEqual(plain(signature.decode(ink)),[[[20,100],[100,20],[140,110],[210,60]],[[230,100],[390,110],[600,180]]]);checks++;
+for(const experience of ['glassgarden','wisteria','lotusmoon','sunmail','lavender','heartgarden'])for(const signatureStyle of ['classic','script','minimal','seal']){
+ const payload={target:'mom',greeting:'Chúc mẹ bình yên.',design:{scene:experience,experience,signatureStyle,signatureText:'Thương mẹ · Minh 🌷',signatureInk:ink}};
+ assert.deepEqual(plain(codec.decode(codec.encodeCompact(payload))).design,payload.design);checks++;
+}
+for(const signatureText of ['', '<b>Minh</b>', '🖋'.repeat(40)]){assert.deepEqual(roundtrip({design:{signatureText}}).design,{signatureText});checks++;}
+for(const signatureInk of ['a','AAA','AAAAAA.', '<svg/>',signature.encode([[[601,0],[0,0]]]),signature.encode([[[0,181],[0,0]]]),Array(17).fill('AAAAAA').join('.'),signature.encode([Array(401).fill([20,20])])]){
+ assert.throws(()=>codec.encodeCompact({design:{signatureInk}}));assert.throws(()=>signature.decode(signatureInk));checks+=2;
+}
+for(const signatureStyle of ['',null,{},'fancy']){assert.throws(()=>codec.encode({design:{signatureStyle}}));checks++;}
+assert.throws(()=>codec.encode({design:{signatureText:'x'.repeat(81)}}));checks++;
+const oldSignature=plain(codec.decode(codec.encode({senderName:'Minh',design:{showSignature:'on'}})));
+assert.equal(oldSignature.design.signatureInk,undefined);assert.equal(oldSignature.design.signatureText,undefined);checks+=2;
+
 console.log(`CardLinks: ${checks} compatibility, Unicode, gift, arrival and malformed-input checks passed.`);
