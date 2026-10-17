@@ -431,7 +431,7 @@ const CardLinks = (() => {
   // Positional fields and choice indexes are append-only: shared v4 cards keep
   // their original meaning when more gift experiences become available.
   const designFields = [...legacyDesignFields, 'scene', 'structure', 'ornament', 'intensity',
-    'experience', 'size', 'reveal', 'showDate', 'showSignature', 'secret', 'giftIntro', 'flowerNotes', 'arrival', 'welcome', 'welcomeText'];
+    'experience', 'size', 'reveal', 'showDate', 'showSignature', 'secret', 'giftIntro', 'flowerNotes', 'arrival', 'welcome', 'welcomeText', 'welcomeName', 'welcomeMusic'];
   const designChoices = [
     ['rose', 'sage', 'champagne', 'midnight', 'teal', 'lilac'],
     ['serif', 'sans', 'italic', 'handwriting'],
@@ -443,7 +443,7 @@ const CardLinks = (() => {
     ['galaxy', 'aurora', 'garden', 'rose', 'sunflower', 'lotus', 'moonlake', 'butterfly', 'letter', 'pearl', 'crystal', 'lovegalaxy',
       'umbrella', 'storybook', 'island', 'ocean', 'balloon', 'lantern', 'wishtree', 'silk', 'lightbridge', 'musicbox'],
     ['small', 'medium', 'large'], ['instant', 'gentle', 'slow'], ['on', 'off'], ['on', 'off'], null, null, null,
-    ['stardust', 'growing', 'classic'], ['none','bebe'], null
+    ['stardust', 'growing', 'classic'], ['none','bebe'], null, null, ['on','off']
   ];
   const rootFields = new Set(['v', 'target', 'variant', 'recipientName', 'senderName', 'pronoun',
     'sampleIndex', 'message', 'musicId', 'design', 'recipientPronoun', 'tone', 'greeting', 'volume']);
@@ -486,6 +486,7 @@ const CardLinks = (() => {
     return value;
   }
   function designText(value, key) {
+    if(key==='welcomeMusic'){if(!['on','off'].includes(value))throw new Error('Invalid welcome music');return value;}
     if(key==='welcome'){if(!['none','bebe'].includes(value))throw new Error('Invalid welcome');return value;}
     if (key === 'arrival') {
       if (!['stardust', 'growing', 'classic'].includes(value)) throw new Error('Invalid bouquet arrival');
@@ -502,7 +503,7 @@ const CardLinks = (() => {
       }
       return source;
     }
-    const limit = key === 'body' ? 3000 : key === 'secret' ? 1000 :
+    const limit = key === 'welcomeName' ? 30 : key === 'body' ? 3000 : key === 'secret' ? 1000 :
       (key === 'giftIntro'||key==='welcomeText') ? 160 : key === 'dedication' ? 100 : 40;
     return limitedText(value, limit);
   }

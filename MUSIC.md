@@ -28,6 +28,14 @@ Các file cũ **không bị xóa, đổi tên hoặc suy đoán tên bài hát**
 
 Đây là ánh xạ để giữ nhạc cũ hoạt động, không phải xác nhận nội dung hay tên bản thu. Hãy nghe và xác nhận trước khi cập nhật tên bài/nghệ sĩ. Khi có file đúng đường dẫn chuẩn, website ưu tiên file đó. Giữ các file cũ để những liên kết trước đây tiếp tục hoạt động.
 
+## Nhạc cho người đưa quà
+
+Màn chào có bản **Một chút ánh sáng**, nhạc không lời celesta/pad dài 24 giây được tạo riêng cho dự án, tại `assets/music/loichao.mp3`. Không lấy âm thanh từ trang/video tham khảo. Có thể thay chính tệp này bằng MP3 mong muốn; tên hiển thị trong màn chào không suy đoán bài hát của tệp thay thế. Nhạc này dùng chung cho tên nhân vật do người tạo thiệp đặt, không bị cố định vào tên bé B.
+
+Trong **Màn chào đón**, bật/tắt **Nhạc hộp nhạc cho màn chào**; lựa chọn đi theo liên kết chia sẻ. Website thử phát khi bắt đầu màn chào. Nếu trình duyệt chặn âm thanh, người nhận chạm **Bật nhạc chào** hoặc nhân vật để nghe; phần dẫn và nút nhận hoa vẫn hoạt động. Khi nhận hoa hoặc bỏ qua, nhạc chào dừng và cùng phần tử audio chuyển sang bài người gửi chọn cho thiệp. Tắt nhạc thủ công được giữ qua chuyển cảnh và xem lại. Không khởi động lại bài thiệp khi chuyển từ hoa sang phần đọc.
+
+Chỉ có **một phần tử audio** cho ba chế độ: nhạc làm thiệp, nhạc chào và nhạc đọc thiệp. Ẩn tab tạm dừng nhạc chào; quay lại tiếp tục ở vị trí cũ. Tệp chào lỗi hoặc thiếu không cản mở thiệp và không làm thay đổi trạng thái có/thiếu của các bài người nhận.
+
 ## Nhạc riêng khi tạo thiệp
 
 Đặt **`nhac.mp3` ở thư mục gốc**, cùng `index.html`. Nếu cần, có thể đặt tại `assets/music/nhac.mp3`; website ưu tiên đường dẫn gốc. Hiện chưa có tệp này trong repository. Thanh nhạc làm thiệp báo rõ khi thiếu tệp và không lấy bài của người nhận để thay thế.
