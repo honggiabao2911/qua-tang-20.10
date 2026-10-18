@@ -203,4 +203,10 @@ for(const data of [[-1],[2**28],[1,0,3],[0,1,0,0,0],[0,0,null],[0,28,0],[0,1],[0
 }
 const bomb='[6,null,null,null,null,null,null,null,null,null,null,null,"'+String.fromCharCode(1).repeat(1000)+'"]';
 assert.throws(()=>codec.decode(codec.raw(bomb)));checks++;
+
+for(const scene of ['motherhug','grandmatea','classroom','sisterswing','friendpicnic','lovewaltz']){
+ const p={target:'lover',greeting:'Một lời chúc giữ nguyên cho người thương.',design:{scene,experience:scene,effect:'hearts',welcomeLines:JSON.stringify(['Chào em!','Một món quà dành cho em.'])}};
+ assert.equal(roundtrip(p).design.experience,scene);checks++;
+ assert.deepEqual(plain(codec.decode(codec.encodeCompact(p))),roundtrip(p));checks++;
+}
 console.log(`CardLinks: ${checks} compatibility, Unicode, gift, arrival and malformed-input checks passed.`);

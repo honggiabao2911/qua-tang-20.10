@@ -46,6 +46,10 @@ const CardMusic = (() => {
   let welcomeEnabled=false,welcomeDesired=false,welcomePending=false,welcomeUserPaused=false,welcomeStatusOverride='',welcomeHiddenPause=false;
   let studioTrack = null;
   let studioDiscovery = null;
+  let groupDiscovery = Promise.resolve([]);
+  let studioTrackTitle = '';
+  const studioFailed = new Set();
+  const groupLabels={mom:'mẹ',grandma:'bà',teacher:'cô giáo',sister:'chị/em gái',friend:'bạn nữ',women:'bạn nữ/nhóm phụ nữ',lover:'người thương'};
   let studioLoading = false;
   let studioDesired = false;
   let studioPending = false;
@@ -195,8 +199,8 @@ const CardMusic = (() => {
   function studioStatus() {
     if (studioStatusOverride) return studioStatusOverride;
     if (studioLoading) return 'Đang tìm nhạc cho lúc làm thiệp…';
-    if (!studioTrack) return 'Chưa có nhac.mp3. Thêm tệp này ở thư mục gốc để nghe nhạc khi làm thiệp.';
-    if (studioPlaying()) return 'Nhạc làm thiệp đang phát.';
+    if (!studioTrack) return group?`Chưa có bản nhạc dùng được cho ${groupLabels[group]}. Thêm nhạc vào ${MUSIC_ROOT} theo tên 0${definitions[group].stem}.mp3 đến 5${definitions[group].stem}.mp3 rồi kiểm tra lại nhạc.`:'Chọn người nhận để nghe ngẫu nhiên nhạc của nhóm đó.';
+    if (studioPlaying()) return `Đang nghe ngẫu nhiên cho ${groupLabels[group]} · ${studioTrackTitle}.`;
     if (studioPending && studioDesired) return 'Đang mở nhạc làm thiệp…';
     if (mode !== 'studio') return 'Nhạc làm thiệp sẽ phát riêng khi bạn quay lại thiết kế.';
     if (studioUserPaused) return 'Nhạc làm thiệp đã tạm dừng.';
@@ -256,7 +260,7 @@ const CardMusic = (() => {
 
   function studioState() {
     return { active: mode === 'studio', available: Boolean(studioTrack), loading: studioLoading,
-      playing: studioPlaying(), pending: studioPending, file: studioTrack, volume: studioVolume,
+      playing: studioPlaying(), pending: studioPending, file: studioTrack, volume: studioVolume, group, title:studioTrackTitle, count:studioCandidates().length,
       status: studioStatus() };
   }
 
@@ -283,6 +287,7 @@ const CardMusic = (() => {
       else studioButton.textContent = on ? 'Tạm dừng' : 'Bật nhạc làm thiệp';
     }
     document.dispatchEvent(new CustomEvent('cardmusicwelcome',{detail:welcomeState()}));
+    if($('studio-music-shuffle'))$('studio-music-shuffle').disabled=studioLoading||!studioCandidates().length||(studioCandidates().length<2&&Boolean(studioTrack));
     if ($('studio-music-status')) $('studio-music-status').textContent = studioStatus();
     if ($('music-status')) $('music-status').textContent = currentStatus();
     if ($('volume-control')) $('volume-control').disabled = false;
@@ -402,17 +407,20 @@ const CardMusic = (() => {
     return studioVolume;
   }
 
+  function studioCandidates(){return tracks.filter(track=>track.index<6&&track.available&&!studioFailed.has(track.url));}
   function discoverStudio() {
     if (!studioDiscovery) {
+      const target=group,generation=scanId;
       studioLoading = true;
-      studioDiscovery = (async () => {
-        for (const path of ['nhac.mp3', `${MUSIC_ROOT}nhac.mp3`]) {
-          const found = await probe(path);
-          if (found) { studioTrack = found; return found; }
-        }
-        studioTrack = null;
-        return null;
-      })().finally(() => { studioLoading = false; syncUI(); });
+      const task=Promise.resolve(groupDiscovery).then(()=>{
+        if(target!==group||generation!==scanId)return null;
+        const available=studioCandidates(),others=available.filter(track=>track.url!==studioTrack);
+        const choices=others.length?others:available;
+        const chosen=choices[Math.floor(Math.random()*choices.length)];
+        studioTrack=chosen?.url||null;studioTrackTitle=chosen?titleFor(chosen):'';
+        return studioTrack;
+      }).finally(()=>{if(studioDiscovery===task){studioLoading=false;syncUI();}});
+      studioDiscovery=task;
     }
     return studioDiscovery;
   }
@@ -430,6 +438,8 @@ const CardMusic = (() => {
       audio.src = studioTrack;
       audio.load();
     }
+    audio.loop=false;
+    if(audio.ended)audio.currentTime=0;
     applyAudioVolume(studioVolume);
     const attempt = ++requestId;
     let result;
@@ -446,7 +456,7 @@ const CardMusic = (() => {
       studioPending = false;
       if (error?.name !== 'AbortError') studioStatusOverride = error?.name === 'NotAllowedError'
         ? 'Chạm “Bật nhạc làm thiệp” để trình duyệt cho phép phát nhạc.'
-        : 'Chưa phát được nhac.mp3. Chạm nút để thử lại.';
+        : 'Chưa phát được bản nhạc này. Chạm đổi bài hoặc thử lại.';
       syncUI();
       return false;
     });
@@ -491,7 +501,7 @@ const CardMusic = (() => {
     requestId += 1;
     studioDesired = false;
     studioPending = false;
-    if (audio) audio.pause();
+    if (audio) {audio.pause();audio.loop=true;}
     mode = 'card';
     loadTrack(selectedTrack);
     applyAudioVolume(volume);
@@ -512,11 +522,23 @@ const CardMusic = (() => {
     }
     studioUserPaused = false;
     studioStatusOverride = '';
-    if (!studioTrack && !studioLoading) {
-      for (const path of ['nhac.mp3', `${MUSIC_ROOT}nhac.mp3`]) probeCache.delete(path);
-      studioDiscovery = null;
-    }
-    return enterStudio({ gesture: true });
+    studioDiscovery=null;
+    return shuffleStudio();
+  }
+
+  function shuffleStudio(){
+    studioUserPaused=false;studioStatusOverride='';studioDiscovery=null;
+    // Keep the previous path until discovery so a new draw avoids repeating it.
+    if(audio&&mode==='studio')audio.pause();
+    studioDesired=true;studioPending=true;
+    const revision=++studioRevision;
+    if(mode!=='studio'){studioTrack=null;return enterStudio({gesture:true});}
+    const result=discoverStudio().then(found=>{
+      if(revision!==studioRevision||mode!=='studio'||!studioDesired||studioUserPaused)return false;
+      if(found)return playStudio();
+      studioDesired=false;studioPending=false;syncUI();return false;
+    });
+    syncUI();return result;
   }
 
   function pause(userInitiated = true) {
@@ -607,11 +629,18 @@ const CardMusic = (() => {
     return true;
   }
 
-  async function setGroup(target, requestedId) {
+  function setGroup(target,requestedId){
+    groupDiscovery=scanGroup(target,requestedId);
+    return groupDiscovery;
+  }
+  async function scanGroup(target, requestedId) {
     if (!definitions[target]) target = 'women';
     const changed = group !== target;
     const generation = ++scanId;
+    studioDiscovery=null;studioLoading=false;
     if (changed) {
+      studioRevision++;studioTrack=null;studioTrackTitle='';studioFailed.clear();studioLoading=false;
+      if(mode==='studio'){requestId++;studioDesired=false;studioPending=false;if(audio)audio.pause();}
       openingIntent = null;
       pause(false);
       autoAttempted = false;
@@ -662,6 +691,7 @@ const CardMusic = (() => {
   async function refreshGroup() {
     if (!group) return [];
     probeCache.clear();
+    studioFailed.clear();studioDiscovery=null;
     metadata.clear();
     catalogueRequest = null;
     const result = await setGroup(group, selectedId);
@@ -745,12 +775,12 @@ const CardMusic = (() => {
   for (const id of ['volume-control', 'editor-volume-control']) {
     $(id)?.addEventListener('input', event => setVolume(event.target.value));
   }
+  $('studio-music-shuffle')?.addEventListener('click',()=>{void shuffleStudio();});
   $('studio-music-toggle')?.addEventListener('click', () => { void toggleStudio(); });
   for (const id of ['studio-volume', 'studio-volume-control']) {
     $(id)?.addEventListener('input', event => setStudioVolume(event.target.value));
   }
   setStudioVolume(studioVolume);
-  void discoverStudio();
   setVolume(30, false);
   if (audio) {
     audio.addEventListener('playing', () => {
@@ -763,6 +793,7 @@ const CardMusic = (() => {
       else pendingPlay = false;
       syncUI();
     });
+    audio.addEventListener('ended',()=>{if(mode==='studio'&&studioDesired&&!studioUserPaused)void shuffleStudio();});
     for (const event of ['pause', 'loadedmetadata', 'ended', 'emptied']) audio.addEventListener(event, syncUI);
     audio.addEventListener('error', () => {
       if(mode==='welcome'){
@@ -776,7 +807,8 @@ const CardMusic = (() => {
         studioPending = false;
         requestId += 1;
         audio.pause();
-        studioStatusOverride = 'Không đọc được nhac.mp3. Kiểm tra tệp MP3 rồi chạm để thử lại.';
+        studioStatusOverride = 'Không đọc được bài này. Chạm đổi bài để chọn bản khác trong nhóm.';
+        studioFailed.add(studioTrack);
         studioDiscovery = null;
         studioTrack = null;
         syncUI();
@@ -828,6 +860,7 @@ const CardMusic = (() => {
     leaveStudio,
     toggleStudio,
     studioState,
+    shuffleStudio,
     setStudioVolume,
     currentId: () => selectedId,
     openGesture,

@@ -1,6 +1,6 @@
 # Lời thương · Thiệp 20/10
 
-Website thiệp chúc mừng bằng HTML, CSS, JavaScript thuần. Thiệp mới đón người nhận bằng **bé B**: đôi mắt ánh sáng thức dậy, nói lời chúc riêng theo quan hệ rồi trao bó hoa lớn từ 2.450 hạt sáng (1.250 trên điện thoại) hoặc hoa mọc nở. Chạm cả bó hoa hoặc nút **Nhận hoa và mở lời chúc** để mở đúng thiệp đã chuẩn bị. Màn đầu không hiển thị tấm thiệp. Tạo lời chúc theo quan hệ, chọn thiết kế từ 32 chủ đề, nghe thử nhạc và chia sẻ nguyên tấm thiệp. Không cần backend, tài khoản, thư viện từ CDN hoặc bước build. Font tiếng Việt nằm trong dự án.
+Website thiệp chúc mừng bằng HTML, CSS, JavaScript thuần. Thiệp mới đón người nhận bằng **bé B**: đôi mắt ánh sáng thức dậy, nói lời chúc riêng theo quan hệ rồi trao bó hoa lớn từ 2.450 hạt sáng (1.250 trên điện thoại) hoặc hoa mọc nở. Chạm cả bó hoa hoặc nút **Nhận hoa và mở lời chúc** để mở đúng thiệp đã chuẩn bị. Màn đầu không hiển thị tấm thiệp. Tạo lời chúc theo quan hệ, chọn thiết kế từ 38 chủ đề, nghe thử nhạc và chia sẻ nguyên tấm thiệp. Không cần backend, tài khoản, thư viện từ CDN hoặc bước build. Font tiếng Việt nằm trong dự án.
 
 ## Chạy và triển khai
 
@@ -12,7 +12,7 @@ python3 -m http.server 8000 --bind 127.0.0.1
 
 Dùng trình duyệt trên máy chạy lệnh để mở cổng 8000. Có thể dùng Live Server. Cần phục vụ qua HTTP/HTTPS để kiểm tra tệp nhạc; `file://` không hỗ trợ đầy đủ. Khi gửi thiệp cho người khác, tạo liên kết từ địa chỉ website đã triển khai, không dùng địa chỉ máy cá nhân.
 
-GitHub Pages: trong **Settings → Pages**, chọn **Deploy from a branch → main → /(root)**. Merge Pull Request từ `codex/20-10-premium` vào `main`, rồi chờ tác vụ Pages hoàn tất. Khi tải thủ công, phải đưa lên cả `index.html` và thư mục `assets/`; các module mới không còn nằm hết trong HTML. Giữ các MP3 cũ tại thư mục gốc.
+GitHub Pages: trong **Settings → Pages**, chọn **Deploy from a branch → main → /(root)**. Merge Pull Request từ `codex/20-10-premium` vào `main`, rồi chờ tác vụ Pages hoàn tất. Khi tải thủ công, phải đưa lên cả `index.html` và thư mục `assets/`; các module mới không còn nằm hết trong HTML. Giữ các MP3 cũ tại thư mục gốc. Các tệp JS/CSS vừa đổi có mã phiên bản trong URL để tránh dùng bản cache cũ sau khi Pages cập nhật.
 
 ## Tạo một món quà riêng
 
@@ -51,11 +51,11 @@ Khi đọc, hoa/sao/bướm đã chọn tiếp tục bay nhẹ ở hai mép ngo�
 
 Phần đón bó hoa dùng canvas điểm sáng định vị theo cánh/nhụy/lá/cành và hình SVG 23 đóa hoa, giấy gói, nơ. Cành bắt đầu tại tâm mỗi hoa; cành, hoa, giấy gói và điểm sáng cùng chuyển động, không tách hai nửa. Giới hạn DPR 1,5 và giảm mật độ trên thiết bị yếu. Nhịp vẽ hạt sáng tối đa 30 lần/giây lúc xuất hiện, 20 khi đã ổn định (24/12 trên máy yếu); SVG rung nhẹ vẫn dùng CSS. Quầng sáng được vẽ sẵn theo màu và tái sử dụng, không tạo radial gradient trong mỗi khung hình. Hoa có bốn tầng cánh và nhụy chi tiết, mở lần lượt quanh đúng tâm cành. Không dùng filter trên từng bông hoa. Cành được vẽ từ gốc lên; giấy gói mở mềm, nơ vào sau. Kiểu hạt sáng hội tụ theo đường cong, thêm vệt sao và quầng sáng ngắn khi bó hoa thành hình; không dùng một lớp ảnh quét từ dưới lên. Dừng vòng vẽ khi ẩn, chuyển màn hoặc bật giảm chuyển động; bản tĩnh vẫn có đầy đủ bó hoa. Liên kết lưu `design.arrival`; liên kết cũ chưa có trường này giữ cảnh đã chọn.
 
-Nhạc riêng khi làm thiệp lấy từ **`nhac.mp3` ở thư mục gốc**, âm lượng độc lập với nhạc người nhận. Hiện chưa có tệp này: thêm bản thu của bạn để nghe. Thiếu tệp không chặn tạo thiệp. Không tự phát khi tải trang và chỉ có một audio hoạt động. Các dòng gợi ý chọn nhạc đã được bỏ.
+Nhạc lúc làm thiệp lấy **ngẫu nhiên từ những bài có sẵn của đúng nhóm người nhận**, trong sáu vị trí `0me.mp3`–`5me.mp3`, `0ba.mp3`–`5ba.mp3`, `0co.mp3`–`5co.mp3`, `0chi.mp3`–`5chi.mp3`, `0nu.mp3`–`5nu.mp3`, `0yeu.mp3`–`5yeu.mp3`. Không cần `nhac.mp3`. Chạm **Bật nhạc làm thiệp** để nghe; **Đổi bài ngẫu nhiên** tránh lặp ngay bài đang nghe nếu có bài khác. Hết một bài sẽ tự bốc bài tiếp cùng nhóm. Nhạc lúc viết có âm lượng riêng, không đổi bài/âm lượng được gửi trong thiệp. Tạm dừng/hủy trong lúc tìm nhạc không bị phát lại bởi kết quả đến muộn; thiếu nhạc được báo theo đúng nhóm. Tệp cũ vẫn được giữ và dùng như dự phòng theo danh mục đã có.
 
-## 32 chủ đề và cảnh mở quà
+## 38 chủ đề và cảnh mở quà
 
-Hai mươi cảnh quà có trạng thái bắt đầu, chuyển đổi, quà hoàn chỉnh và đọc lời chúc. Hình đại diện và bản xem trước lấy từ chính đồ họa dùng khi nhận thiệp.
+Hai mươi sáu cảnh quà có trạng thái bắt đầu, chuyển đổi, quà hoàn chỉnh và đọc lời chúc. Hình đại diện và bản xem trước lấy từ chính đồ họa dùng khi nhận thiệp.
 
 | Cảnh quà mới | Quá trình mở và phần trang trí khi đọc | Tương tác |
 | --- | --- | --- |
@@ -140,9 +140,16 @@ Trong **Màn chào đón → Bạn muốn nhân vật nói gì?**, chọn **Tự
 
 Đây là lời thoại bằng chữ cùng biểu cảm và nhạc hộp nhạc, không phải giọng đọc. Nhạc chào tiếp tục dùng trình phát chung; nhận hoa chuyển sang nhạc thiệp đã chọn. Lời thoại tự soạn được lưu nguyên văn trong URL, độc lập lời chúc và chữ ký trên giấy. Giảm/tắt chuyển động hiển thị đủ các câu ngay cùng bó hoa; các nút đọc chậm, ẩn tab, bỏ qua và xem lại vẫn dọn đúng bộ hẹn giờ.
 
-Bé B nhỏ ở cạnh đầu màn tạo thiệp chào ngắn và đưa mẹo khi chạm đôi mắt. Có thể thu gọn, mở lại; nằm trong bố cục trang để không đè các ô nhập trên điện thoại. Nhân vật này độc lập màn chào người nhận, không bật nhạc riêng hoặc xuất hiện trong thiệp nhận.
+Bé B ở cố định góc phải dưới màn trang chủ và tạo thiệp, giữ vị trí khi cuộn trang. Mở nút nhân vật để xem khung trò chuyện, hỏi về mẫu/lời chúc/nhạc/lời thoại/chữ ký hoặc dùng nút nhanh. Khung này dùng mẹo có sẵn trên trang, không phải dịch vụ AI và không gửi câu hỏi đi; lịch sử chỉ giữ tối đa 12 tin trong lần xem. Có sáu biểu cảm vui, tò mò, ngại, trái tim, nháy mắt và buồn ngủ. Đóng bằng nút × hoặc Escape, phục hồi tiêu điểm về nút nhân vật. Nhân vật trợ giúp độc lập và ẩn khi đang nhận hoa/đọc thiệp; không mở thêm trình phát. Hỗ trợ vùng an toàn, kích thước điện thoại, giảm chuyển động và tạm dừng khi ẩn tab.
 
-Bốn cảnh mới đưa tổng số lên **32**: **Bồ công anh gửi ước**, **Tách trà nở hoa**, **Lọ thư giữa biển sao**, **Hạc giấy chở ngàn sao**. Mỗi cảnh có bố cục SVG, chuyển động mở và chuyển động nhẹ lúc đọc riêng. Thêm ba lựa chọn **Đom đóm**, **Trái tim**, **Bọt ngọc**; tất cả bảy lựa chọn (kể cả tĩnh) dùng được cho mọi chủ đề. Thư viện tự tính số mẫu và đặt bốn mẫu mới lên đầu.
+Bốn cảnh được bổ sung ở bản trước: **Bồ công anh gửi ước**, **Tách trà nở hoa**, **Lọ thư giữa biển sao**, **Hạc giấy chở ngàn sao**. Mỗi cảnh có bố cục SVG, chuyển động mở và chuyển động nhẹ lúc đọc riêng. Thêm ba lựa chọn **Đom đóm**, **Trái tim**, **Bọt ngọc**; tất cả bảy lựa chọn (kể cả tĩnh) dùng được cho mọi chủ đề. Thư viện tự tính số mẫu và đặt bốn mẫu mới lên đầu.
+
+
+## Gợi ý theo người nhận và sáu cảnh có nhân vật
+
+Thư viện giữ toàn bộ 32 mẫu trước, thêm **Vòng tay của mẹ, Chiều trà cùng bà, Bài giảng nở hoa, Xích đu hai chị em, Hẹn nhau dưới tán hoa, Điệu valse của hai ta**. Các nhân vật được vẽ bằng SVG trong dự án; mỗi cảnh có chuyển động mở và chuyển động nhẹ bên lời chúc, không dùng video nặng hoặc ảnh tải từ bên ngoài.
+
+Bộ lọc có **Gợi ý cho người nhận hiện tại** và sáu nhóm **Cho Mẹ / Bà / Cô giáo / Chị-em gái / Bạn nữ-nhóm phụ nữ / Người thương**, bên cạnh năm cảm xúc cũ. Trong Tất cả, mẫu hợp với người đang nhận được đưa lên đầu và gắn nhãn. Mọi mẫu trước đây vẫn nằm trong Tất cả và ít nhất một nhóm gợi ý. Lọc chỉ sắp xếp/ẩn-hiện mẫu, không thay người nhận, lời tự viết, chữ ký hoặc nhạc. Nút gợi ý thiết kế cũng dùng cùng danh sách theo người nhận.
 
 ## Liên kết giữ đúng tấm thiệp
 
@@ -164,7 +171,7 @@ Giới hạn kích thước cả trước và trong giải nén; kiểm tra phi�
 | `assets/js/bebe-welcome.js`, `assets/css/bebe-welcome.css` | Nhân vật bé B, lời thoại sáu nhóm, nhịp dẫn, biểu cảm và dọn bộ hẹn giờ |
 | `assets/js/bouquet-arrival.js`, `assets/css/bouquet-arrival.css` | Bó hoa lớn, lời tặng 20/10, cành và hoa chuyển động liền nhau, vòng đời canvas |
 | `assets/css/reception.css` | Màn tạo thiệp, nhạc riêng và hiệu ứng mở hai cánh giấy |
-| `assets/js/gift-scenes.js` | Danh mục 20 cảnh quà, bộ dựng dùng chung, trạng thái mở/hoàn chỉnh/đọc và vòng đời xem trước |
+| `assets/js/gift-scenes.js` | Danh mục 26 cảnh quà, bộ dựng dùng chung, trạng thái mở/hoàn chỉnh/đọc và vòng đời xem trước |
 | `assets/js/gift-art-a.js`, `assets/js/gift-art-b.js`, `assets/js/gift-art-c.js`, `assets/js/gift-art-d.js` | SVG và tạo hình riêng của các cảnh quà mới |
 | `assets/css/themes.css`, `assets/css/collection.css` | Không gian, chất liệu, chi tiết và bố cục điện thoại |
 | `assets/css/gift-scenes.css`, `assets/css/gift-art-a.css`, `assets/css/gift-art-b.css`, `assets/css/gift-art-c.css`, `assets/css/gift-art-d.css` | Thư viện quà, bản xem trước và chuyển động từng cảnh |
@@ -172,6 +179,8 @@ Giới hạn kích thước cả trước và trong giải nén; kiểm tra phi�
 | `assets/js/card-music.js` | Tìm tệp và trình phát duy nhất |
 | `assets/music/catalog.json` | 36 mục ID, đường dẫn, tên hiển thị và nghệ sĩ |
 | `assets/js/welcome-studio.js`, `assets/css/welcome-studio.css` | Soạn và sắp xếp lời thoại; bé B hướng dẫn độc lập trong màn tạo thiệp |
+| `assets/js/theme-recommendations.js` | Gợi ý mẫu theo sáu nhóm, dùng chung trong bộ lọc và bé B |
+| `assets/js/gift-art-f.js`, `assets/css/gift-art-f.css` | Sáu cảnh có nhân vật theo người nhận, mở/đọc cùng một đồ họa |
 | `assets/js/gift-art-e.js`, `assets/css/gift-art-e.css` | Bốn cảnh quà mới, phần mở và phần chuyển động khi đọc |
 | `assets/js/card-links.js` | Bộ nén LZ, bảng v5/v6, snapshot v4 và dữ liệu cũ; kèm giấy phép MIT |
 | `assets/fonts/` | Font tự lưu và giấy phép OFL |
@@ -212,3 +221,7 @@ Kiểm chứng bản mẫu mới/chữ ký: **61 ca trình duyệt đạt** tron
 Kiểm thử phần lời thoại/chủ đề mới: `tests/test_welcome_studio.py` bao gồm thứ tự 2–8 câu, đổi/xóa câu, nhịp đọc, dừng/đọc lại, nội dung thật trên trình duyệt tách bộ nhớ, fallback khi module nhân vật không tải được, chữ an toàn, điện thoại 360/390 px và máy tính. Các bộ collection/gifts/welcome_effects đã cập nhật để kiểm tra đủ 32 chủ đề và 20 cảnh quà. Bộ `test_links.js` kiểm tra tương thích cũ, bảng v6, đa ngôn ngữ/ký tự điều khiển, lời thoại, giới hạn và dữ liệu hỏng. Ảnh thực tế từ Chromium được kiểm tra thêm để sửa tương phản chữ/nút ở các cảnh đêm.
 
 Kiểm chứng lần cập nhật lời thoại: **71 ca trình duyệt đạt** (studio 12, collection 20, gifts 17, welcome_effects 6, welcome_reading 7, signature_gardens 9), **457 kiểm tra codec đạt**; cú pháp toàn bộ JavaScript, ID/tài nguyên HTML và `git diff --check` đạt. Ca fallback dùng tài liệu trình duyệt mới để mô phỏng đúng việc script không tải được; ca chia sẻ mở trong context tách bộ nhớ. Đã kiểm tra ảnh thật ở 390 px và độ sáng chữ/nút trên hai cảnh đêm mới. Không thay thế kiểm tra trên Safari/iPhone thật.
+
+Kiểm chứng bản nhạc theo nhóm / gợi ý mẫu / bé B góc màn hình: **73 ca trình duyệt đạt**, gồm recipient_studio 14, welcome_studio 12, collection 20, arrival 11, signature_gardens 9, welcome_effects 6 và ca thư viện gifts 1. Có kiểm tra 38 chủ đề đi qua cảnh mở thật, sáu câu chuyện mới giữ chuyển động khi đọc, phát MP3 thật, đổi nhóm lúc đang dò nhạc, tạm dừng không phát lại muộn, tự đổi bài khi bài kết thúc, độc lập bài gửi/âm lượng, sáu nhóm gợi ý phủ đủ 38 mẫu, trợ giúp cố định ở 360/390 px, hội thoại có giới hạn và ô hỏi trên vùng bàn phím thu nhỏ. **469 kiểm tra codec đạt**, cú pháp JavaScript và ID/tài nguyên HTML đạt. Các ca đối chiếu bàn phím dùng Chromium với VisualViewport thu nhỏ; chưa thay cho kiểm tra Safari/iPhone thật. Ảnh sáu cảnh và màn đọc điện thoại được kiểm tra trực quan thêm.
+
+Kiểm tra HTTP bằng tài nguyên thật trong repository (không thay tệp nhạc bằng fixture): tìm đủ sáu bài cô giáo, bật/đổi ngẫu nhiên, chuyển sang nhạc chào rồi phát đúng `0co.mp3` ở thiệp, đọc cảnh Bài giảng nở hoa và mở trợ giúp góc màn hình đều đạt. Các script/stylesheet có mã phiên bản trả HTTP 200, không có lỗi JavaScript.

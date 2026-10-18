@@ -87,8 +87,8 @@ class WelcomeStudioTests(unittest.TestCase):
 
     def test_05_helper_is_scoped_dismissible_and_silent_on_phone(self):
         self.page.set_viewport_size({'width':360,'height':800});self.editor()
-        expect(self.page.locator('#studio-helper')).to_be_visible();expect(self.page.locator('#studio-helper-message')).to_contain_text('Chào bạn')
-        self.page.locator('#studio-helper-toggle').click();expect(self.page.locator('#studio-helper-message')).to_contain_text('Chọn một thế giới')
+        expect(self.page.locator('#studio-helper')).to_be_visible();expect(self.page.locator('#studio-helper-copy')).not_to_be_visible()
+        self.page.locator('#studio-helper-toggle').click();expect(self.page.locator('#studio-helper-message')).to_contain_text('Chào bạn')
         self.page.locator('#studio-helper-close').click();expect(self.page.locator('#studio-helper-copy')).not_to_be_visible()
         self.page.locator('#studio-helper-toggle').click();expect(self.page.locator('#studio-helper-copy')).to_be_visible()
         self.assert_layout(self.page);self.assertEqual(1,self.page.locator('audio').count())
@@ -133,7 +133,7 @@ class WelcomeStudioTests(unittest.TestCase):
             self.script(['Thương em rất nhiều. '*8,'Mỗi ngày có em là một ngày thật đẹp.','Món quà nhỏ dành cho em, người thương của anh.'])
             self.assert_layout(self.page)
             count=self.page.evaluate('Object.keys(CardThemes.catalog).length')
-            self.assertEqual(32,count);expect(self.page.locator('#theme-filter option[value=all]')).to_have_text(f'Tất cả {count} không gian')
+            self.assertEqual(38,count);expect(self.page.locator('#theme-filter option[value=all]')).to_have_text(f'Tất cả {count} không gian')
             self.welcome();self.assert_layout(self.page);self.receive();self.assert_layout(self.page)
 
     def test_09_empty_sentence_is_not_silently_dropped(self):

@@ -227,27 +227,27 @@ class ArrivalBrowserTests(unittest.TestCase):
         self.assertEqual(0, self.page.locator(".track-suggestion").count())
         self.assertNotIn("Gợi ý chọn nhạc", self.page.locator("#music-library").inner_text())
         self.page.locator("#studio-music-toggle").click()
-        expect(self.page.locator("#studio-music-status")).to_contain_text("nhac.mp3")
+        expect(self.page.locator("#studio-music-status")).to_contain_text("0me.mp3")
         self.assertEqual(0, self.page.locator("audio").evaluate_all("els=>els.filter(a=>!a.paused).length"))
 
-    def test_10_studio_music_uses_nhac_and_never_overlaps_card_preview(self):
-        self.available["nhac.mp3"] = "music_under.mp3"
+    def test_10_studio_music_uses_group_and_never_overlaps_card_preview(self):
         self.add_group_audio("mom")
         self.editor()
         self.settle_library()
-        # Choosing a recipient is already a user gesture and can start studio
+        # Starting the studio player uses a real group track and a user gesture.
+        # Legacy helper below also handles an already-playing studio track.
         # music. A second toggle would intentionally pause that playing track.
         if not self.page.evaluate("CardMusic.studioState().playing"):
             self.page.locator("#studio-music-toggle").click()
         self.page.wait_for_function("""() => [...document.querySelectorAll('audio')].some(a =>
-            !a.paused && a.readyState >= 2 && a.currentSrc.endsWith('/nhac.mp3'))""")
+            !a.paused && a.readyState >= 2 && a.currentSrc.match(/[0-5]me[.]mp3$/))""")
         self.assertEqual(1, self.page.locator("audio").evaluate_all("els=>els.filter(a=>!a.paused).length"))
         self.page.locator('[data-preview-track="mom:2"]').click()
         self.wait_playing("2me.mp3")
         self.assertEqual(1, self.page.locator("audio").evaluate_all("els=>els.filter(a=>!a.paused).length"))
         self.page.locator("#studio-music-toggle").click()
         self.page.wait_for_function("""() => [...document.querySelectorAll('audio')].some(a =>
-            !a.paused && a.readyState >= 2 && a.currentSrc.endsWith('/nhac.mp3'))""")
+            !a.paused && a.readyState >= 2 && a.currentSrc.match(/[0-5]me[.]mp3$/))""")
         self.invitation()
         self.assertEqual(0, self.page.locator("audio").evaluate_all("els=>els.filter(a=>!a.paused).length"))
         self.read_arrival()

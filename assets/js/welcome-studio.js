@@ -46,14 +46,62 @@
     $('welcome-script-defaults').addEventListener('click',()=>commit(BebeWelcome.linesFor({...settings,welcomeLines:''})));
     return {render(source,nextSettings,active){value=source;settings=nextSettings;enabled=active;draw();},validate(){if(!value)return true;try{scriptFor(value);return true;}catch(_){const fields=[...list.querySelectorAll('textarea')];(fields.find(f=>!f.value.trim()||f.value.length>160)||fields[0])?.focus();return false;}}};
   }
-  function helper(){
-    const host=$('studio-helper'),bubble=$('studio-helper-message'),toggle=$('studio-helper-toggle');
-    let dismissed=false;
-    const lines=['Chào bạn! Mình là bé B. Cùng làm một tấm thiệp thật riêng nhé.','Chọn một thế giới bạn thích. Sau bó hoa, thế giới ấy vẫn ở lại cùng lời chúc.','Bạn có thể đặt tên cho mình và viết từng câu mình nói với người nhận.','Thêm một chữ ký nhỏ, nghe thử nhạc, rồi xem trọn món quà trước khi gửi nhé.'];
-    let line=0;
-    toggle.addEventListener('click',()=>{dismissed=false;host.classList.remove('studio-helper-quiet');line=(line+1)%lines.length;bubble.textContent=lines[line];toggle.setAttribute('aria-expanded','true');});
-    $('studio-helper-close').addEventListener('click',()=>{dismissed=true;host.classList.add('studio-helper-quiet');toggle.setAttribute('aria-expanded','false');});
-    return {show(visible){host.hidden=!visible;if(visible&&!dismissed)bubble.textContent=lines[line];}};
+  function helper({getContext=()=>({}),onAction=()=>{}}={}){
+    const host=$('studio-helper'),panel=$('studio-helper-copy'),toggle=$('studio-helper-toggle'),log=$('studio-helper-log');
+    let opened=false,visible=false,expression=0;
+    const moods=['happy','curious','shy','love','wink','sleep'];let moodIndex=0;
+    function react(mood){clearTimeout(expression);host.dataset.expression=mood;if(!document.hidden&&visible)expression=setTimeout(()=>{host.dataset.expression='idle';expression=0;},4200);}
+    function append(text,user=false){
+      const p=document.createElement('p');p.className='helper-bubble'+(user?' helper-user':'');p.textContent=text;log.append(p);
+      while(log.children.length>12)log.firstElementChild.remove();log.scrollTop=log.scrollHeight;
+    }
+    function syncViewport(){
+      const viewport=window.visualViewport;const inset=opened&&visible&&viewport?Math.max(0,window.innerHeight-viewport.height-viewport.offsetTop):0;
+      host.style.setProperty('--helper-keyboard',`${inset}px`);host.style.setProperty('--helper-visible-height',`${viewport?.height||window.innerHeight}px`);host.dataset.keyboard=String(inset>100);
+    }
+    window.visualViewport?.addEventListener('resize',syncViewport);window.visualViewport?.addEventListener('scroll',syncViewport);
+    window.addEventListener('resize',syncViewport);
+    function setOpen(value,focus=false){opened=value;syncViewport();panel.hidden=!opened;toggle.setAttribute('aria-expanded',String(opened));host.classList.toggle('helper-open',opened);if(value){react('happy');log.scrollTop=log.scrollHeight;if(focus)$('studio-helper-input').focus({preventScroll:true});}else if(focus)toggle.focus({preventScroll:true});}
+    function advice(topic,target){
+      const context=getContext(),group=CardRecommendations.groupFor(target||context.target),label=CardRecommendations.labels[group];
+      if(topic==='themes'){
+        const names=CardRecommendations.idsFor(group).slice(0,3).map(id=>CardThemes.catalog[id].name);
+        append(`Gửi ${label}, mình gợi ý ${names.join(', ')}. Mẫu khác vẫn nằm trong “Tất cả không gian” nhé.`);react('curious');onAction('themes',group);
+      }else if(topic==='words'){
+        const current=CardRecommendations.groupFor(context.target);
+        if(target&&group!==current){append(`Bạn đang làm thiệp cho ${CardRecommendations.labels[current]}. Muốn dùng cách xưng hô cho ${label}, hãy chọn Đổi người nhận ở đầu trang nhé. Lời bạn tự viết sẽ được giữ.`);react('curious');onAction('recipient');return;}
+        append(`Lời gửi ${label} sẽ tự dùng đúng cách xưng hô bạn chọn. Bạn có thể viết lời riêng hoặc chọn giọng ấm áp, ngắn gọn, tình cảm ở phần lời chúc.`);react('shy');onAction('words');
+      }else if(topic==='music'){
+        append('Nhạc lúc làm thiệp chọn ngẫu nhiên trong nhóm người nhận. Chạm “Bật nhạc làm thiệp” hoặc “Đổi bài ngẫu nhiên” để nghe; bản nhạc gửi trong thiệp vẫn do bạn chọn riêng.');react('happy');onAction('music');
+      }else if(topic==='welcome'){
+        append('Bạn đặt tên cho người đưa quà và tự viết 2–8 câu theo thứ tự nhé. Câu cuối đi cùng bó hoa; nhấn Xem thử để đọc chậm cùng biểu cảm.');react('wink');onAction('welcome');
+      }else if(topic==='signature'){
+        append('Một nét ký nhỏ làm tấm thiệp rất riêng đó! Bạn có thể viết tên, lời ký hoặc dùng ngón tay ký trực tiếp trên điện thoại.');react('love');onAction('signature');
+      }else{react(moods[moodIndex++%moods.length]);append(['Mình nhận một cái chạm dễ thương rồi nè!','Gửi bạn một chút lấp lánh trước khi viết lời thương.','Mình ở góc này, bạn cứ thong thả làm thiệp nhé.'][moodIndex%3]);}
+    }
+    function answer(text){
+      const q=text.normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/đ/g,'d').toLowerCase();
+      const targets=[[/\bme\b/,'mom'],[/\bba\b/,'grandma'],[/\bco\b|giao vien|buc giang/,'teacher'],[/chi gai|em gai|chi em/,'sister'],[/nguoi thuong|tinh yeu|nguoi yeu/,'lover'],[/ban nu|ban be|nhom/,'women']];
+      const target=targets.find(([pattern])=>pattern.test(q))?.[1];
+      if(/ngu ngon|buon ngu/.test(q)){append('Mình chợp mắt một chút thôi… Bạn cứ thong thả viết, mình vẫn ở đây nhé.');react('sleep');return;}
+      if(/trai tim|thuong be b/.test(q)){append('Một trái tim nhỏ gửi đến bạn nè. Mong hôm nay bạn cũng nhận thật nhiều dịu dàng ♡');react('love');return;}
+      if(/^(chao|hi\b|hello|be b oi)/.test(q)){append('Chào bạn! Muốn mình gợi ý mẫu, giúp chọn lời chúc hay tìm phần chữ ký nào?');react('happy');return;}
+      if(/nhac|bai hat|am nhac/.test(q))advice('music');
+      else if(/ky ten|chu ky|ky tay/.test(q))advice('signature');
+      else if(/loi thoai|be b|nhan vat|loi chao/.test(q))advice('welcome');
+      else if(/loi chuc|viet gi|xung ho|loi rieng/.test(q))advice('words',target);
+      else if(target||/mau|chu de|goi y|thiep/.test(q))advice('themes',target);
+      else if(/chao|de thuong|trai tim|ngu ngon|cuoi/.test(q))advice('play');
+      else{append('Mình có mẹo về mẫu thiệp, lời chúc, nhạc, lời bé B nói và chữ ký. Bạn thử hỏi “mẫu cho mẹ” hoặc chọn một nút bên dưới nhé.');react('curious');}
+    }
+    toggle.addEventListener('click',()=>setOpen(!opened));
+    $('studio-helper-close').addEventListener('click',()=>setOpen(false,true));
+    host.addEventListener('click',event=>{const b=event.target.closest('[data-helper-topic]');if(b)advice(b.dataset.helperTopic);});
+    $('studio-helper-chat').addEventListener('submit',event=>{event.preventDefault();const field=$('studio-helper-input'),text=field.value.trim().slice(0,160);if(!text)return;append(text,true);field.value='';answer(text);});
+    host.addEventListener('keydown',event=>{if(event.key==='Escape'&&opened){event.preventDefault();setOpen(false,true);}});
+    document.addEventListener('visibilitychange',()=>{if(document.hidden){clearTimeout(expression);expression=0;}});
+    window.addEventListener('pagehide',()=>{clearTimeout(expression);expression=0;});
+    return {show(value){visible=value;host.hidden=!value;syncViewport();if(!value){clearTimeout(expression);expression=0;host.dataset.expression='idle';}},react,close:()=>setOpen(false)};
   }
   window.WelcomeStudio=Object.freeze({mount,helper,scriptFor});
 })();
