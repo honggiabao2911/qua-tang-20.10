@@ -53,6 +53,7 @@
   $('theme-gallery').setAttribute('aria-label',`Thư viện ${Object.keys(CardThemes.catalog).length} cảnh mở quà`);
   CardThemes.mount({gallery: $('theme-gallery'), stage: $('theme-stage'), backdrop: $('theme-backdrop')});
   let state = makeDefaultState();
+  let helperUndo=null;
   let screen = 'home';
   let shared = false;
   let pronounEdited = false;
@@ -66,7 +67,7 @@
   let bebePhase='idle',arrivalEdited=false;
   const bebe=window.BebeWelcome?.mount($('bebe-welcome'),{onFlowers:presentBebeFlowers,onSkip:skipBebe,onSound:()=>CardMusic.toggleWelcome(),onGreet:()=>CardMusic.greetWelcome()});
   const welcomeEditor=WelcomeStudio.mount({onChange:lines=>{state.design.welcomeLines=lines;renderCard();}});
-  const studioHelper=WelcomeStudio.helper({getContext:()=>({target:state.target,screen}),onAction:handleStudioHelp});
+  const studioHelper=WelcomeStudio.helper({getContext:()=>({target:state.target,screen,arrival:state.design.arrival,welcome:state.design.welcome,experience:state.design.experience,musicGroup:state.design.musicGroup,musicId:state.musicId,pronoun:state.pronoun,recipientPronoun:state.recipientPronoun}),onAction:handleStudioHelp});
   const hasBebe=()=>Boolean(bebe)&&state.design.welcome==='bebe'&&hasArrival();
   const flowersVisible=()=>arrivalActive()&&(!hasBebe()||bebePhase==='flowers');
   let arrivalPassed=false;
@@ -86,7 +87,7 @@
   const OPENING_NAMES = { bouquet:'Bó hoa bung nở',galaxy:'Vườn sao',envelope:'Mở phong thư',stardust:'Bụi sao hội tụ',aurora:'Dải sáng cực quang',bloom:'Cành lá hé mở',rose:'Nụ hồng bung nở',sunrise:'Nắng qua khung cửa',lotus:'Cánh sen trên nước',moonlight:'Trăng soi mặt hồ',butterflies:'Cánh bướm hé lời thương',layers:'Các lớp ngọc trai',crystal:'Trái tim pha lê',orbits:'Hai quỹ đạo gặp nhau' };
   const DESIGN_NAMES = { structure: {letter:'Thư tay',arch:'Thiệp đứng',postcard:'Toàn cảnh',folded:'Thiệp gập'}, theme: {rose:'Hồng sương',sage:'Vườn xanh',champagne:'Champagne',midnight:'Đêm ánh kim',teal:'Ngọc xanh',lilac:'Tím thạch anh'} };
   function defaultDesign(legacy = false) {
-    return { theme:'rose',font:'serif',layout:'classic',decoration:'botanical',effect:'petals',dedication:'',body:'',scene:'bouquet',structure:'arch',ornament:'botanical',intensity:'cinematic',experience:legacy?'':'sunflower',size:'medium',reveal:'gentle',showDate:'on',showSignature:'on',secret:'',giftIntro:'',flowerNotes:'[]',arrival:legacy?'classic':'growing',welcome:legacy?'none':'bebe',welcomeText:'',welcomeName:'bé B',welcomeMusic:'on',signatureText:'',signatureInk:'',signatureStyle:legacy?'classic':'script',welcomeLines:'' };
+    return { theme:'rose',font:'serif',layout:'classic',decoration:'botanical',effect:'petals',dedication:'',body:'',scene:'bouquet',structure:'arch',ornament:'botanical',intensity:'cinematic',experience:legacy?'':'sunflower',size:'medium',reveal:'gentle',showDate:'on',showSignature:'on',secret:'',giftIntro:'',flowerNotes:'[]',arrival:legacy?'classic':'growing',welcome:legacy?'none':'bebe',welcomeText:'',welcomeName:'bé B',welcomeMusic:'on',signatureText:'',signatureInk:'',signatureStyle:legacy?'classic':'script',welcomeLines:'',musicGroup:'' };
   }
   function recommendedArrival(id){return ['galaxy','lovegalaxy','aurora','moonlake','ocean','lantern','lightbridge','crystal','lotusmoon'].includes(id)?'stardust':'growing';}
   function themeDesign(id) {
@@ -97,6 +98,7 @@
   function applyTheme(id) {
     if (!Object.hasOwn(CardThemes.catalog,id)) return;
     Object.assign(state.design,themeDesign(id));
+    if(state.design.flowerNotes==='[]'&&CardThemes.catalog[id].defaultNotes)state.design.flowerNotes=JSON.stringify(CardThemes.catalog[id].defaultNotes);
     if(state.design.welcome==='bebe'&&!arrivalEdited)state.design.arrival=recommendedArrival(id);
     renderDesignControls(); renderCard();
   }
@@ -168,6 +170,7 @@
   function focusElement(element, centered = false) {
     window.requestAnimationFrame(() => {
       if (!element || element.closest('[hidden]')) return;
+      for(let parent=element.parentElement;parent;parent=parent.parentElement)if(parent.tagName==='DETAILS')parent.open=true;
       element.focus({ preventScroll: true });
       if (centered) element.scrollIntoView({ behavior: reducedMotion.matches ? 'auto' : 'smooth', block: 'center' });
     });
@@ -291,7 +294,10 @@
     renderVariants();
     renderPairs();
     renderDesignControls();
-    CardMusic.setGroup(state.target, state.musicId);
+    CardMusic.setStudioGroup(state.target);
+    $('recipient-music-group').value=state.design.musicGroup;
+    $('recipient-music-group').querySelector('[value=""]').textContent=`Theo người nhận (${recipientFor().label})`;
+    CardMusic.setGroup(state.design.musicGroup||state.target, state.musicId);
     CardMusic.setVolume(state.volume);
     updateMessageCount();
     renderCard();
@@ -382,7 +388,7 @@
     document.querySelectorAll('.letter-sprig').forEach(sprig => {sprig.style.visibility=!modern && design.decoration==='botanical'?'':'hidden';});
     $('use-template').hidden=!design.body;
     $('gift-configuration').hidden=!GiftScenes.has(design.experience);
-    $('flower-notes-fields').hidden=design.experience!=='wishtree';
+    $('flower-notes-fields').hidden=design.experience!=='wishtree'&&!CardThemes.catalog[design.experience]?.supportsNotes;
     $('secret-note').hidden=!design.secret.trim(); $('secret-content').textContent=design.secret;
     renderWelcomeGuide();
     renderThemeRecommendations();
@@ -437,6 +443,9 @@
   }
 
   const READING_NOTES={
+    teacherbloom:'Chạm vào những bông hoa có số để mở từng lời nhắn gửi cô.',
+    teachingbook:'Những trang sách ở lại cùng khu vườn giấy và lời biết ơn.',
+    chalkconstellation:'Nét phấn hóa thành chòm hoa sáng bên lời tri ân.',
     motherhug:'Vòng tay mẹ con ở lại cùng lời chúc; những bông hoa khẽ thở quanh một cái ôm.',grandmatea:'Bà và cháu cùng ngồi bên ấm trà; nắng và hơi trà nhẹ bay bên lời thương.',classroom:'Cô đứng bên bảng phấn nở hoa, giữ một lời cảm ơn bên bục giảng.',sisterswing:'Hai chị em trên chiếc xích đu; tán hoa khẽ lay cùng những chuyện nhỏ.',friendpicnic:'Hai người bạn và giỏ hoa vẫn ở dưới vòm lá, cùng một buổi hẹn nhiều nắng.',lovewaltz:'Hai người giữ một điệu valse nhỏ giữa quỹ đạo sao và những trái tim.',
     dandelion:'Bồ công anh và những đom đóm giữ ước nguyện bên lời chúc.',teacup:'Tách trà hoa ở lại, hơi trà chậm rãi bay lên như một cái ôm ấm.',seabottle:'Lọ thư và bọt ngọc vẫn ở đây, giữa biển đêm dịu sáng.',starcrane:'Hạc giấy ôm chòm sao; đôi cánh nhẹ thở bên lời thương.',
     glassgarden:'Lồng kính và khu vườn nhỏ ở lại; những hạt sáng khẽ lay quanh hoa.',wisteria:'Tử đằng đung đưa dưới vòm, giữ một khoảng trời tím bên lời chúc.',lotusmoon:'Cánh sen giữ dáng dưới trăng; gợn sáng chậm rãi trên mặt hồ.',sunmail:'Hoa hướng dương và hộp thư ở lại cùng những đám mây trôi nhẹ.',lavender:'Những nhành oải hương khẽ nghiêng trong nắng mật ong.',heartgarden:'Hai cánh tim mở, khu vườn và những đốm sáng ở lại bên lời thương.',
@@ -569,7 +578,7 @@
     state.variant=config.variants ? requestedVariant || variantMemory[target] || config.defaultVariant : '';
     if (config.variants) variantMemory[target]=state.variant;
     if (changed) {
-      resetPair(); state.musicId=`${target}:0`;
+      resetPair(); state.musicId=`${state.design.musicGroup||target}:0`;
       Object.assign(state.design,themeDesign(target==='women'&&state.variant==='friend'?'garden':CardThemes.defaults[target]));
     }
     if(state.design.welcome==='bebe'&&!arrivalEdited)state.design.arrival=recommendedArrival(state.design.experience);
@@ -724,7 +733,7 @@
     result.design.arrival='classic';result.design.welcome='none';result.design.welcomeMusic='off';result.design.signatureStyle='classic';
     if (data.v === 2 || data.v === 4) {
       if (Object.hasOwn(data, 'musicId')) {
-        if (typeof data.musicId !== 'string' || !new RegExp(`^${target}:(?:[0-9]|1[0-9])$`).test(data.musicId)) throw new Error('Invalid song');
+        if (typeof data.musicId !== 'string' || !/^(mom|grandma|teacher|sister|friend|women|lover):(?:[0-9]|1[0-9])$/.test(data.musicId)) throw new Error('Invalid song');
         result.musicId = data.musicId;
       }
       if (Object.hasOwn(data, 'design')) {
@@ -740,6 +749,8 @@
         result.design.body = stringProperty(design, 'body', '', CONFIG.maxCustomGreetingLength);
         result.design.secret = stringProperty(design,'secret','',1000);
         result.design.giftIntro=stringProperty(design,'giftIntro','',160);
+        result.design.musicGroup=stringProperty(design,'musicGroup','',12);
+        if(result.design.musicGroup&&!Object.hasOwn(RECIPIENTS,result.design.musicGroup))throw new Error('Invalid music group');
         result.design.welcomeText=stringProperty(design,'welcomeText','',160);
         result.design.welcomeLines=stringProperty(design,'welcomeLines','',8000);WelcomeStudio.scriptFor(result.design.welcomeLines);
         result.design.welcomeName=stringProperty(design,'welcomeName','bé B',30);
@@ -749,6 +760,7 @@
         if(!Array.isArray(notes)||notes.length>5||notes.some(note=>typeof note!=='string'||note.length>160))throw new Error('Invalid flower notes');
       }
     }
+    if(!result.musicId.startsWith(`${result.design.musicGroup||target}:`))throw new Error('Song group mismatch');
     if (data.v !== 4) {
       const legacyTemplate=LEGACY_GREETINGS[recipient.greetings]?.[result.sampleIndex];
       if (legacyTemplate) result.greeting=CardGreetings.render(legacyTemplate,{self:result.pronoun,you:recipient.you});
@@ -787,7 +799,7 @@
       recipientName: state.recipientName, senderName: state.senderName,
       pronoun: state.pronoun, sampleIndex: state.sampleIndex, message: state.message,
       recipientPronoun:state.recipientPronoun,tone:state.tone,greeting:cardText().greeting,volume:CardMusic.currentVolume(),
-      musicId: state.musicId, design: { ...state.design }
+      musicId: state.musicId, design: Object.fromEntries(Object.entries(state.design).filter(([key,value])=>key!=='musicGroup'||value!==''))
     };
     let fragment;
     try { fragment = CardLinks.encodeCompact(payload); }
@@ -871,7 +883,7 @@
   // Trình phát dùng một audio duy nhất, tự dò tệp theo nhóm và giữ lựa chọn khi chia sẻ.
   document.addEventListener('cardmusicchange', event => {
     const id = event.detail && event.detail.id;
-    if (typeof id === 'string' && id.startsWith(`${state.target}:`)) state.musicId = id;
+    if (typeof id === 'string' && id.startsWith(`${state.design.musicGroup||state.target}:`)) state.musicId = id;
   });
   document.addEventListener('cardmusicnotice', event => {
     if (event.detail && typeof event.detail.message === 'string') showToast(event.detail.message, true);
@@ -891,6 +903,7 @@
       renderCard();
     });
   });
+  $('recipient-music-group').addEventListener('change',()=>{state.design.musicGroup=$('recipient-music-group').value;state.musicId=`${state.design.musicGroup||state.target}:0`;CardMusic.setGroup(state.design.musicGroup||state.target,state.musicId);renderCard();});
   $('theme-gallery').addEventListener('click',event => {
     const button=event.target.closest('[data-theme-preset]');if(button)applyTheme(button.dataset.themePreset);
     const preview=event.target.closest('[data-preview-theme]');if(preview)previewTheme(preview.dataset.previewTheme);
@@ -922,6 +935,34 @@
     $('theme-recommendation-status').textContent=`${visible} mẫu đang hiện · ${filter==='all'?'Mẫu hợp với '+label+' được gợi ý ở đầu.':filter==='recipient'||filter.startsWith('for-')?'Gợi ý dành cho '+label+'.':'Bạn đang lọc theo cảm xúc.'} Chọn “Tất cả không gian” để xem đủ ${order.length} mẫu.`;
   }
   function handleStudioHelp(action,target){
+    if(action==='apply-draft'){
+      const draft=target;
+      if(!draft||!Object.hasOwn(RECIPIENTS,draft.target)||!Object.hasOwn(CardThemes.catalog,draft.theme))return false;
+      const bounded=(key,max)=>typeof draft[key]==='string'&&draft[key].length<=max;
+      if(!['recipientName','senderName'].every(key=>bounded(key,100))||!bounded('body',1000)||!bounded('message',1000)||!bounded('signatureText',80)||!['stardust','growing'].includes(draft.arrival)||!Number.isInteger(draft.track)||draft.track<0||draft.track>5||(draft.musicGroup&&!Object.hasOwn(RECIPIENTS,draft.musicGroup)))return false;
+      helperUndo={state:structuredClone(state),arrivalEdited,pronounEdited,variants:{...variantMemory}};
+      const next=makeDefaultState(),config=RECIPIENTS[draft.target];
+      next.target=draft.target;next.variant=config.variants?(Object.hasOwn(config.variants,draft.variant)?draft.variant:config.defaultVariant):'';
+      const pair=CardGreetings.defaultPair((config.variants?.[next.variant]||config).greetings);
+      Object.assign(next,{recipientName:draft.recipientName,senderName:draft.senderName,pronoun:pair.self,recipientPronoun:pair.you,message:draft.message,volume:state.volume,musicId:`${draft.musicGroup||draft.target}:${draft.track}`});
+      Object.assign(next.design,themeDesign(draft.theme),{body:draft.body,arrival:draft.arrival,musicGroup:draft.musicGroup,signatureText:draft.signatureText});
+      const notes=CardThemes.catalog[draft.theme].defaultNotes;if(notes)next.design.flowerNotes=JSON.stringify(notes);
+      state=next;shared=false;arrivalEdited=true;pronounEdited=false;removeFragment();
+      if(config.variants)variantMemory[draft.target]=next.variant;
+      renderEditor();showScreen('editor');CardMusic.enterStudio();return true;
+    }
+    if(action==='undo-draft'){
+      if(!helperUndo)return false;
+      state=helperUndo.state;arrivalEdited=helperUndo.arrivalEdited;pronounEdited=helperUndo.pronounEdited;Object.assign(variantMemory,helperUndo.variants);helperUndo=null;shared=false;removeFragment();renderEditor();showScreen('editor');CardMusic.enterStudio();return true;
+    }
+    if(action==='preview'){if(!validateFields())return false;shared=false;renderCard();showScreen('envelope');return true;}
+    if(action==='focus'){
+      if(target==='share'){showToast('Mở thiệp bằng “Mở thiệp yêu thương”, rồi chọn Chia sẻ hoặc Sao chép liên kết.');return;}
+      if(['help','privacy','deploy','mobile'].includes(target))return;
+      if(screen!=='editor')selectRecipient(state.target);
+      const ids={journey:'arrival-style',arrival:'arrival-style',music:'recipient-music-group',studio:'studio-music-toggle',welcome:'welcome-script-mode',signature:'signature-text',recipient:'back-to-recipients',names:'recipient-name',words:'personal-message',secret:'secret-message',design:'effect-field',effects:'effect-field',preview:'preview-welcome',themes:'theme-filter'};
+      if(ids[target])focusElement($(ids[target]),true);return;
+    }
     if(screen!=='editor')selectRecipient(target||state.target);
     if(action==='themes'){$('theme-filter').value=target?`for-${target}`:'recipient';renderThemeRecommendations();focusElement($('theme-filter'),true);}
     else if(action==='music')focusElement($('studio-music-toggle'),true);
@@ -987,7 +1028,7 @@
     renderCard();
   });
   $('reset-design').addEventListener('click', () => {
-    state.design = { ...defaultDesign(), ...themeDesign(state.design.experience || CardThemes.defaults[state.target]), body: state.design.body, dedication:state.design.dedication,secret:state.design.secret,giftIntro:state.design.giftIntro,flowerNotes:state.design.flowerNotes,arrival:state.design.arrival,welcome:state.design.welcome,welcomeText:state.design.welcomeText,welcomeLines:state.design.welcomeLines,welcomeName:state.design.welcomeName,welcomeMusic:state.design.welcomeMusic,signatureText:state.design.signatureText,signatureInk:state.design.signatureInk,signatureStyle:state.design.signatureStyle };
+    state.design = { ...defaultDesign(), ...themeDesign(state.design.experience || CardThemes.defaults[state.target]), body: state.design.body, dedication:state.design.dedication,secret:state.design.secret,giftIntro:state.design.giftIntro,flowerNotes:state.design.flowerNotes,arrival:state.design.arrival,welcome:state.design.welcome,welcomeText:state.design.welcomeText,welcomeLines:state.design.welcomeLines,welcomeName:state.design.welcomeName,welcomeMusic:state.design.welcomeMusic,signatureText:state.design.signatureText,signatureInk:state.design.signatureInk,signatureStyle:state.design.signatureStyle,musicGroup:state.design.musicGroup };
     renderDesignControls();
     renderCard();
   });

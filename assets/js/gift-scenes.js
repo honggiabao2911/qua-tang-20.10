@@ -48,7 +48,7 @@
     update(design){
       this.design={...design};this.node.dataset.intensity=design.intensity || 'cinematic';this.node.classList.toggle('gift-low-power',lowPower);
       this.noteLayer.replaceChildren();
-      if(this.id==='wishtree'){
+      if(this.id==='wishtree'||catalog[this.id].supportsNotes){
         const positions=catalog[this.id].notePositions || [[34,36],[44,26],[58,29],[66,42],[45,46]];
         getNotes(design).forEach((value,index)=>{
           if(!value.trim())return;const button=document.createElement('button');button.type='button';button.className='gift-flower-note';button.dataset.noteIndex=String(index);

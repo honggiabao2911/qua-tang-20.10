@@ -209,4 +209,17 @@ for(const scene of ['motherhug','grandmatea','classroom','sisterswing','friendpi
  assert.equal(roundtrip(p).design.experience,scene);checks++;
  assert.deepEqual(plain(codec.decode(codec.encodeCompact(p))),roundtrip(p));checks++;
 }
+// Cross-group music is explicit in design; recipient grammar remains separate.
+for(const target of targets)for(const musicGroup of targets){
+ const p={target,musicId:`${musicGroup}:5`,greeting:'Lời chúc không đổi.',design:{musicGroup,scene:'teachingbook',experience:'teachingbook'}};
+ assert.deepEqual(plain(codec.decode(codec.encodeCompact(p))),roundtrip(p));checks++;
+ assert.equal(roundtrip(p).musicId,`${musicGroup}:5`);checks++;
+}
+assert.equal(roundtrip({target:'mom',design:{musicGroup:'teacher'}}).musicId,'teacher:0');checks++;
+for(const scene of ['teacherbloom','teachingbook','chalkconstellation']){
+ const p={target:'teacher',musicId:'mom:2',greeting:'Em cảm ơn cô.',design:{musicGroup:'mom',scene,experience:scene,flowerNotes:JSON.stringify(['Cảm ơn cô 🌷','<b>Riêng cô</b>'])}};
+ assert.deepEqual(plain(codec.decode(codec.encodeCompact(p))),roundtrip(p));checks++;
+}
+for(const musicGroup of ['bad',null,{},'Mẹ']){assert.throws(()=>codec.encode({design:{musicGroup}}));checks++;}
+assert.throws(()=>codec.encode({target:'mom',musicId:'lover:0',design:{musicGroup:'teacher'}}));checks++;
 console.log(`CardLinks: ${checks} compatibility, Unicode, gift, arrival and malformed-input checks passed.`);

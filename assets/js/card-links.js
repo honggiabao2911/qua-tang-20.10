@@ -431,19 +431,19 @@ const CardLinks = (() => {
   // Positional fields and choice indexes are append-only: shared v4 cards keep
   // their original meaning when more gift experiences become available.
   const designFields = [...legacyDesignFields, 'scene', 'structure', 'ornament', 'intensity',
-    'experience', 'size', 'reveal', 'showDate', 'showSignature', 'secret', 'giftIntro', 'flowerNotes', 'arrival', 'welcome', 'welcomeText', 'welcomeName', 'welcomeMusic', 'signatureText', 'signatureInk', 'signatureStyle', 'welcomeLines'];
+    'experience', 'size', 'reveal', 'showDate', 'showSignature', 'secret', 'giftIntro', 'flowerNotes', 'arrival', 'welcome', 'welcomeText', 'welcomeName', 'welcomeMusic', 'signatureText', 'signatureInk', 'signatureStyle', 'welcomeLines', 'musicGroup'];
   const designChoices = [
     ['rose', 'sage', 'champagne', 'midnight', 'teal', 'lilac'],
     ['serif', 'sans', 'italic', 'handwriting'],
     ...legacyDesignChoices.slice(2,4), [...legacyDesignChoices[4], 'fireflies', 'hearts', 'bubbles'], null, null,
     ['stardust', 'aurora', 'bloom', 'rose', 'sunrise', 'lotus', 'moonlight', 'butterflies', 'envelope', 'layers', 'crystal', 'orbits', 'bouquet', 'galaxy',
-      'umbrella', 'storybook', 'island', 'ocean', 'balloon', 'lantern', 'wishtree', 'silk', 'lightbridge', 'musicbox', 'glassgarden', 'wisteria', 'lotusmoon', 'sunmail', 'lavender', 'heartgarden', 'dandelion', 'teacup', 'seabottle', 'starcrane', 'motherhug', 'grandmatea', 'classroom', 'sisterswing', 'friendpicnic', 'lovewaltz'],
+      'umbrella', 'storybook', 'island', 'ocean', 'balloon', 'lantern', 'wishtree', 'silk', 'lightbridge', 'musicbox', 'glassgarden', 'wisteria', 'lotusmoon', 'sunmail', 'lavender', 'heartgarden', 'dandelion', 'teacup', 'seabottle', 'starcrane', 'motherhug', 'grandmatea', 'classroom', 'sisterswing', 'friendpicnic', 'lovewaltz', 'teacherbloom', 'teachingbook', 'chalkconstellation'],
     ['letter', 'arch', 'postcard', 'folded'], ['botanical', 'orbit', 'pressed'],
     ['cinematic', 'medium', 'gentle', 'off'],
     ['galaxy', 'aurora', 'garden', 'rose', 'sunflower', 'lotus', 'moonlake', 'butterfly', 'letter', 'pearl', 'crystal', 'lovegalaxy',
-      'umbrella', 'storybook', 'island', 'ocean', 'balloon', 'lantern', 'wishtree', 'silk', 'lightbridge', 'musicbox', 'glassgarden', 'wisteria', 'lotusmoon', 'sunmail', 'lavender', 'heartgarden', 'dandelion', 'teacup', 'seabottle', 'starcrane', 'motherhug', 'grandmatea', 'classroom', 'sisterswing', 'friendpicnic', 'lovewaltz'],
+      'umbrella', 'storybook', 'island', 'ocean', 'balloon', 'lantern', 'wishtree', 'silk', 'lightbridge', 'musicbox', 'glassgarden', 'wisteria', 'lotusmoon', 'sunmail', 'lavender', 'heartgarden', 'dandelion', 'teacup', 'seabottle', 'starcrane', 'motherhug', 'grandmatea', 'classroom', 'sisterswing', 'friendpicnic', 'lovewaltz', 'teacherbloom', 'teachingbook', 'chalkconstellation'],
     ['small', 'medium', 'large'], ['instant', 'gentle', 'slow'], ['on', 'off'], ['on', 'off'], null, null, null,
-    ['stardust', 'growing', 'classic'], ['none','bebe'], null, null, ['on','off'], null, null, ['classic','script','minimal','seal'], null
+    ['stardust', 'growing', 'classic'], ['none','bebe'], null, null, ['on','off'], null, null, ['classic','script','minimal','seal'], null, ['',...targets]
   ];
   const rootFields = new Set(['v', 'target', 'variant', 'recipientName', 'senderName', 'pronoun',
     'sampleIndex', 'message', 'musicId', 'design', 'recipientPronoun', 'tone', 'greeting', 'volume']);
@@ -486,6 +486,7 @@ const CardLinks = (() => {
     return value;
   }
   function designText(value, key) {
+    if(key==='musicGroup'){if(typeof value!=='string'||(value!==''&&!targets.includes(value)))throw new Error('Invalid music group');return value;}
     if(key==='welcomeLines'){
       const source=limitedText(value,8000);if(!source)return source;
       const lines=JSON.parse(source);
@@ -617,8 +618,10 @@ const CardLinks = (() => {
     if (targetIndex < 0) throw new Error('Invalid recipient');
     const variant = limitedText(payload.variant, 30, defaultVariant(target));
     const pronoun = limitedText(payload.pronoun, 30, defaultPronoun(target, variant));
-    const musicId = limitedText(payload.musicId, 30, `${target}:0`);
-    if (!new RegExp(`^${target}:(?:[0-9]|1[0-9])$`).test(musicId)) throw new Error('Invalid card song');
+    const songGroup=payload.design?.musicGroup||target;
+    const musicId = limitedText(payload.musicId, 30, `${songGroup}:0`);
+    if(!targets.includes(songGroup))throw new Error('Invalid music group');
+    if (!new RegExp(`^${songGroup}:(?:[0-9]|1[0-9])$`).test(musicId)) throw new Error('Invalid card song');
     const track = Number(musicId.slice(musicId.lastIndexOf(':') + 1));
     const sample = payload.sampleIndex === undefined ? 0 : payload.sampleIndex;
     if (!Number.isInteger(sample) || sample < 0 || sample > 1000) throw new Error('Invalid card sample');
@@ -716,13 +719,15 @@ const CardLinks = (() => {
     if (!Number.isInteger(toneIndex) || toneIndex < 0 || toneIndex >= tones.length) throw new Error('Invalid card tone');
     const volume = packed[13] ?? 30;
     if (typeof volume !== 'number' || !Number.isFinite(volume) || volume < 0 || volume > 100) throw new Error('Invalid card volume');
+    const design=unpackDesign(packed[9]);
+    const songGroup=design.musicGroup||target;
     return {
       v: 4, target, variant,
       recipientName: limitedText(packed[3] ?? undefined, 100),
       senderName: limitedText(packed[4] ?? undefined, 100),
       pronoun: limitedText(packed[5] ?? undefined, 30, defaultPronoun(target, variant)),
       sampleIndex, message: limitedText(packed[7] ?? undefined, 1000),
-      musicId: `${target}:${track}`, design: unpackDesign(packed[9]),
+      musicId: `${songGroup}:${track}`, design,
       recipientPronoun: limitedText(packed[10] ?? undefined, 30),
       tone: tones[toneIndex], greeting: limitedText(packed[12] ?? undefined, 3000), volume
     };
