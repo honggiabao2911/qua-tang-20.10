@@ -437,11 +437,11 @@ const CardLinks = (() => {
     ['serif', 'sans', 'italic', 'handwriting'],
     ...legacyDesignChoices.slice(2,4), [...legacyDesignChoices[4], 'fireflies', 'hearts', 'bubbles'], null, null,
     ['stardust', 'aurora', 'bloom', 'rose', 'sunrise', 'lotus', 'moonlight', 'butterflies', 'envelope', 'layers', 'crystal', 'orbits', 'bouquet', 'galaxy',
-      'umbrella', 'storybook', 'island', 'ocean', 'balloon', 'lantern', 'wishtree', 'silk', 'lightbridge', 'musicbox', 'glassgarden', 'wisteria', 'lotusmoon', 'sunmail', 'lavender', 'heartgarden', 'dandelion', 'teacup', 'seabottle', 'starcrane'],
+      'umbrella', 'storybook', 'island', 'ocean', 'balloon', 'lantern', 'wishtree', 'silk', 'lightbridge', 'musicbox', 'glassgarden', 'wisteria', 'lotusmoon', 'sunmail', 'lavender', 'heartgarden', 'dandelion', 'teacup', 'seabottle', 'starcrane', 'motherhug', 'grandmatea', 'classroom', 'sisterswing', 'friendpicnic', 'lovewaltz'],
     ['letter', 'arch', 'postcard', 'folded'], ['botanical', 'orbit', 'pressed'],
     ['cinematic', 'medium', 'gentle', 'off'],
     ['galaxy', 'aurora', 'garden', 'rose', 'sunflower', 'lotus', 'moonlake', 'butterfly', 'letter', 'pearl', 'crystal', 'lovegalaxy',
-      'umbrella', 'storybook', 'island', 'ocean', 'balloon', 'lantern', 'wishtree', 'silk', 'lightbridge', 'musicbox', 'glassgarden', 'wisteria', 'lotusmoon', 'sunmail', 'lavender', 'heartgarden', 'dandelion', 'teacup', 'seabottle', 'starcrane'],
+      'umbrella', 'storybook', 'island', 'ocean', 'balloon', 'lantern', 'wishtree', 'silk', 'lightbridge', 'musicbox', 'glassgarden', 'wisteria', 'lotusmoon', 'sunmail', 'lavender', 'heartgarden', 'dandelion', 'teacup', 'seabottle', 'starcrane', 'motherhug', 'grandmatea', 'classroom', 'sisterswing', 'friendpicnic', 'lovewaltz'],
     ['small', 'medium', 'large'], ['instant', 'gentle', 'slow'], ['on', 'off'], ['on', 'off'], null, null, null,
     ['stardust', 'growing', 'classic'], ['none','bebe'], null, null, ['on','off'], null, null, ['classic','script','minimal','seal'], null
   ];

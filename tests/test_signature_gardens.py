@@ -37,8 +37,8 @@ class SignatureGardenTests(unittest.TestCase):
 
     def test_01_no_timing_bar_or_detached_hand_arcs_and_gentle_lights_respect_motion(self):
         self.page.emulate_media(reduced_motion='no-preference');self.editor()
-        self.assertEqual({'dandelion','teacup','seabottle','starcrane'},set(self.page.locator('[data-theme-preset]').evaluate_all('a=>a.slice(0,4).map(e=>e.dataset.themePreset)')))
-        self.assertEqual(4,self.page.locator('.theme-new').count());self.welcome()
+        self.assertEqual('motherhug',self.page.locator('[data-theme-preset]').first.get_attribute('data-theme-preset'))
+        self.assertEqual(6,self.page.locator('.theme-new').count());self.welcome()
         expect(self.page.locator('#bebe-hold')).to_be_visible(timeout=3000)
         self.assertEqual(0,self.page.locator('.bb-reading-meter,.bb-hands').count())
         self.assertEqual(8,self.page.locator('.bb-wish-lights i').count())
