@@ -6,12 +6,20 @@
   const clean=value=>typeof value==='string'?value.trim().normalize('NFC'):'';
   const nameFor=settings=>clean(settings?.welcomeName)||'bé B';
   const capital=value=>value.charAt(0).toLocaleUpperCase('vi-VN')+value.slice(1);
+  function scriptFor(source=''){
+    if(!source)return null;
+    if(typeof source!=='string'||source.length>8000)throw new Error('Lời thoại quá dài');
+    const lines=JSON.parse(source);
+    if(!Array.isArray(lines)||lines.length<2||lines.length>8||lines.some(line=>typeof line!=='string'||!line.trim()||line.length>160))throw new Error('Cần 2–8 câu, mỗi câu có nội dung và tối đa 160 ký tự');
+    return lines;
+  }
   function readingTime(text){
     const words=clean(text).split(/\s+/u).filter(Boolean).length;
     const reveal=Math.min(Math.max(0,words-1)*65,2200)+650;
     return Math.round(Math.max(4800,Math.min(16000,1800+Math.max(words*200,Array.from(text).length*38)+reveal)));
   }
   function linesFor(settings={}){
+    if(settings.welcomeLines){try{return scriptFor(settings.welcomeLines);}catch(_){/* An unfinished editor draft still has a safe preview. */}}
     const actor=nameFor(settings),Actor=capital(actor);
     const target=settings.target||'women',variant=settings.variant||'';
     const name=clean(settings.recipientName),sender=clean(settings.senderName);
@@ -78,11 +86,12 @@
       this.node.classList.remove('bb-paused');
       this.steps=[[0,'sleep','sleep',`Suỵt… ${capital(this.actor)} đang thức dậy để mang quà đến.`]];
       let at=1100;
-      for(let i=0;i<4;i++){
-        this.steps.push([at,['awake','curious','happy','shy'][i],'story',this.lines[i]]);
+      this.storyCount=this.lines.length-1;this.flowersStep=this.lines.length;
+      for(let i=0;i<this.storyCount;i++){
+        this.steps.push([at,['awake','curious','happy','shy'][i%4],'story',this.lines[i]]);
         at+=readingTime(this.lines[i]);
       }
-      this.steps.push([at,'offering','flowers',this.lines[4]],[at+3000,'waiting','flowers',this.lines[4]]);
+      this.steps.push([at,'offering','flowers',this.lines.at(-1)],[at+3000,'waiting','flowers',this.lines.at(-1)]);
       if(this.motion.matches||settings.intensity==='off')this.finish();else if(document.hidden){this.renderStep(0);this.pause();}else this.advance();
       return this;
     }
@@ -92,9 +101,9 @@
       this.beat=index;const step=this.steps[index];this.say(step[3],step[1],step[2]);
       this.node.dataset.step=String(index);
       const labels=['Một lời chào đang thức dậy','Lời chào dành riêng','Một món quà nhỏ','Một lời chúc từ lòng','Một chút bất ngờ'];
-      this.host.querySelector('#bebe-step-label').textContent=labels[index]||'Mời nhận hoa';
-      this.host.querySelector('#bebe-step-count').textContent=index>0&&index<5?`${index} / 4`:'';
-      this.readingPanel.hidden=index===0||index>=5;
+      this.host.querySelector('#bebe-step-label').textContent=this.settings.welcomeLines?(index===this.flowersStep?'Mời nhận hoa':'Lời bạn viết'):(labels[index]||'Mời nhận hoa');
+      this.host.querySelector('#bebe-step-count').textContent=index>0&&index<this.flowersStep?`${index} / ${this.storyCount}`:'';
+      this.readingPanel.hidden=index===0||index>=this.flowersStep;
       this.syncReading();if(step[2]==='flowers')this.offer();
     }
     syncReading(){
@@ -103,7 +112,7 @@
       const hold=this.host.querySelector('#bebe-hold');hold.setAttribute('aria-pressed',String(Boolean(this.manualPaused)));
       hold.textContent=this.manualPaused?'Tự chuyển tiếp':'Dừng để đọc';
       this.host.querySelector('#bebe-prev').disabled=this.beat<=1;
-      this.host.querySelector('#bebe-next').textContent=this.beat===4?'Đón bó hoa →':'Đọc tiếp ›';
+      this.host.querySelector('#bebe-next').textContent=this.beat===this.storyCount?'Đón bó hoa →':'Đọc tiếp ›';
     }
     advance(){
       clearTimeout(this.timer);this.timer=0;
@@ -115,15 +124,15 @@
       else this.finished=true;
     }
     goTo(index){
-      if(!this.visible||this.opened||this.offered||document.hidden||index<1||index>5)return;
+      if(!this.visible||this.opened||this.offered||document.hidden||index<1||index>this.flowersStep)return;
       this.freezeClock();this.elapsed=this.steps[index][0];
-      if(index===5)this.manualPaused=false;
+      if(index===this.flowersStep)this.manualPaused=false;
       if(!this.manualPaused)this.started=performance.now();
       this.renderStep(index);if(!this.manualPaused)this.advance();
     }
     next(){
-      const focusFlowers=this.beat===4;
-      this.goTo(Math.min(5,this.beat+1));
+      const focusFlowers=this.beat===this.storyCount;
+      this.goTo(Math.min(this.flowersStep,this.beat+1));
       if(focusFlowers&&this.offered)this.host.parentElement.querySelector('#bouquet-letter-open')?.focus({preventScroll:true});
     }
     previous(){
@@ -139,15 +148,16 @@
     finish(){
       this.freezeClock();if(!this.visible||this.opened)return;
       this.manualPaused=false;this.finished=true;this.beat=this.steps.length-1;this.readingPanel.hidden=true;this.syncReading();
-      this.say(`${this.lines[0]} ${this.lines[2]}${clean(this.settings.welcomeText)?' '+this.lines[3]:''} Chạm bó hoa để nhận lời chúc nhé!`,'waiting','flowers');this.offer();
+      const caption=this.settings.welcomeLines?this.lines.join('\n\n'):`${this.lines[0]} ${this.lines[2]}${clean(this.settings.welcomeText)?' '+this.lines[3]:''} Chạm bó hoa để nhận lời chúc nhé!`;
+      this.say(caption,'waiting','flowers');this.offer();
     }
     setSound(state={}){const button=this.host.querySelector('#welcome-music-toggle');button.hidden=!state.active||!state.enabled;button.setAttribute('aria-pressed',String(Boolean(state.playing)));button.textContent=state.playing?'Tắt nhạc chào ♫':state.pending?'Đang mở nhạc…':'Bật nhạc chào ♫';this.host.querySelector('#welcome-audio-status').textContent=state.active&&state.enabled?state.status||'':'';this.node.classList.toggle('bb-music-on',Boolean(state.playing));}
     open(){if(!this.visible||this.opened)return;this.opened=true;clearTimeout(this.timer);this.timer=0;this.say(`${capital(this.actor)} chuyển món quà đến rồi. Một lời chúc thật ấm lòng đang mở ra!`,'happy','flowers');}
     pause(){this.freezeClock();this.node.classList.add('bb-paused');}
     resume(){if(!this.visible)return;this.node.classList.remove('bb-paused');if(!this.finished&&!this.opened&&!this.manualPaused){this.started=performance.now();this.advance();}}
     hide(){clearTimeout(this.timer);this.timer=0;this.visible=false;this.started=0;this.lookReset();this.character.classList.remove('bb-coucou');if(this.node)this.node.classList.add('bb-paused');this.host.hidden=true;}
-    metrics(){return{visible:this.visible,offered:this.offered,opened:this.opened,pendingTimer:Boolean(this.timer),phase:this.node.dataset.phase,mood:this.node.dataset.mood,elapsed:Math.round(this.clock()),step:this.beat,manualPaused:Boolean(this.manualPaused),duration:this.steps?.[this.beat+1]?.[0]-this.steps?.[this.beat]?.[0]||0,flowersAt:this.steps?.[5]?.[0]||0};}
+    metrics(){return{visible:this.visible,offered:this.offered,opened:this.opened,pendingTimer:Boolean(this.timer),phase:this.node.dataset.phase,mood:this.node.dataset.mood,elapsed:Math.round(this.clock()),step:this.beat,manualPaused:Boolean(this.manualPaused),duration:this.steps?.[this.beat+1]?.[0]-this.steps?.[this.beat]?.[0]||0,flowersAt:this.steps?.[this.flowersStep]?.[0]||0};}
     destroy(){this.hide();document.removeEventListener('visibilitychange',this.visibilityHandler);this.motion.removeEventListener('change',this.motionHandler);this.host.querySelector('#bebe-skip').removeEventListener('click',this.skipHandler);this.host.querySelector('#welcome-music-toggle').removeEventListener('click',this.soundHandler);this.character.removeEventListener('click',this.greetHandler);this.node.removeEventListener('pointermove',this.lookHandler);this.node.removeEventListener('pointerleave',this.lookReset);this.host.querySelector('#bebe-prev').removeEventListener('click',this.prevHandler);this.host.querySelector('#bebe-next').removeEventListener('click',this.nextHandler);this.host.querySelector('#bebe-hold').removeEventListener('click',this.holdHandler);this.host.replaceChildren();}
   }
-  window.BebeWelcome=Object.freeze({nameFor,linesFor,mount(host,options){if(!host)return null;current?.destroy();current=new Welcome(host,options);return current;},metrics:()=>current?.metrics()||{visible:false,pendingTimer:false}});
+  window.BebeWelcome=Object.freeze({nameFor,linesFor,scriptFor,mount(host,options){if(!host)return null;current?.destroy();current=new Welcome(host,options);return current;},metrics:()=>current?.metrics()||{visible:false,pendingTimer:false}});
 })();

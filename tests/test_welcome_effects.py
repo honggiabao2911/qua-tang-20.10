@@ -25,8 +25,8 @@ class WelcomeEffectsTests(unittest.TestCase):
         expect(self.page.locator('#bebe-welcome')).not_to_be_visible()
         self.assertFalse(self.page.evaluate('BouquetArrival.metrics().running'))
 
-    def test_01_all_28_themes_play_their_actual_opening_after_the_named_messenger(self):
-        self.editor();scenes=self.page.evaluate('Object.keys(CardThemes.catalog)');self.assertEqual(28,len(scenes))
+    def test_01_all_32_themes_play_their_actual_opening_after_the_named_messenger(self):
+        self.editor();scenes=self.page.evaluate('Object.keys(CardThemes.catalog)');self.assertEqual(32,len(scenes))
         for i,scene in enumerate(scenes):
             with self.subTest(scene=scene):
                 self.page.emulate_media(reduced_motion='reduce');self.editor()

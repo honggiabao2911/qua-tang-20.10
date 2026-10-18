@@ -431,19 +431,19 @@ const CardLinks = (() => {
   // Positional fields and choice indexes are append-only: shared v4 cards keep
   // their original meaning when more gift experiences become available.
   const designFields = [...legacyDesignFields, 'scene', 'structure', 'ornament', 'intensity',
-    'experience', 'size', 'reveal', 'showDate', 'showSignature', 'secret', 'giftIntro', 'flowerNotes', 'arrival', 'welcome', 'welcomeText', 'welcomeName', 'welcomeMusic', 'signatureText', 'signatureInk', 'signatureStyle'];
+    'experience', 'size', 'reveal', 'showDate', 'showSignature', 'secret', 'giftIntro', 'flowerNotes', 'arrival', 'welcome', 'welcomeText', 'welcomeName', 'welcomeMusic', 'signatureText', 'signatureInk', 'signatureStyle', 'welcomeLines'];
   const designChoices = [
     ['rose', 'sage', 'champagne', 'midnight', 'teal', 'lilac'],
     ['serif', 'sans', 'italic', 'handwriting'],
-    ...legacyDesignChoices.slice(2), null, null,
+    ...legacyDesignChoices.slice(2,4), [...legacyDesignChoices[4], 'fireflies', 'hearts', 'bubbles'], null, null,
     ['stardust', 'aurora', 'bloom', 'rose', 'sunrise', 'lotus', 'moonlight', 'butterflies', 'envelope', 'layers', 'crystal', 'orbits', 'bouquet', 'galaxy',
-      'umbrella', 'storybook', 'island', 'ocean', 'balloon', 'lantern', 'wishtree', 'silk', 'lightbridge', 'musicbox', 'glassgarden', 'wisteria', 'lotusmoon', 'sunmail', 'lavender', 'heartgarden'],
+      'umbrella', 'storybook', 'island', 'ocean', 'balloon', 'lantern', 'wishtree', 'silk', 'lightbridge', 'musicbox', 'glassgarden', 'wisteria', 'lotusmoon', 'sunmail', 'lavender', 'heartgarden', 'dandelion', 'teacup', 'seabottle', 'starcrane'],
     ['letter', 'arch', 'postcard', 'folded'], ['botanical', 'orbit', 'pressed'],
     ['cinematic', 'medium', 'gentle', 'off'],
     ['galaxy', 'aurora', 'garden', 'rose', 'sunflower', 'lotus', 'moonlake', 'butterfly', 'letter', 'pearl', 'crystal', 'lovegalaxy',
-      'umbrella', 'storybook', 'island', 'ocean', 'balloon', 'lantern', 'wishtree', 'silk', 'lightbridge', 'musicbox', 'glassgarden', 'wisteria', 'lotusmoon', 'sunmail', 'lavender', 'heartgarden'],
+      'umbrella', 'storybook', 'island', 'ocean', 'balloon', 'lantern', 'wishtree', 'silk', 'lightbridge', 'musicbox', 'glassgarden', 'wisteria', 'lotusmoon', 'sunmail', 'lavender', 'heartgarden', 'dandelion', 'teacup', 'seabottle', 'starcrane'],
     ['small', 'medium', 'large'], ['instant', 'gentle', 'slow'], ['on', 'off'], ['on', 'off'], null, null, null,
-    ['stardust', 'growing', 'classic'], ['none','bebe'], null, null, ['on','off'], null, null, ['classic','script','minimal','seal']
+    ['stardust', 'growing', 'classic'], ['none','bebe'], null, null, ['on','off'], null, null, ['classic','script','minimal','seal'], null
   ];
   const rootFields = new Set(['v', 'target', 'variant', 'recipientName', 'senderName', 'pronoun',
     'sampleIndex', 'message', 'musicId', 'design', 'recipientPronoun', 'tone', 'greeting', 'volume']);
@@ -486,6 +486,12 @@ const CardLinks = (() => {
     return value;
   }
   function designText(value, key) {
+    if(key==='welcomeLines'){
+      const source=limitedText(value,8000);if(!source)return source;
+      const lines=JSON.parse(source);
+      if(!Array.isArray(lines)||lines.length<2||lines.length>8||lines.some(line=>typeof line!=='string'||!line.trim()||line.length>160))throw new Error('Invalid welcome script');
+      return source;
+    }
     if(key==='signatureInk'){
       const ink=limitedText(value,1215);if(!ink)return ink;const alphabet='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_-',strokes=ink.split('.');let points=0;
       if(strokes.length>16)throw new Error('Too many signature strokes');
@@ -574,6 +580,32 @@ const CardLinks = (() => {
     }
     return result;
   }
+  // Frozen v6 design dictionary. A bit means the field was explicitly present
+  // with this exact value; index/value pairs carry exceptions. Missing keys stay
+  // missing. Never derive this table from mutable UI defaults or reorder it.
+  // Frozen v6 phrase bytes (JSON source never contains literal control bytes).
+  // These are exact string substitutions, independent of the live greeting catalog.
+  const phrasesV6=[" nhiều sức khỏe, bình an và thật nhiều niềm vui. Mong mỗi người đều có thời gian cho điều mình yêu thích và một ngày vui theo cách riêng. Gửi "," luôn khỏe, cười thật nhiều và gặp những người tử tế. Cứ dành thời gian cho điều mình thích, thử điều mình tò mò và nghỉ khi cần nhé. Gửi "," khỏe, vui và gặp thật nhiều chuyện dễ thương. Mong hôm nay có món ngon, bài nhạc hay và một điều bất ngờ khiến "," khỏe, vui và gặp nhiều chuyện dễ thương. Hôm nay hãy dành một chút thời gian làm điều mình thích nhé. Gửi "," có thời gian cho điều mình yêu thích, gặp những người tử tế và đón nhận thật nhiều lời chúc ấm áp hôm nay."," luôn khỏe, ngủ ngon và có những ngày nhẹ lòng. Tấm thiệp này là một chút bất ngờ, còn điều "," có những giờ dạy thật vui và những khoảng nghỉ thật dễ chịu. Xin gửi đến "," một tấm thiệp nhỏ, một lời chúc thật lòng và thật nhiều thương mến."," thật khỏe, ăn ngon, ngủ ngon và ngày nào cũng có chuyện vui. Mong "," có nhiều lúc ngồi chơi thong thả, chuyện trò rôm rả. Gửi "," khỏe, ngủ ngon và có thật nhiều niềm vui. Hôm nay, mong "," dành một chút thời gian cho điều mình thích. Gửi "," một ngày thật vui và thật nhiều yêu thương. Mong "," thật nhiều thương mến trong tấm thiệp nhỏ này."," tận hưởng ngày này theo đúng cách mình thích!"," nhiều sức khỏe, niềm vui và bình an. Chúc "," nhiều sức khỏe, niềm vui và bình an. Mong "," một tấm thiệp nhỏ và thật nhiều thương."," một bất ngờ nhỏ thật dễ thương!"," những lời chúc chân thành nhất!"," lời cảm ơn và sự trân trọng."," muốn nói là: thương ","Nhân ngày 20/10, ","20/10, "," chúc "];
+  function packPhrasesV6(source){
+    let out='';
+    for(let i=0;i<source.length;){const k=phrasesV6.findIndex(p=>source.startsWith(p,i));if(k>=0){out+=String.fromCharCode(k+1);i+=phrasesV6[k].length;}else out+=source[i++];}
+    return out;
+  }
+  function unpackPhrasesV6(source){
+    let out='';for(const ch of source){const n=ch.charCodeAt(0);out+=n>0&&n<=phrasesV6.length?phrasesV6[n-1]:ch;if(out.length>MAX_TEXT_LENGTH)throw new Error('Card text exceeds limit');}return out;
+  }
+  const designV6=[0,0,0,0,0,'','',12,1,0,0,4,1,1,0,0,'','','[]',1,1,'','bé B',0,'','',1,''];
+  function packDesignV6(design){
+    let defaults=0;const exceptions=[];
+    design.forEach((v,i)=>{if(v===null)return;if(v===designV6[i])defaults+=2**i;else exceptions.push(i,v);});
+    return [defaults,...exceptions];
+  }
+  function unpackDesignV6(data){
+    if(!Array.isArray(data)||!data.length||data.length>1+designV6.length*2||data.length%2!==1||!Number.isSafeInteger(data[0])||data[0]<0||data[0]>=2**designV6.length)throw new Error('Invalid v6 design');
+    const packed=designV6.map((v,i)=>Math.floor(data[0]/2**i)%2?v:null);let previous=-1;
+    for(let i=1;i<data.length;i+=2){const k=data[i];if(!Number.isInteger(k)||k<=previous||k>=designV6.length||packed[k]!==null||data[i+1]===null)throw new Error('Invalid v6 field');packed[k]=data[i+1];previous=k;}
+    return trimDefaults(packed);
+  }
   function encodeCompact(payload){return encode(payload,true);}
   function encode(payload, compact=false) {
     if (!isRecord(payload)) throw new Error('Invalid card');
@@ -617,6 +649,12 @@ const CardLinks = (() => {
         const alternate='#c='+compress(compactSource,6,value=>alphabet.charAt(value));
         if(alternate.length<hash.length)hash=alternate;
       }
+    }
+    if(compact&&design.length<=designV6.length){
+      const v6=[...packed];v6[0]=6;
+      if(v6[9])v6[9]=packDesignV6(v6[9]);
+      const alternate='#c='+compress(packVietnamese(packPhrasesV6(JSON.stringify(v6))),6,value=>alphabet.charAt(value));
+      if(alternate.length<hash.length)hash=alternate;
     }
     if (hash.length > MAX_FRAGMENT_LENGTH) throw new Error('Card link exceeds limit');
     return hash;
@@ -697,9 +735,10 @@ const CardLinks = (() => {
     if (!input.length || !/^[A-Za-z0-9_-]+$/.test(input)) throw new Error('Invalid card encoding');
     const source = decompress(input.length, 32, index => alphabet.indexOf(input.charAt(index)));
     if (!source) throw new Error('Invalid compressed card');
-    const isVietnamese=/^\[5(?:,|\])/.test(source);
-    const packed = parseJSON(isVietnamese?unpackVietnamese(source):source);
-    if(isVietnamese)packed[0]=4;
+    const isVietnamese=/^\[[56](?:,|\])/.test(source);
+    const unpacked=isVietnamese?unpackVietnamese(source):source;
+    const packed=parseJSON(/^\[6(?:,|\])/.test(source)?unpackPhrasesV6(unpacked):unpacked);
+    if(isVietnamese){if(packed[0]===6&&packed[9]!==undefined&&packed[9]!==null)packed[9]=unpackDesignV6(packed[9]);packed[0]=4;}
     if (!Array.isArray(packed)) throw new Error('Unsupported card encoding');
     if (packed[0] === 3) return decodeLegacyPacked(packed);
     if (packed[0] === 4) return decodeV4(packed);
