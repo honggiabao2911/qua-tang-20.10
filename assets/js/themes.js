@@ -186,6 +186,8 @@
     burstTimer = setTimeout(stopBurst, 3100);
   }
   function effectGlyph(effect){
+    const extra={hearts:'<path d="M24 43C-9 20 8-5 24 12 40-5 57 20 24 43Z"/>',fireflies:'<circle cx="24" cy="24" r="7"/><circle cx="24" cy="24" r="17" opacity=".2"/>',bubbles:'<circle cx="24" cy="24" r="18" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M13 22q0-10 10-11" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>'};
+    if(extra[effect])return extra[effect];
     return effect==='butterflies' ? '<path d="M24 24C-8-7-4 35 18 26 0 49 23 49 24 24M24 24C56-7 52 35 30 26 48 49 25 49 24 24"/>' : effect==='petals' ? '<path d="M5 42C-2 9 24-6 43 5 49 27 31 48 5 42Z"/>' : '<path d="m24 2 5 16 17 6-17 5-5 17-6-17L2 24l16-6Z"/>';
   }
   function celebrate(effect) {

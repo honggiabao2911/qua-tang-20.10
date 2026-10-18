@@ -1,6 +1,6 @@
 # Lời thương · Thiệp 20/10
 
-Website thiệp chúc mừng bằng HTML, CSS, JavaScript thuần. Thiệp mới đón người nhận bằng **bé B**: đôi mắt ánh sáng thức dậy, nói lời chúc riêng theo quan hệ rồi trao bó hoa lớn từ 2.450 hạt sáng (1.250 trên điện thoại) hoặc hoa mọc nở. Chạm cả bó hoa hoặc nút **Nhận hoa và mở lời chúc** để mở đúng thiệp đã chuẩn bị. Màn đầu không hiển thị tấm thiệp. Tạo lời chúc theo quan hệ, chọn thiết kế từ 28 chủ đề, nghe thử nhạc và chia sẻ nguyên tấm thiệp. Không cần backend, tài khoản, thư viện từ CDN hoặc bước build. Font tiếng Việt nằm trong dự án.
+Website thiệp chúc mừng bằng HTML, CSS, JavaScript thuần. Thiệp mới đón người nhận bằng **bé B**: đôi mắt ánh sáng thức dậy, nói lời chúc riêng theo quan hệ rồi trao bó hoa lớn từ 2.450 hạt sáng (1.250 trên điện thoại) hoặc hoa mọc nở. Chạm cả bó hoa hoặc nút **Nhận hoa và mở lời chúc** để mở đúng thiệp đã chuẩn bị. Màn đầu không hiển thị tấm thiệp. Tạo lời chúc theo quan hệ, chọn thiết kế từ 32 chủ đề, nghe thử nhạc và chia sẻ nguyên tấm thiệp. Không cần backend, tài khoản, thư viện từ CDN hoặc bước build. Font tiếng Việt nằm trong dự án.
 
 ## Chạy và triển khai
 
@@ -33,9 +33,9 @@ Trong **Màn chào đón**, chọn **bé B tặng hoa** (mặc định cho thi�
 
 Nhân vật là người đưa quà: mắt ngủ, thức dậy, tò mò, vui, ngại rồi nhìn về bó hoa. Lời thoại thay đổi theo Mẹ, Bà, Cô giáo, Chị/em gái, Bạn nữ/nhóm phụ nữ và Người thương; dùng đúng cách gọi, số ít/số nhiều và tên người nhận. Nếu có tên người gửi, bé B nhắc người đó nhờ chuyển quà; không có tên thì dùng câu trung tính, không tự điền tên chủ dự án. Không dùng đại từ của người gửi làm vai của bé B.
 
-Lời dẫn có 4 câu chính. Mỗi câu giữ tối thiểu 4,8 giây; câu dài được tăng thời gian theo số từ và số ký tự, tối đa 16 giây/câu. Lời dẫn mặc định thường khoảng 23–30 giây trước khi trao hoa; tên/lời thêm dài có thể cần nhiều thời gian hơn. Hoa giữ chờ người nhận. Có **Mở thiệp ngay** ở mọi nhịp. Nhân vật và bó hoa nằm trong cùng một bầu trời: cạnh nhau trên máy tính, nối dọc trên điện thoại. Nhận hoa làm nhân vật vui lên, bó hoa chuyển cảnh 0,85–1,25 giây rồi **chạy đúng hiệu ứng mở của chủ đề đã chọn** (khoảng 2,8 giây cho các chủ đề cũ, 4,2 giây cho cảnh quà). Sau đó lời chúc tự mở, không cần bấm lần nữa. **Bỏ qua hiệu ứng** mở ngay phần đọc. Khi không dùng nhân vật, các cảnh quà vẫn giữ thao tác chọn đọc như trước.
+Lời dẫn gợi ý có 4 câu chính; lời tự soạn dùng số câu của bạn. Mỗi câu giữ tối thiểu 4,8 giây; câu dài được tăng thời gian theo số từ và số ký tự, tối đa 16 giây/câu. Lời dẫn mặc định thường khoảng 23–30 giây trước khi trao hoa; tên/lời thêm dài có thể cần nhiều thời gian hơn. Hoa giữ chờ người nhận. Có **Mở thiệp ngay** ở mọi nhịp. Nhân vật và bó hoa nằm trong cùng một bầu trời: cạnh nhau trên máy tính, nối dọc trên điện thoại. Nhận hoa làm nhân vật vui lên, bó hoa chuyển cảnh 0,85–1,25 giây rồi **chạy đúng hiệu ứng mở của chủ đề đã chọn** (khoảng 2,8 giây cho các chủ đề cũ, 4,2 giây cho cảnh quà). Sau đó lời chúc tự mở, không cần bấm lần nữa. **Bỏ qua hiệu ứng** mở ngay phần đọc. Khi không dùng nhân vật, các cảnh quà vẫn giữ thao tác chọn đọc như trước.
 
-Người nhận có **Câu trước**, **Dừng để đọc**, **Đọc tiếp** và bộ đếm 1/4. **Dừng để đọc** hiện trọn câu rồi giữ vô thời hạn; nhạc vẫn tiếp tục. **Tự chuyển tiếp** tiếp tục từ thời gian còn lại và không làm chữ biến mất để chạy hiệu ứng lại. **Câu trước** giữ chế độ tự đọc để câu không tự trôi đi. Ở câu cuối, **Đón bó hoa** trao đúng một bó hoa và đưa tiêu điểm bàn phím sang nút nhận hoa. Không hiện thanh thời gian; bộ đếm 1/4 chỉ cho biết vị trí câu. Ẩn/hiện tab không tự hủy lựa chọn dừng của người đọc. Các nút này chỉ điều khiển lần xem hiện tại, không thêm dữ liệu vào URL.
+Người nhận có **Câu trước**, **Dừng để đọc**, **Đọc tiếp** và bộ đếm số câu (mẫu mặc định 1/4; lời tự viết dùng đúng số câu đã soạn). **Dừng để đọc** hiện trọn câu rồi giữ vô thời hạn; nhạc vẫn tiếp tục. **Tự chuyển tiếp** tiếp tục từ thời gian còn lại và không làm chữ biến mất để chạy hiệu ứng lại. **Câu trước** giữ chế độ tự đọc để câu không tự trôi đi. Ở câu cuối, **Đón bó hoa** trao đúng một bó hoa và đưa tiêu điểm bàn phím sang nút nhận hoa. Không hiện thanh thời gian; bộ đếm chỉ cho biết vị trí câu. Ẩn/hiện tab không tự hủy lựa chọn dừng của người đọc. Các nút này chỉ điều khiển lần xem hiện tại, không thêm dữ liệu vào URL.
 
 Có thể thêm một câu tối đa 160 ký tự trong lời dẫn; **Xem bé B → hoa → thiệp** dùng chính nội dung, tên, xưng hô, chủ đề, kiểu chữ, chữ ký và bài nhạc đang chọn. Cấu hình lưu ở `design.welcome`, `design.welcomeText`, `design.welcomeName`, `design.welcomeMusic`; chỉ thêm ở cuối các trường URL cũ. Liên kết trước đây không có tên nhân vật vẫn dùng bé B; không có cấu hình nhạc chào thì giữ hành vi âm thanh cũ.
 
@@ -53,9 +53,9 @@ Phần đón bó hoa dùng canvas điểm sáng định vị theo cánh/nhụy/l
 
 Nhạc riêng khi làm thiệp lấy từ **`nhac.mp3` ở thư mục gốc**, âm lượng độc lập với nhạc người nhận. Hiện chưa có tệp này: thêm bản thu của bạn để nghe. Thiếu tệp không chặn tạo thiệp. Không tự phát khi tải trang và chỉ có một audio hoạt động. Các dòng gợi ý chọn nhạc đã được bỏ.
 
-## 28 chủ đề và cảnh mở quà
+## 32 chủ đề và cảnh mở quà
 
-Mười sáu cảnh quà có trạng thái bắt đầu, chuyển đổi, quà hoàn chỉnh và đọc lời chúc. Hình đại diện và bản xem trước lấy từ chính đồ họa dùng khi nhận thiệp.
+Hai mươi cảnh quà có trạng thái bắt đầu, chuyển đổi, quà hoàn chỉnh và đọc lời chúc. Hình đại diện và bản xem trước lấy từ chính đồ họa dùng khi nhận thiệp.
 
 | Cảnh quà mới | Quá trình mở và phần trang trí khi đọc | Tương tác |
 | --- | --- | --- |
@@ -133,9 +133,20 @@ Xem [MUSIC.md](MUSIC.md) để có danh sách thiếu, bảng chuyển tên và 
 
 Chỉ có một phần tử audio. Trình phát kiểm tra HEAD cho nhóm được chọn, tải metadata của bài được chọn, không tải trước 36 bài. Có nghe thử, phát/dừng, trước/sau, âm lượng và kiểm tra lại tệp. Không tự phát khi bắt đầu nhập liệu hoặc xem trước cảnh; thiếu nhạc không ngăn mở thiệp. Cảnh hộp nhạc cũng dùng bài người gửi chọn, không tạo nhạc riêng phát chồng. Lựa chọn tắt nhạc được giữ khi xem lại. Nếu hệ điều hành không cho điều chỉnh âm lượng qua web, dùng nút âm lượng điện thoại.
 
+
+## Tự viết lời cho người đưa quà
+
+Trong **Màn chào đón → Bạn muốn nhân vật nói gì?**, chọn **Tự viết và sắp xếp từng câu**. Lời gợi ý theo nhóm được điền vào làm điểm bắt đầu; bạn sửa toàn bộ, thêm/xóa hoặc đưa câu lên/xuống. Viết 2–8 câu, mỗi câu 160 ký tự. Câu cuối hiện khi trao hoa; các câu trước hiện lần lượt với biểu cảm và nhịp đọc theo độ dài. Ô trống được báo trước khi xem/gửi, không tự bỏ câu. Đổi tên nhân vật sau khi tự viết không sửa các chữ bạn đã viết.
+
+Đây là lời thoại bằng chữ cùng biểu cảm và nhạc hộp nhạc, không phải giọng đọc. Nhạc chào tiếp tục dùng trình phát chung; nhận hoa chuyển sang nhạc thiệp đã chọn. Lời thoại tự soạn được lưu nguyên văn trong URL, độc lập lời chúc và chữ ký trên giấy. Giảm/tắt chuyển động hiển thị đủ các câu ngay cùng bó hoa; các nút đọc chậm, ẩn tab, bỏ qua và xem lại vẫn dọn đúng bộ hẹn giờ.
+
+Bé B nhỏ ở cạnh đầu màn tạo thiệp chào ngắn và đưa mẹo khi chạm đôi mắt. Có thể thu gọn, mở lại; nằm trong bố cục trang để không đè các ô nhập trên điện thoại. Nhân vật này độc lập màn chào người nhận, không bật nhạc riêng hoặc xuất hiện trong thiệp nhận.
+
+Bốn cảnh mới đưa tổng số lên **32**: **Bồ công anh gửi ước**, **Tách trà nở hoa**, **Lọ thư giữa biển sao**, **Hạc giấy chở ngàn sao**. Mỗi cảnh có bố cục SVG, chuyển động mở và chuyển động nhẹ lúc đọc riêng. Thêm ba lựa chọn **Đom đóm**, **Trái tim**, **Bọt ngọc**; tất cả bảy lựa chọn (kể cả tĩnh) dùng được cho mọi chủ đề. Thư viện tự tính số mẫu và đặt bốn mẫu mới lên đầu.
+
 ## Liên kết giữ đúng tấm thiệp
 
-Định dạng `#c=` chọn bản ngắn hơn giữa dữ liệu v4 và v5. V5 dùng bảng ký tự/cụm từ tiếng Việt cố định trước khi nén LZ; Latin-1 được escape để giữ chính xác văn bản đa ngôn ngữ, có giới hạn trong lúc mở rộng. API giải mã trả về cùng snapshot v4; v1/v2/v3/v4 cũ vẫn đọc nguyên vẹn. Liên kết lưu nguyên văn lời chúc đã render, cặp xưng hô, người nhận/gửi, lời nhắn, mọi lựa chọn thiết kế, ID cảnh quà, câu mở quà, các lời nhắn trên hoa, nhạc và âm lượng. Các trường mới được thêm ở cuối dữ liệu v4 để thiệp v4 trước đó vẫn đọc được. Thay đổi danh sách mẫu sau này không làm lời chúc đã gửi đổi theo. Không tạo mã ngắn qua dịch vụ bên ngoài; độ dài vẫn phụ thuộc nội dung.
+Định dạng `#c=` tự chọn bản ngắn nhất trong v4/v5/v6. V6 dùng bảng giá trị thiết kế và 25 đoạn văn cố định, thay thế chính xác trước khi nén; dữ liệu không nằm trong bảng vẫn được lưu nguyên văn. Bảng v6 không lấy từ danh sách lời gợi ý đang thay đổi, nên các tấm thiệp đã gửi giữ nguyên chữ. V4/v5 cũ tiếp tục đọc được. V5 dùng bảng ký tự/cụm từ tiếng Việt cố định trước khi nén LZ; Latin-1 được escape để giữ chính xác văn bản đa ngôn ngữ, có giới hạn trong lúc mở rộng. API giải mã trả về cùng snapshot v4; v1/v2/v3/v4 cũ vẫn đọc nguyên vẹn. Liên kết lưu nguyên văn lời chúc đã render, cặp xưng hô, người nhận/gửi, lời nhắn, mọi lựa chọn thiết kế, ID cảnh quà, câu mở quà, các lời nhắn trên hoa, nhạc và âm lượng. Các trường mới được thêm ở cuối dữ liệu v4 để thiệp v4 trước đó vẫn đọc được. Thay đổi danh sách mẫu sau này không làm lời chúc đã gửi đổi theo. Liên kết vẫn chứa nội dung, không phải một mã tra cứu trên máy chủ; độ dài phụ thuộc lời riêng và nét ký. Với link mẫu trong yêu cầu này, fragment giảm từ 288 xuống 102 ký tự và giải mã ra cùng dữ liệu. Có phần giải thích ở màn chia sẻ: muốn một mã rất ngắn có thể tự dán link vào TinyURL. Đây là dịch vụ bên ngoài và sẽ nhận link thiệp khi người dùng dán vào; website không tự tải thiệp lên dịch vụ này. Không dùng khóa localStorage làm link giả: thiệp mở được trên máy khác chỉ từ URL.
 
 Đọc được liên kết `#card=` v1/v2 và `#c=` packed v3 của các bản trước. Dữ liệu lời cũ được giữ riêng; nhạc cũ `women:0` được chuyển sang vị trí tương ứng `women:1`. Tên đã có trong dữ liệu thiệp cũ vẫn được tôn trọng. Người dùng mới luôn bắt đầu với ô tên trống.
 
@@ -153,14 +164,16 @@ Giới hạn kích thước cả trước và trong giải nén; kiểm tra phi�
 | `assets/js/bebe-welcome.js`, `assets/css/bebe-welcome.css` | Nhân vật bé B, lời thoại sáu nhóm, nhịp dẫn, biểu cảm và dọn bộ hẹn giờ |
 | `assets/js/bouquet-arrival.js`, `assets/css/bouquet-arrival.css` | Bó hoa lớn, lời tặng 20/10, cành và hoa chuyển động liền nhau, vòng đời canvas |
 | `assets/css/reception.css` | Màn tạo thiệp, nhạc riêng và hiệu ứng mở hai cánh giấy |
-| `assets/js/gift-scenes.js` | Danh mục 16 cảnh quà, bộ dựng dùng chung, trạng thái mở/hoàn chỉnh/đọc và vòng đời xem trước |
+| `assets/js/gift-scenes.js` | Danh mục 20 cảnh quà, bộ dựng dùng chung, trạng thái mở/hoàn chỉnh/đọc và vòng đời xem trước |
 | `assets/js/gift-art-a.js`, `assets/js/gift-art-b.js`, `assets/js/gift-art-c.js`, `assets/js/gift-art-d.js` | SVG và tạo hình riêng của các cảnh quà mới |
 | `assets/css/themes.css`, `assets/css/collection.css` | Không gian, chất liệu, chi tiết và bố cục điện thoại |
 | `assets/css/gift-scenes.css`, `assets/css/gift-art-a.css`, `assets/css/gift-art-b.css`, `assets/css/gift-art-c.css`, `assets/css/gift-art-d.css` | Thư viện quà, bản xem trước và chuyển động từng cảnh |
 | `assets/js/card-signature.js`, `assets/css/card-signature.css` | Khung ký tay, định dạng tọa độ có giới hạn, chữ ký trên giấy và kiểu lời ký |
 | `assets/js/card-music.js` | Tìm tệp và trình phát duy nhất |
 | `assets/music/catalog.json` | 36 mục ID, đường dẫn, tên hiển thị và nghệ sĩ |
-| `assets/js/card-links.js` | Bộ nén LZ, bảng tiếng Việt v5, snapshot v4 và dữ liệu cũ; kèm giấy phép MIT |
+| `assets/js/welcome-studio.js`, `assets/css/welcome-studio.css` | Soạn và sắp xếp lời thoại; bé B hướng dẫn độc lập trong màn tạo thiệp |
+| `assets/js/gift-art-e.js`, `assets/css/gift-art-e.css` | Bốn cảnh quà mới, phần mở và phần chuyển động khi đọc |
+| `assets/js/card-links.js` | Bộ nén LZ, bảng v5/v6, snapshot v4 và dữ liệu cũ; kèm giấy phép MIT |
 | `assets/fonts/` | Font tự lưu và giấy phép OFL |
 
 ## Kiểm thử
@@ -194,3 +207,8 @@ Kiểm chứng bản nhịp đọc: **33 ca trình duyệt đạt** (7 reading, 
 Bản làm gọn nhân vật bỏ thanh thời gian và hai nét tay rời dưới mắt; vẫn giữ nhịp đọc chậm và các nút đọc trước/dừng/tiếp. Thêm tám đốm sáng trôi chậm và ánh sáng thở sau mắt, không thêm bộ hẹn giờ hoặc vòng lặp vẽ. Bộ `test_signature_gardens.py` kiểm tra chữ ký nhập/ký tay/chia sẻ/hoàn tác/hủy nét/cảm ứng, dữ liệu cũ và sáu cảnh mở mới với nhạc liên tục.
 
 Kiểm chứng bản mẫu mới/chữ ký: **61 ca trình duyệt đạt** trong collection (20), gifts (17), welcome_reading (7), welcome_music (8), signature_gardens (9); **406 kiểm tra liên kết và định dạng nét ký đạt**. Có ca cảm ứng qua Chromium, lời ký dài ở 360/390 px, hoàn tác/hủy nét/rời trang, giữ nguyên dữ liệu khi chia sẻ, cả 16 cảnh quà và giảm chuyển động. Ca thư viện được chạy lại sau khi đưa sáu mẫu mới lên đầu; các trường hợp chữ ký dài và hủy nét khi rời trang được kiểm tra riêng. Cú pháp JavaScript, ID/tài nguyên HTML và `git diff --check` đạt. Chưa thay thế kiểm tra trên điện thoại/Safari thật.
+
+
+Kiểm thử phần lời thoại/chủ đề mới: `tests/test_welcome_studio.py` bao gồm thứ tự 2–8 câu, đổi/xóa câu, nhịp đọc, dừng/đọc lại, nội dung thật trên trình duyệt tách bộ nhớ, fallback khi module nhân vật không tải được, chữ an toàn, điện thoại 360/390 px và máy tính. Các bộ collection/gifts/welcome_effects đã cập nhật để kiểm tra đủ 32 chủ đề và 20 cảnh quà. Bộ `test_links.js` kiểm tra tương thích cũ, bảng v6, đa ngôn ngữ/ký tự điều khiển, lời thoại, giới hạn và dữ liệu hỏng. Ảnh thực tế từ Chromium được kiểm tra thêm để sửa tương phản chữ/nút ở các cảnh đêm.
+
+Kiểm chứng lần cập nhật lời thoại: **71 ca trình duyệt đạt** (studio 12, collection 20, gifts 17, welcome_effects 6, welcome_reading 7, signature_gardens 9), **457 kiểm tra codec đạt**; cú pháp toàn bộ JavaScript, ID/tài nguyên HTML và `git diff --check` đạt. Ca fallback dùng tài liệu trình duyệt mới để mô phỏng đúng việc script không tải được; ca chia sẻ mở trong context tách bộ nhớ. Đã kiểm tra ảnh thật ở 390 px và độ sáng chữ/nút trên hai cảnh đêm mới. Không thay thế kiểm tra trên Safari/iPhone thật.

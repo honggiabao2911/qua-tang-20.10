@@ -49,6 +49,8 @@
   const recipientButtons = [...document.querySelectorAll('[data-recipient]')];
   const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
   const variantMemory = { sister: 'older', women: 'friend' };
+  $('theme-filter').querySelector('[value=all]').textContent=`Tất cả ${Object.keys(CardThemes.catalog).length} không gian`;
+  $('theme-gallery').setAttribute('aria-label',`Thư viện ${Object.keys(CardThemes.catalog).length} cảnh mở quà`);
   CardThemes.mount({gallery: $('theme-gallery'), stage: $('theme-stage'), backdrop: $('theme-backdrop')});
   let state = makeDefaultState();
   let screen = 'home';
@@ -63,6 +65,8 @@
   const hasArrival=()=>state.design.arrival!=='classic';
   let bebePhase='idle',arrivalEdited=false;
   const bebe=window.BebeWelcome?.mount($('bebe-welcome'),{onFlowers:presentBebeFlowers,onSkip:skipBebe,onSound:()=>CardMusic.toggleWelcome(),onGreet:()=>CardMusic.greetWelcome()});
+  const welcomeEditor=WelcomeStudio.mount({onChange:lines=>{state.design.welcomeLines=lines;renderCard();}});
+  const studioHelper=WelcomeStudio.helper();
   const hasBebe=()=>Boolean(bebe)&&state.design.welcome==='bebe'&&hasArrival();
   const flowersVisible=()=>arrivalActive()&&(!hasBebe()||bebePhase==='flowers');
   let arrivalPassed=false;
@@ -71,7 +75,7 @@
   const DESIGN_OPTIONS = Object.freeze({
     theme: ['rose', 'sage', 'champagne', 'midnight', 'teal', 'lilac'],
     font: ['serif', 'sans', 'italic', 'handwriting'], layout: ['classic', 'centered'],
-    decoration: ['botanical', 'stars', 'minimal'], effect: ['petals', 'constellation', 'butterflies', 'none'],
+    decoration: ['botanical', 'stars', 'minimal'], effect: ['petals', 'constellation', 'butterflies', 'none', 'fireflies', 'hearts', 'bubbles'],
     scene: ['bouquet', 'galaxy', 'envelope', 'stardust', 'aurora', 'bloom', 'rose', 'sunrise', 'lotus', 'moonlight', 'butterflies', 'layers', 'crystal', 'orbits', ...Object.keys(GiftScenes.catalog)],
     structure: ['letter', 'arch', 'postcard', 'folded'], ornament: ['botanical', 'orbit', 'pressed'],
     intensity: ['cinematic', 'medium', 'gentle', 'off'], experience: ['', ...Object.keys(CardThemes.catalog)],
@@ -82,7 +86,7 @@
   const OPENING_NAMES = { bouquet:'Bó hoa bung nở',galaxy:'Vườn sao',envelope:'Mở phong thư',stardust:'Bụi sao hội tụ',aurora:'Dải sáng cực quang',bloom:'Cành lá hé mở',rose:'Nụ hồng bung nở',sunrise:'Nắng qua khung cửa',lotus:'Cánh sen trên nước',moonlight:'Trăng soi mặt hồ',butterflies:'Cánh bướm hé lời thương',layers:'Các lớp ngọc trai',crystal:'Trái tim pha lê',orbits:'Hai quỹ đạo gặp nhau' };
   const DESIGN_NAMES = { structure: {letter:'Thư tay',arch:'Thiệp đứng',postcard:'Toàn cảnh',folded:'Thiệp gập'}, theme: {rose:'Hồng sương',sage:'Vườn xanh',champagne:'Champagne',midnight:'Đêm ánh kim',teal:'Ngọc xanh',lilac:'Tím thạch anh'} };
   function defaultDesign(legacy = false) {
-    return { theme:'rose',font:'serif',layout:'classic',decoration:'botanical',effect:'petals',dedication:'',body:'',scene:'bouquet',structure:'arch',ornament:'botanical',intensity:'cinematic',experience:legacy?'':'sunflower',size:'medium',reveal:'gentle',showDate:'on',showSignature:'on',secret:'',giftIntro:'',flowerNotes:'[]',arrival:legacy?'classic':'growing',welcome:legacy?'none':'bebe',welcomeText:'',welcomeName:'bé B',welcomeMusic:'on',signatureText:'',signatureInk:'',signatureStyle:legacy?'classic':'script' };
+    return { theme:'rose',font:'serif',layout:'classic',decoration:'botanical',effect:'petals',dedication:'',body:'',scene:'bouquet',structure:'arch',ornament:'botanical',intensity:'cinematic',experience:legacy?'':'sunflower',size:'medium',reveal:'gentle',showDate:'on',showSignature:'on',secret:'',giftIntro:'',flowerNotes:'[]',arrival:legacy?'classic':'growing',welcome:legacy?'none':'bebe',welcomeText:'',welcomeName:'bé B',welcomeMusic:'on',signatureText:'',signatureInk:'',signatureStyle:legacy?'classic':'script',welcomeLines:'' };
   }
   function recommendedArrival(id){return ['galaxy','lovegalaxy','aurora','moonlake','ocean','lantern','lightbridge','crystal','lotusmoon'].includes(id)?'stardust':'growing';}
   function themeDesign(id) {
@@ -194,6 +198,7 @@
     if ((next === 'editor' || next === 'home') && screen !== next) CardMusic.stopOnPageHide();
     if(next!=='editor')CardMusic.leaveStudio();
     screen = next;
+    studioHelper.show(next==='editor');
     if(next==='envelope'){arrivalPassed=false;bebePhase=hasBebe()?'story':'idle';renderCard();}
     $('envelope-screen').dataset.journeyPhase=next==='envelope'?(hasBebe()?'bebe':arrivalActive()?'bouquet':'theme'):'idle';
     Object.entries(screens).forEach(([key, element]) => { element.hidden = key !== next; });
@@ -328,9 +333,9 @@
     const choices = preset ? preset.compatibleOpenings : ['bouquet','galaxy','envelope'];
     $('scene-field').replaceChildren(...choices.map(value => new Option(OPENING_NAMES[value] || CardThemes.catalog[value]?.name || value,value)));
     if (!choices.includes(state.design.scene)) state.design.scene = preset?.opening || 'envelope';
-    const effects = preset ? ((preset.effect==='constellation'||['galaxy','aurora','moonlake','lovegalaxy','crystal','pearl'].includes(state.design.experience)) ? ['constellation','none'] : ['petals','butterflies','none']) : ['petals','constellation','butterflies','none'];
-    if (!effects.includes(state.design.effect)) state.design.effect = effects[0];
-    const labels = {petals:'Cánh hoa bay nhẹ',constellation:'Sao nhỏ lấp lánh',butterflies:'Cánh bướm bay quanh',none:'Không thêm hoa, sao hoặc bướm'};
+    const effects = ['petals','constellation','butterflies','none','fireflies','hearts','bubbles'];
+    if (!effects.includes(state.design.effect)) state.design.effect = preset?.effect || 'petals';
+    const labels = {petals:'Cánh hoa bay nhẹ',constellation:'Sao nhỏ lấp lánh',butterflies:'Cánh bướm bay quanh',none:'Không thêm chuyển động',fireflies:'Đom đóm trong vườn đêm',hearts:'Trái tim gửi người thương',bubbles:'Bọt ngọc giữa biển sao'};
     $('effect-field').replaceChildren(...effects.map(value => new Option(labels[value],value)));
     $('effect-field').value = state.design.effect;
   }
@@ -386,7 +391,7 @@
   }
 
   function setArrival(value){arrivalEdited=true;state.design.arrival=value;if(value==='classic')state.design.welcome='none';renderDesignControls();renderCard();}
-  function bebeSettings(){return {target:state.target,variant:state.variant,recipientName:state.recipientName,senderName:state.senderName,recipientPronoun:state.recipientPronoun,welcomeText:state.design.welcomeText,welcomeName:state.design.welcomeName,theme:state.design.theme,intensity:state.design.intensity};}
+  function bebeSettings(){return {target:state.target,variant:state.variant,recipientName:state.recipientName,senderName:state.senderName,recipientPronoun:state.recipientPronoun,welcomeText:state.design.welcomeText,welcomeLines:state.design.welcomeLines,welcomeName:state.design.welcomeName,theme:state.design.theme,intensity:state.design.intensity};}
   function showBouquet(){BouquetArrival.show({style:state.design.arrival,intensity:state.design.intensity,recipient:cardText().envelopeRecipient,sender:state.senderName.trim()});}
   function presentBebeFlowers(){
     if(screen!=='envelope'||!hasBebe()||bebePhase==='flowers')return;
@@ -394,12 +399,14 @@
   }
   function skipBebe(){if(screen!=='envelope')return;CardMusic.openGesture();revealLetter();}
   function renderWelcomeGuide(){
-    const enabled=state.design.welcome==='bebe';
+    const enabled=state.design.welcome==='bebe'&&Boolean(window.BebeWelcome);
     $('welcome-text').disabled=!enabled;$('welcome-name').disabled=!enabled;$('welcome-music').disabled=!enabled;
+    welcomeEditor.render(state.design.welcomeLines,bebeSettings(),enabled);
+    $('welcome-legacy-extra').hidden=Boolean(state.design.welcomeLines);
     const character=window.BebeWelcome?.nameFor(bebeSettings())||'bé B';
     $('welcome-name-label').textContent=character;$('welcome-settings-title').textContent=character+' mang lời thương đến.';
     $('welcome-option').textContent=character+' tặng hoa';$('welcome-dialogue-sample').hidden=!enabled;
-    if(enabled&&window.BebeWelcome){const lines=window.BebeWelcome.linesFor(bebeSettings());$('welcome-dialogue-sample').textContent=`${character} sẽ nói: “${lines[0]}” “${lines[2]}”`;}
+    if(enabled&&window.BebeWelcome){const lines=window.BebeWelcome.linesFor(bebeSettings());$('welcome-dialogue-sample').textContent=`${character} sẽ nói ${lines.length} câu. ${state.design.welcomeLines?'Bạn đã viết lời riêng.':'Lời gợi ý thay đổi theo người nhận.'} Xem thử để đọc từng câu cùng biểu cảm.`;}
     $('preview-welcome').textContent=enabled?`Xem ${character} → hoa → thiệp`:'Xem cách mở thiệp đã chọn';
   }
 
@@ -407,6 +414,9 @@
     petals:'Khi mở phần đọc, cánh hoa bay nhẹ ở mép thiệp; vài cánh hoa tiếp tục trôi trên nền.',
     constellation:'Khi mở phần đọc, sao nhỏ lóe sáng ở mép thiệp và lấp lánh trên nền.',
     butterflies:'Khi mở phần đọc, những cánh bướm bay quanh mép thiệp; không che lời chúc.',
+    fireflies:'Những đốm đom đóm vàng xanh thở sáng ở mép thiệp, như một khu vườn đêm.',
+    hearts:'Những trái tim nhỏ màu hồng trôi nhẹ bên lời thương.',
+    bubbles:'Bọt ngọc trong suốt nổi chậm, như một lời chúc từ biển sao.',
     none:'Không thêm hạt trang trí bay quanh chữ. Cảnh chủ đề vẫn hiện đầy đủ.'
   };
   function renderEffectGuide(replay=false){
@@ -416,7 +426,7 @@
     if(!replay&&demo.dataset.previewKey===key)return;
     demo.dataset.previewKey=key;demo.dataset.effect=effect;demo.dataset.intensity=state.design.intensity;
     const particles=$('effect-preview-particles');particles.replaceChildren();
-    document.querySelectorAll('.reading-ambience i').forEach((node,i)=>{node.style.setProperty('--x',`${i%2?94+(i%5):1+(i%5)}%`);node.innerHTML=['butterflies','constellation'].includes(effect)?`<svg viewBox="0 0 48 48" aria-hidden="true">${CardThemes.effectGlyph(effect)}</svg>`:'';});
+    document.querySelectorAll('.reading-ambience i').forEach((node,i)=>{node.style.setProperty('--x',`${i%2?94+(i%5):1+(i%5)}%`);node.innerHTML=['butterflies','constellation','fireflies','hearts','bubbles'].includes(effect)?`<svg viewBox="0 0 48 48" aria-hidden="true">${CardThemes.effectGlyph(effect)}</svg>`:'';});
     if(effect==='none')return;
     const glyph=CardThemes.effectGlyph(effect);
     for(let i=0;i<6;i++){
@@ -426,6 +436,7 @@
   }
 
   const READING_NOTES={
+    dandelion:'Bồ công anh và những đom đóm giữ ước nguyện bên lời chúc.',teacup:'Tách trà hoa ở lại, hơi trà chậm rãi bay lên như một cái ôm ấm.',seabottle:'Lọ thư và bọt ngọc vẫn ở đây, giữa biển đêm dịu sáng.',starcrane:'Hạc giấy ôm chòm sao; đôi cánh nhẹ thở bên lời thương.',
     glassgarden:'Lồng kính và khu vườn nhỏ ở lại; những hạt sáng khẽ lay quanh hoa.',wisteria:'Tử đằng đung đưa dưới vòm, giữ một khoảng trời tím bên lời chúc.',lotusmoon:'Cánh sen giữ dáng dưới trăng; gợn sáng chậm rãi trên mặt hồ.',sunmail:'Hoa hướng dương và hộp thư ở lại cùng những đám mây trôi nhẹ.',lavender:'Những nhành oải hương khẽ nghiêng trong nắng mật ong.',heartgarden:'Hai cánh tim mở, khu vườn và những đốm sáng ở lại bên lời thương.',
     umbrella:'Ô vẫn che bó hoa; những hạt mưa sáng tiếp tục rơi quanh lời chúc.',
     storybook:'Cuốn sách vẫn mở với khu vườn giấy, cây và hoa ở lại cùng lời chúc.',
@@ -537,6 +548,7 @@
         return false;
       }
     }
+    if(state.design.welcome==='bebe'&&!welcomeEditor.validate()){showToast('Hãy điền đủ 2–8 câu cho nhân vật, mỗi câu tối đa 160 ký tự.',true);return false;}
     const flowerNotes=JSON.parse(state.design.flowerNotes || '[]');
     for(let i=0;i<flowerNotes.length;i++)if(flowerNotes[i].length>160){
       showToast('Mỗi lời nhắn trên hoa tối đa 160 ký tự. Hãy rút ngắn rồi mở thiệp.',true);
@@ -727,6 +739,7 @@
         result.design.secret = stringProperty(design,'secret','',1000);
         result.design.giftIntro=stringProperty(design,'giftIntro','',160);
         result.design.welcomeText=stringProperty(design,'welcomeText','',160);
+        result.design.welcomeLines=stringProperty(design,'welcomeLines','',8000);WelcomeStudio.scriptFor(result.design.welcomeLines);
         result.design.welcomeName=stringProperty(design,'welcomeName','bé B',30);
         result.design.signatureText=stringProperty(design,'signatureText','',80);result.design.signatureInk=stringProperty(design,'signatureInk','',1215);CardSignature.decode(result.design.signatureInk);
         result.design.flowerNotes=stringProperty(design,'flowerNotes','[]',5000);
@@ -943,7 +956,7 @@
     renderCard();
   });
   $('reset-design').addEventListener('click', () => {
-    state.design = { ...defaultDesign(), ...themeDesign(state.design.experience || CardThemes.defaults[state.target]), body: state.design.body, dedication:state.design.dedication,secret:state.design.secret,giftIntro:state.design.giftIntro,flowerNotes:state.design.flowerNotes,arrival:state.design.arrival,welcome:state.design.welcome,welcomeText:state.design.welcomeText,welcomeName:state.design.welcomeName,welcomeMusic:state.design.welcomeMusic,signatureText:state.design.signatureText,signatureInk:state.design.signatureInk,signatureStyle:state.design.signatureStyle };
+    state.design = { ...defaultDesign(), ...themeDesign(state.design.experience || CardThemes.defaults[state.target]), body: state.design.body, dedication:state.design.dedication,secret:state.design.secret,giftIntro:state.design.giftIntro,flowerNotes:state.design.flowerNotes,arrival:state.design.arrival,welcome:state.design.welcome,welcomeText:state.design.welcomeText,welcomeLines:state.design.welcomeLines,welcomeName:state.design.welcomeName,welcomeMusic:state.design.welcomeMusic,signatureText:state.design.signatureText,signatureInk:state.design.signatureInk,signatureStyle:state.design.signatureStyle };
     renderDesignControls();
     renderCard();
   });

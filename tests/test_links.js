@@ -179,4 +179,28 @@ assert.throws(()=>codec.encode({design:{signatureText:'x'.repeat(81)}}));checks+
 const oldSignature=plain(codec.decode(codec.encode({senderName:'Minh',design:{showSignature:'on'}})));
 assert.equal(oldSignature.design.signatureInk,undefined);assert.equal(oldSignature.design.signatureText,undefined);checks+=2;
 
+
+// All user-written sentences are preserved, independently of the live catalog.
+for(const world of ['dandelion','teacup','seabottle','starcrane'])for(const effect of ['fireflies','hearts','bubbles']){
+ const payload={target:'lover',pronoun:'em',recipientPronoun:'anh',greeting:'20/10, em chúc anh thật khỏe 🌷. \u0001 «ÿ»',design:{scene:world,experience:world,effect,welcomeLines:JSON.stringify(['Chào anh 🥰 <script>hi</script>','Một điều riêng từ em.','Anh nhận hoa nhé.'])}};
+ assert.deepEqual(plain(codec.decode(codec.encodeCompact(payload))),roundtrip(payload));checks++;
+ assert.ok(codec.encodeCompact(payload).length<=codec.encode(payload).length);checks++;
+}
+for(const lines of ['[]','["one"]','["a",""]',JSON.stringify(Array(9).fill('a')),JSON.stringify(['a','x'.repeat(161)]),'null','{}','[1,2]']){
+ assert.throws(()=>codec.encodeCompact({design:{welcomeLines:lines}}));checks++;
+}
+const defaultDesign={theme:'rose',font:'serif',layout:'classic',decoration:'botanical',effect:'petals',dedication:'',body:'',scene:'bouquet',structure:'arch',ornament:'botanical',intensity:'cinematic',experience:'sunflower',size:'medium',reveal:'gentle',showDate:'on',showSignature:'on',secret:'',giftIntro:'',flowerNotes:'[]',arrival:'growing',welcome:'bebe',welcomeText:'',welcomeName:'bé B',welcomeMusic:'on',signatureText:'',signatureInk:'',signatureStyle:'script',welcomeLines:''};
+const compactDefault={target:'mom',recipientPronoun:'mẹ',greeting:'20/10, con chúc mẹ khỏe, ngủ ngon và có thật nhiều niềm vui. Hôm nay, mong mẹ dành một chút thời gian cho điều mình thích. Gửi mẹ một tấm thiệp nhỏ và thật nhiều thương.',design:defaultDesign};
+assert.deepEqual(plain(codec.decode(codec.encodeCompact(compactDefault))),roundtrip(compactDefault));checks++;
+assert.ok(codec.encodeCompact(compactDefault).length<codec.encode(compactDefault).length*.75);checks++;
+for(const value of ['\u0000','\u0001','\u001f','\n','ÿ','😀','\\u0001']){
+ const p={greeting:value,design:{welcomeLines:JSON.stringify(['Tự viết '+value,'20/10, chúc mẹ 🌷'])}};
+ assert.deepEqual(plain(codec.decode(codec.encodeCompact(p))),roundtrip(p));checks++;
+}
+for(const data of [[-1],[2**28],[1,0,3],[0,1,0,0,0],[0,0,null],[0,28,0],[0,1],[0,0,999],[0,27,'["a"]']]){
+ const wire=[6,null,null,null,null,null,null,null,null,data];
+ assert.throws(()=>codec.decode(codec.raw(JSON.stringify(wire))));checks++;
+}
+const bomb='[6,null,null,null,null,null,null,null,null,null,null,null,"'+String.fromCharCode(1).repeat(1000)+'"]';
+assert.throws(()=>codec.decode(codec.raw(bomb)));checks++;
 console.log(`CardLinks: ${checks} compatibility, Unicode, gift, arrival and malformed-input checks passed.`);

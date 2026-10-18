@@ -147,14 +147,14 @@ class CollectionBrowserTests(unittest.TestCase):
         expect(self.page.locator("#preview-greeting")).not_to_have_text(custom)
         self.assertNotIn("chúc bạn", self.page.locator("#preview-greeting").inner_text().lower())
 
-    def test_04_all_twenty_eight_themes_have_recognizable_previews(self):
+    def test_04_all_thirty_two_themes_have_recognizable_previews(self):
         self.editor()
         buttons = self.theme_buttons()
-        expect(buttons).to_have_count(28)
-        self.assertEqual(28, len(set(buttons.evaluate_all("els => els.map(el => el.dataset.themePreset)"))))
+        expect(buttons).to_have_count(32)
+        self.assertEqual(32, len(set(buttons.evaluate_all("els => els.map(el => el.dataset.themePreset)"))))
         previews = []
         appearances = []
-        for index in range(28):
+        for index in range(32):
             button = buttons.nth(index)
             self.assertTrue(button.locator("svg,canvas,img").count(), button.inner_text())
             previews.append(button.locator("svg,canvas,img").first.evaluate("el => el.outerHTML"))
@@ -164,8 +164,8 @@ class CollectionBrowserTests(unittest.TestCase):
                 background:getComputedStyle(el).backgroundImage,
                 radius:getComputedStyle(el).borderRadius
             })"""))
-        self.assertEqual(28, len(set(previews)), "Each tile needs its own artwork")
-        self.assertEqual(28, len({json.dumps(style, sort_keys=True) for style in appearances}))
+        self.assertEqual(32, len(set(previews)), "Each tile needs its own artwork")
+        self.assertEqual(32, len({json.dumps(style, sort_keys=True) for style in appearances}))
 
     def test_05_visual_themes_preserve_custom_text_relationship_and_selected_music(self):
         self.add_group_audio("mom")
@@ -176,7 +176,7 @@ class CollectionBrowserTests(unittest.TestCase):
         custom = "Con gửi mẹ một ngày thật dịu dàng. " + VIETNAMESE
         self.page.locator("#custom-greeting").fill(custom)
         self.page.locator("#personal-message").fill("Yêu mẹ.")
-        for index in range(28):
+        for index in range(32):
             self.theme_buttons().nth(index).click()
             expect(self.page.locator("#preview-greeting")).to_have_text(custom)
             expect(self.page.locator("#preview-message")).to_have_text("Yêu mẹ.")

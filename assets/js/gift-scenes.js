@@ -1,4 +1,4 @@
-/* One renderer and lifecycle for the ten gifts, recipient view and full previews. */
+/* One renderer and lifecycle for the gift worlds, recipient view and full previews. */
 (() => {
   'use strict';
   const parts = window.GiftArtParts || {};
@@ -89,7 +89,7 @@
     refs.stage.style.setProperty('--tx-bg',catalog[id].background);refs.stage.style.setProperty('--tx-color',catalog[id].color);
     refs.backdrop.style.setProperty('--tx-bg',catalog[id].background);refs.backdrop.style.setProperty('--tx-color',catalog[id].color);
     refs.backdrop.closest('#letter-screen').dataset.experience=id;refs.backdrop.closest('#letter-screen').classList.add('has-theme-experience');
-    refs.backdrop.closest('#letter-screen').dataset.giftDark=String(['umbrella','ocean','lantern','lightbridge'].includes(id)||catalog[id].palette==='midnight');
+    refs.backdrop.closest('#letter-screen').dataset.giftDark=String(catalog[id].dark===true||['umbrella','ocean','lantern','lightbridge'].includes(id)||catalog[id].palette==='midnight');
     document.querySelectorAll('.paper .paper-heading').forEach(heading=>{
       let mark=heading.querySelector('.tx-paper-mark');if(!mark){mark=document.createElement('span');mark.className='tx-paper-mark';mark.setAttribute('aria-hidden','true');heading.prepend(mark);}
       if(mark.dataset.experience!==id){mark.dataset.experience=id;mark.classList.add('gift-scene','gift-motion-off');mark.dataset.phase='ready';mark.innerHTML=art(id,'reading');}

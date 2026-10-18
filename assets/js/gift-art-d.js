@@ -47,11 +47,11 @@
     <g class="gd-reveal">${sprig(p,419,457,1,-13)}${sprig(p,485,458,1.15,16)}${use(p,'mail',450,477,.9,-4)}</g><g class="gd-heart-float">${use(p,'star',259,144,1.6)}${use(p,'star',654,365,1.4)}</g>`);}
   window.GiftArtParts=window.GiftArtParts||{};
   Object.assign(window.GiftArtParts,{
-    glassgarden:{meta:{fresh:true,name:'Vườn hoa trong lồng kính',description:'Nắp kính nâng lên · khu vườn nhỏ thức giấc',palette:'sage',structure:'arch',moods:['gentle','elegant','fantasy'],color:'#a9c7b7',background:'#e9f0e5'},render:glassgarden},
-    wisteria:{meta:{fresh:true,name:'Hiên hoa tử đằng',description:'Rèm hoa tím khẽ lay · một lời thương dưới vòm',palette:'lilac',structure:'arch',moods:['romantic','gentle','fantasy'],color:'#baa3cf',background:'#ede7f2'},render:wisteria},
-    lotusmoon:{meta:{fresh:true,name:'Trăng ôm hồ sen',description:'Cánh sen ngọc mở dưới trăng · gợn sáng trên hồ',palette:'midnight',structure:'postcard',effect:'constellation',moods:['elegant','fantasy','gentle'],color:'#d3bfd6',background:'#142a3b'},render:lotusmoon},
-    sunmail:{meta:{fresh:true,name:'Bưu thiếp ban mai',description:'Hộp thư hé mở · hướng dương đón một ngày mới',palette:'champagne',structure:'folded',moods:['bright','gentle'],color:'#d4ab65',background:'#fcf0dc'},render:sunmail},
-    lavender:{meta:{fresh:true,name:'Cánh đồng oải hương',description:'Nắng mật ong · những nhành hoa tím đung đưa',palette:'lilac',structure:'letter',moods:['gentle','romantic'],color:'#b49acb',background:'#f0e9f2'},render:lavender},
-    heartgarden:{meta:{fresh:true,name:'Khu vườn trái tim',description:'Hai cánh tim hé mở · hoa hồng giữ lời thương',palette:'rose',structure:'arch',moods:['romantic','elegant'],color:'#d6a1b5',background:'#f7e6eb'},render:heartgarden}
+    glassgarden:{meta:{fresh:false,name:'Vườn hoa trong lồng kính',description:'Nắp kính nâng lên · khu vườn nhỏ thức giấc',palette:'sage',structure:'arch',moods:['gentle','elegant','fantasy'],color:'#a9c7b7',background:'#e9f0e5'},render:glassgarden},
+    wisteria:{meta:{fresh:false,name:'Hiên hoa tử đằng',description:'Rèm hoa tím khẽ lay · một lời thương dưới vòm',palette:'lilac',structure:'arch',moods:['romantic','gentle','fantasy'],color:'#baa3cf',background:'#ede7f2'},render:wisteria},
+    lotusmoon:{meta:{fresh:false,name:'Trăng ôm hồ sen',description:'Cánh sen ngọc mở dưới trăng · gợn sáng trên hồ',palette:'midnight',structure:'postcard',effect:'constellation',moods:['elegant','fantasy','gentle'],color:'#d3bfd6',background:'#142a3b'},render:lotusmoon},
+    sunmail:{meta:{fresh:false,name:'Bưu thiếp ban mai',description:'Hộp thư hé mở · hướng dương đón một ngày mới',palette:'champagne',structure:'folded',moods:['bright','gentle'],color:'#d4ab65',background:'#fcf0dc'},render:sunmail},
+    lavender:{meta:{fresh:false,name:'Cánh đồng oải hương',description:'Nắng mật ong · những nhành hoa tím đung đưa',palette:'lilac',structure:'letter',moods:['gentle','romantic'],color:'#b49acb',background:'#f0e9f2'},render:lavender},
+    heartgarden:{meta:{fresh:false,name:'Khu vườn trái tim',description:'Hai cánh tim hé mở · hoa hồng giữ lời thương',palette:'rose',structure:'arch',moods:['romantic','elegant'],color:'#d6a1b5',background:'#f7e6eb'},render:heartgarden}
   });
 })();
