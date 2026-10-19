@@ -75,14 +75,14 @@ class GuideTests(rs.RecipientStudioTests):
         link=self.copy_link();context,page=self.receiver_page();page.goto(link);self.receive(page);expect(page.locator('#letter-greeting')).to_have_text('Em chúc cô một ngày thật vui!');context.close()
 
     def test_22_wizard_back_skip_cancel_and_typing_bounds(self):
-        self.editor();self.open_chat();self.chat('tạo thiệp');self.reply('Bà');self.chat('Ngoại');self.reply('Quay lại');self.chat('Bà Mai');self.reply('Bỏ qua');self.reply('Bỏ qua');self.chat('x'*1000);self.chat('y'*1000);self.reply('Bỏ qua');self.reply('Theo người nhận');self.chat('x'*81)
+        self.editor();self.open_chat();self.chat('tạo thiệp cho bà');self.chat('Ngoại');self.reply('Quay lại');self.chat('Bà Mai');self.reply('Bỏ qua');self.reply('Bỏ qua');self.chat('x'*1000);self.chat('y'*1000);self.reply('Bỏ qua');self.reply('Bà · Bài 1');self.chat('x'*81)
         expect(self.page.locator('#studio-helper-log>p').last).to_contain_text('tối đa 80');self.chat('hủy');expect(self.page.locator('#editor-title')).to_contain_text('mẹ');expect(self.page.locator('#sender-name')).to_have_value('')
 
     def test_23_proactive_greeting_idle_glasses_and_no_interruption_or_audio(self):
-        self.page.clock.install();self.page.goto(rs.bbtests.BASE_URL);self.page.clock.fast_forward(6100);expect(self.page.locator('.helper-nudge')).to_be_visible();expect(self.page.locator('.helper-nudge')).to_contain_text('Hello!')
-        self.assertTrue(self.page.locator('#background-music').evaluate('a=>a.paused'));self.page.clock.fast_forward(9600);self.page.clock.fast_forward(35100);expect(self.page.locator('#studio-helper')).to_have_attribute('data-outfit','glasses')
+        self.page.clock.install();self.page.goto(rs.bbtests.BASE_URL);self.page.clock.fast_forward(2500);expect(self.page.locator('.helper-nudge')).to_be_visible();expect(self.page.locator('.helper-nudge')).to_contain_text('Hello!')
+        self.assertTrue(self.page.locator('#background-music').evaluate('a=>a.paused'));self.page.clock.fast_forward(5600);self.page.clock.fast_forward(3100);expect(self.page.locator('#studio-helper')).to_have_attribute('data-outfit','glasses')
         self.page.locator('.helper-nudge-close').click();self.page.clock.fast_forward(120000);expect(self.page.locator('.helper-nudge')).not_to_be_visible()
-        self.open_chat();self.chat('chán quá đeo kính đi');expect(self.page.locator('#studio-helper')).to_have_attribute('data-outfit','glasses');expect(self.page.locator('#studio-helper-log>p').last).to_contain_text('trí thức')
+        self.open_chat();self.chat('chán quá đeo kính đi');expect(self.page.locator('#studio-helper')).to_have_attribute('data-outfit','glasses');expect(self.page.locator('#studio-helper-log>p').last).to_contain_text('Kính đen')
         self.page.evaluate("Object.defineProperty(document,'hidden',{configurable:true,value:true});document.dispatchEvent(new Event('visibilitychange'))");expect(self.page.locator('#studio-helper')).to_have_attribute('data-outfit','')
 
     def test_26_vietnamese_co_does_not_confuse_can_with_teacher(self):

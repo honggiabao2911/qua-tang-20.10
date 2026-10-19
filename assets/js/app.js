@@ -67,7 +67,7 @@
   let bebePhase='idle',arrivalEdited=false;
   const bebe=window.BebeWelcome?.mount($('bebe-welcome'),{onFlowers:presentBebeFlowers,onSkip:skipBebe,onSound:()=>CardMusic.toggleWelcome(),onGreet:()=>CardMusic.greetWelcome()});
   const welcomeEditor=WelcomeStudio.mount({onChange:lines=>{state.design.welcomeLines=lines;renderCard();}});
-  const studioHelper=WelcomeStudio.helper({getContext:()=>({target:state.target,screen,arrival:state.design.arrival,welcome:state.design.welcome,experience:state.design.experience,musicGroup:state.design.musicGroup,musicId:state.musicId,pronoun:state.pronoun,recipientPronoun:state.recipientPronoun}),onAction:handleStudioHelp});
+  const studioHelper=WelcomeStudio.helper({getContext:()=>({target:state.target,variant:state.variant,screen,arrival:state.design.arrival,welcome:state.design.welcome,experience:state.design.experience,musicGroup:state.design.musicGroup,musicId:state.musicId,pronoun:state.pronoun,recipientPronoun:state.recipientPronoun}),onAction:handleStudioHelp});
   const hasBebe=()=>Boolean(bebe)&&state.design.welcome==='bebe'&&hasArrival();
   const flowersVisible=()=>arrivalActive()&&(!hasBebe()||bebePhase==='flowers');
   let arrivalPassed=false;
@@ -145,17 +145,17 @@
     if (state.design.body.trim()) $('content-change-notice').hidden = false;
   }
 
-  function cardText() {
-    const recipient = recipientFor();
-    const name = state.recipientName.trim();
-    const self = state.pronoun.trim() || recipient.pronoun;
-    const you = state.recipientPronoun.trim() || recipient.you;
-    const template = samplesFor()[state.sampleIndex] || samplesFor()[0];
+  function cardText(card = state) {
+    const recipient = recipientFor(card);
+    const name = card.recipientName.trim();
+    const self = card.pronoun.trim() || recipient.pronoun;
+    const you = card.recipientPronoun.trim() || recipient.you;
+    const template = samplesFor(card)[card.sampleIndex] || samplesFor(card)[0];
     const cap = value => value.charAt(0).toLocaleUpperCase('vi-VN') + value.slice(1);
-    const salutation = state.target === 'lover' ? (['anh','em','cậu'].includes(you) ? `${cap(you)} thương mến,` : `Gửi ${you},`) : state.target === 'teacher' ? `${cap(you)} kính mến,` : ['mom','grandma'].includes(state.target) ? `${cap(you)} yêu thương,` : `${cap(you)} thân mến,`;
+    const salutation = card.target === 'lover' ? (['anh','em','cậu'].includes(you) ? `${cap(you)} thương mến,` : `Gửi ${you},`) : card.target === 'teacher' ? `${cap(you)} kính mến,` : ['mom','grandma'].includes(card.target) ? `${cap(you)} yêu thương,` : `${cap(you)} thân mến,`;
     return {recipient: name ? `Gửi ${name},` : salutation, envelopeRecipient:`Gửi ${name || you}`,
-      greeting:state.design.body.trim() || state.greeting || CardGreetings.render(template,{self,you}),
-      message:state.message.trim(), sender:state.senderName.trim(), template};
+      greeting:card.design.body.trim() || card.greeting || CardGreetings.render(template,{self,you}),
+      message:card.message.trim(), sender:card.senderName.trim(), template};
   }
 
   function showToast(message, persistent = false) {
@@ -226,6 +226,7 @@
 
   function resetCard() {
     state = makeDefaultState();arrivalEdited=false;
+    $('theme-filter').value='recipient';
     pronounEdited = false;
     shared = false;
     variantMemory.sister = 'older';
@@ -301,6 +302,7 @@
     CardMusic.setVolume(state.volume);
     updateMessageCount();
     renderCard();
+    studioHelper.contextChanged?.();
   }
 
   function renderDesignControls() {
@@ -582,6 +584,7 @@
       Object.assign(state.design,themeDesign(target==='women'&&state.variant==='friend'?'garden':CardThemes.defaults[target]));
     }
     if(state.design.welcome==='bebe'&&!arrivalEdited)state.design.arrival=recommendedArrival(state.design.experience);
+    $('theme-filter').value='recipient';
     renderEditor(); showScreen('editor');CardMusic.enterStudio();
   }
 
@@ -934,22 +937,51 @@
     $('theme-gallery').append(fragment);
     $('theme-recommendation-status').textContent=`${visible} mẫu đang hiện · ${filter==='all'?'Mẫu hợp với '+label+' được gợi ý ở đầu.':filter==='recipient'||filter.startsWith('for-')?'Gợi ý dành cho '+label+'.':'Bạn đang lọc theo cảm xúc.'} Chọn “Tất cả không gian” để xem đủ ${order.length} mẫu.`;
   }
+  function guidedState(draft){
+    const target=Object.hasOwn(RECIPIENTS,draft.target)?draft.target:state.target;
+    const next=makeDefaultState(),config=RECIPIENTS[target];
+    const theme=Object.hasOwn(CardThemes.catalog,draft.theme)?draft.theme:CardRecommendations.idsFor(target)[0];
+    next.target=target;next.variant=config.variants?(Object.hasOwn(config.variants,draft.variant)?draft.variant:config.defaultVariant):'';
+    const pair=CardGreetings.defaultPair((config.variants?.[next.variant]||config).greetings);
+    Object.assign(next,{recipientName:draft.recipientName||'',senderName:draft.senderName||'',pronoun:pair.self,recipientPronoun:pair.you,message:draft.message||'',volume:state.volume,musicId:`${draft.musicGroup||target}:${draft.track||0}`});
+    Object.assign(next.design,themeDesign(theme),{body:draft.body||'',arrival:draft.arrival||'growing',musicGroup:draft.musicGroup||'',signatureText:draft.signatureText||''});
+    const notes=CardThemes.catalog[theme].defaultNotes;if(notes)next.design.flowerNotes=JSON.stringify(notes);
+    return next;
+  }
   function handleStudioHelp(action,target){
+    if(action==='preview-draft'){
+      const next=guidedState(target),text=cardText(next);
+      return {...text,pronoun:next.pronoun,recipientPronoun:next.recipientPronoun,signature:next.design.signatureText||text.sender,target:next.target,variant:next.variant,theme:next.design.experience,palette:next.design.theme,musicGroup:next.design.musicGroup||next.target,track:Number(next.musicId.split(':')[1]),arrival:next.design.arrival};
+    }
+    if(action==='edit-card'){
+      const {kind,value,track}=target||{};
+      const designKeys={effect:'effect',intensity:'intensity',arrival:'arrival'};
+      if(kind==='theme'&&!Object.hasOwn(CardThemes.catalog,value))return false;
+      if(kind==='music'&&(!Object.hasOwn(RECIPIENTS,value)||!Number.isInteger(track)||track<0||track>5))return false;
+      if(designKeys[kind]&&!DESIGN_OPTIONS[designKeys[kind]].includes(value))return false;
+      const limits={senderName:100,recipientName:100,welcomeName:30,signatureText:80};
+      if(Object.hasOwn(limits,kind)&&(typeof value!=='string'||value.length>limits[kind]))return false;
+      if(!['theme','music',...Object.keys(designKeys),...Object.keys(limits)].includes(kind))return false;
+      if(screen!=='editor')selectRecipient(state.target);
+      helperUndo={state:structuredClone(state),arrivalEdited,pronounEdited,variants:{...variantMemory}};
+      if(kind==='theme')applyTheme(value);
+      else if(kind==='music'){state.design.musicGroup=value===state.target?'':value;state.musicId=`${value}:${track}`;renderEditor();}
+      else if(kind==='arrival')setArrival(value);
+      else if(designKeys[kind]){state.design[kind]=value;renderDesignControls();renderCard();}
+      else{if(kind==='senderName'||kind==='recipientName'){state[kind]=value;fields[kind].value=value;}else state.design[kind]=value;renderDesignControls();renderCard();}
+      return true;
+    }
+
     if(action==='apply-draft'){
       const draft=target;
       if(!draft||!Object.hasOwn(RECIPIENTS,draft.target)||!Object.hasOwn(CardThemes.catalog,draft.theme))return false;
       const bounded=(key,max)=>typeof draft[key]==='string'&&draft[key].length<=max;
       if(!['recipientName','senderName'].every(key=>bounded(key,100))||!bounded('body',1000)||!bounded('message',1000)||!bounded('signatureText',80)||!['stardust','growing'].includes(draft.arrival)||!Number.isInteger(draft.track)||draft.track<0||draft.track>5||(draft.musicGroup&&!Object.hasOwn(RECIPIENTS,draft.musicGroup)))return false;
       helperUndo={state:structuredClone(state),arrivalEdited,pronounEdited,variants:{...variantMemory}};
-      const next=makeDefaultState(),config=RECIPIENTS[draft.target];
-      next.target=draft.target;next.variant=config.variants?(Object.hasOwn(config.variants,draft.variant)?draft.variant:config.defaultVariant):'';
-      const pair=CardGreetings.defaultPair((config.variants?.[next.variant]||config).greetings);
-      Object.assign(next,{recipientName:draft.recipientName,senderName:draft.senderName,pronoun:pair.self,recipientPronoun:pair.you,message:draft.message,volume:state.volume,musicId:`${draft.musicGroup||draft.target}:${draft.track}`});
-      Object.assign(next.design,themeDesign(draft.theme),{body:draft.body,arrival:draft.arrival,musicGroup:draft.musicGroup,signatureText:draft.signatureText});
-      const notes=CardThemes.catalog[draft.theme].defaultNotes;if(notes)next.design.flowerNotes=JSON.stringify(notes);
+      const next=guidedState(draft),config=RECIPIENTS[draft.target];
       state=next;shared=false;arrivalEdited=true;pronounEdited=false;removeFragment();
       if(config.variants)variantMemory[draft.target]=next.variant;
-      renderEditor();showScreen('editor');CardMusic.enterStudio();return true;
+      $('theme-filter').value='recipient';renderEditor();showScreen('editor');CardMusic.enterStudio();return true;
     }
     if(action==='undo-draft'){
       if(!helperUndo)return false;
