@@ -11,7 +11,10 @@ class WelcomeEffectsTests(unittest.TestCase):
     new_page=bbtests.BebeBrowserTests.new_page
     route_audio=bbtests.BebeBrowserTests.route_audio
     add_group_audio=bbtests.BebeBrowserTests.add_group_audio
-    editor=bbtests.BebeBrowserTests.editor
+    def editor(self,target='mom',variant=None):
+        bbtests.BebeBrowserTests.editor(self,target,variant)
+        # Scene regression coverage deliberately browses the full library.
+        self.page.locator('#theme-filter').select_option('all')
     welcome=bbtests.BebeBrowserTests.welcome
     receive=bbtests.BebeBrowserTests.receive
     open_design=bbtests.BebeBrowserTests.open_design

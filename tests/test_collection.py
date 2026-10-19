@@ -37,7 +37,10 @@ class CollectionBrowserTests(unittest.TestCase):
     tearDownClass = classmethod(regression.UpgradeBrowserTests.tearDownClass.__func__)
     new_page = regression.UpgradeBrowserTests.new_page
     route_audio = regression.UpgradeBrowserTests.route_audio
-    editor = regression.UpgradeBrowserTests.editor
+    def editor(self, recipient='mom', url=regression.BASE_URL):
+        regression.UpgradeBrowserTests.editor(self,recipient,url)
+        # These tests compare every scene; recipient-first entry is covered separately.
+        self.page.locator('#theme-filter').select_option('all')
     open_design = regression.UpgradeBrowserTests.open_design
     wait_playing = regression.UpgradeBrowserTests.wait_playing
     copy_link = regression.UpgradeBrowserTests.copy_link
