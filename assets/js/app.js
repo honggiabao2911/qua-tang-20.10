@@ -67,7 +67,7 @@
   let bebePhase='idle',arrivalEdited=false;
   const bebe=window.BebeWelcome?.mount($('bebe-welcome'),{onFlowers:presentBebeFlowers,onSkip:skipBebe,onSound:()=>CardMusic.toggleWelcome(),onGreet:()=>CardMusic.greetWelcome()});
   const welcomeEditor=WelcomeStudio.mount({onChange:lines=>{state.design.welcomeLines=lines;renderCard();}});
-  const studioHelper=WelcomeStudio.helper({getContext:()=>({target:state.target,variant:state.variant,screen,arrival:state.design.arrival,welcome:state.design.welcome,experience:state.design.experience,musicGroup:state.design.musicGroup,musicId:state.musicId,pronoun:state.pronoun,recipientPronoun:state.recipientPronoun}),onAction:handleStudioHelp});
+  const studioHelper=WelcomeStudio.helper({getContext:()=>({target:state.target,variant:state.variant,recipientName:state.recipientName,screen,arrival:state.design.arrival,welcome:state.design.welcome,experience:state.design.experience,musicGroup:state.design.musicGroup,musicId:state.musicId,pronoun:state.pronoun,recipientPronoun:state.recipientPronoun}),onAction:handleStudioHelp});
   const hasBebe=()=>Boolean(bebe)&&state.design.welcome==='bebe'&&hasArrival();
   const flowersVisible=()=>arrivalActive()&&(!hasBebe()||bebePhase==='flowers');
   let arrivalPassed=false;
@@ -168,7 +168,9 @@
   }
 
   function focusElement(element, centered = false) {
+    const previous=document.activeElement;
     window.requestAnimationFrame(() => {
+      if(document.activeElement!==previous&&document.activeElement?.matches('input,textarea,select,[contenteditable=true]'))return;
       if (!element || element.closest('[hidden]')) return;
       for(let parent=element.parentElement;parent;parent=parent.parentElement)if(parent.tagName==='DETAILS')parent.open=true;
       element.focus({ preventScroll: true });
@@ -943,7 +945,7 @@
     const theme=Object.hasOwn(CardThemes.catalog,draft.theme)?draft.theme:CardRecommendations.idsFor(target)[0];
     next.target=target;next.variant=config.variants?(Object.hasOwn(config.variants,draft.variant)?draft.variant:config.defaultVariant):'';
     const pair=CardGreetings.defaultPair((config.variants?.[next.variant]||config).greetings);
-    Object.assign(next,{recipientName:draft.recipientName||'',senderName:draft.senderName||'',pronoun:pair.self,recipientPronoun:pair.you,message:draft.message||'',volume:state.volume,musicId:`${draft.musicGroup||target}:${draft.track||0}`});
+    Object.assign(next,{recipientName:draft.recipientName||'',senderName:draft.senderName||'',pronoun:pair.self,recipientPronoun:pair.you,message:draft.message||'',volume:state.volume,tone:Object.hasOwn(TONES,draft.tone)?draft.tone:'all',musicId:`${draft.musicGroup||target}:${draft.track||0}`});
     Object.assign(next.design,themeDesign(theme),{body:draft.body||'',arrival:draft.arrival||'growing',musicGroup:draft.musicGroup||'',signatureText:draft.signatureText||''});
     const notes=CardThemes.catalog[theme].defaultNotes;if(notes)next.design.flowerNotes=JSON.stringify(notes);
     return next;
@@ -1004,6 +1006,7 @@
     else if(action==='recipient')focusElement($('back-to-recipients'),true);
   }
   const MOODS={galaxy:['fantasy','bright'],aurora:['fantasy','gentle'],garden:['gentle'],rose:['romantic'],sunflower:['bright'],lotus:['elegant','gentle'],moonlake:['gentle','fantasy'],butterfly:['bright','fantasy'],letter:['elegant'],pearl:['elegant'],crystal:['romantic'],lovegalaxy:['romantic','fantasy']};
+  $('start-quick-card').addEventListener('click',()=>{if(studioHelper.createQuick)studioHelper.createQuick();else focusElement(fields.senderName,true);});
   $('theme-filter').addEventListener('change',renderThemeRecommendations);
   $('gift-intro').addEventListener('input',event=>{state.design.giftIntro=normalizeText(event.target.value);renderCard();});
   document.querySelectorAll('[data-flower-note]').forEach(field=>field.addEventListener('input',()=>{

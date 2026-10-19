@@ -91,18 +91,18 @@ class ScopedCompanionTests(unittest.TestCase):
         self.wizard('mom');self.chat('Mẹ An');self.page.locator('#studio-helper-close').click();self.page.locator('#back-to-recipients').click();self.page.locator('[data-recipient=grandma]').first.click();self.open_chat()
         expect(self.page.locator('#studio-helper-log>p').last).to_contain_text('Bà');expect(self.page.locator('#helper-step-example')).to_contain_text('Ngoại');expect(self.page.locator('.helper-preview-recipient')).to_contain_text('Bà')
 
-    def test_10_idle_glasses_and_ball_show_soon_without_clicking_or_audio(self):
+    def test_10_idle_glasses_and_selfie_show_soon_without_clicking_or_audio(self):
         self.page.clock.install();self.page.goto(bb.BASE_URL);self.page.clock.fast_forward(2500);expect(self.page.locator('.helper-nudge')).to_contain_text('Hello!')
-        self.page.clock.fast_forward(5500);self.page.clock.fast_forward(3100);expect(self.page.locator('#studio-helper')).to_have_attribute('data-outfit','glasses');expect(self.page.locator('.helper-nudge')).to_contain_text('Kính đen')
+        self.page.clock.fast_forward(5500);self.page.clock.fast_forward(3100);expect(self.page.locator('#studio-helper')).to_have_attribute('data-outfit','glasses');expect(self.page.locator('.helper-nudge')).to_contain_text('Thấy tớ ngầu hông?')
         self.assertEqual('rgb(10, 17, 26)',self.page.locator('.helper-shade-frame').first.evaluate('e=>getComputedStyle(e).fill'))
-        self.page.clock.fast_forward(5500);self.page.clock.fast_forward(3100);expect(self.page.locator('#studio-helper')).to_have_attribute('data-act','ball');expect(self.page.locator('.helper-nudge')).to_contain_text('trúng đầu')
+        self.page.clock.fast_forward(5500);self.page.clock.fast_forward(3100);expect(self.page.locator('#studio-helper')).to_have_attribute('data-act','selfie');expect(self.page.locator('.helper-nudge')).to_contain_text('cười xinh')
         self.assertTrue(self.page.locator('#background-music').evaluate('a=>a.paused'));self.page.locator('.helper-nudge-close').click();self.page.clock.fast_forward(120000);expect(self.page.locator('.helper-nudge')).not_to_be_visible();expect(self.page.locator('#studio-helper')).to_have_attribute('data-act','')
 
     def test_11_ball_and_sunglasses_play_on_request_and_respect_motion_and_visibility(self):
         self.page.emulate_media(reduced_motion='no-preference');self.editor();self.open_chat();self.chat('tung bóng đi bé B')
         expect(self.page.locator('#studio-helper')).to_have_attribute('data-act','ball');self.assertTrue(self.page.locator('.helper-toy-ball').first.evaluate("e=>e.getAnimations().some(a=>a.playState==='running')"))
         self.page.emulate_media(reduced_motion='reduce');self.assertEqual(0,self.page.locator('#studio-helper').evaluate("e=>e.getAnimations({subtree:true}).filter(a=>a.playState==='running').length"))
-        self.chat('đeo kính đen');expect(self.page.locator('#studio-helper')).to_have_attribute('data-outfit','glasses');expect(self.page.locator('#studio-helper-log>p').last).to_contain_text('Mình đẹp quá')
+        self.chat('đeo kính đen');expect(self.page.locator('#studio-helper')).to_have_attribute('data-outfit','glasses');expect(self.page.locator('#studio-helper-log>p').last).to_contain_text('Thấy tớ ngầu hông?')
         self.page.evaluate("Object.defineProperty(document,'hidden',{configurable:true,value:true});document.dispatchEvent(new Event('visibilitychange'))");expect(self.page.locator('#studio-helper')).to_have_attribute('data-outfit','');expect(self.page.locator('#studio-helper')).to_have_attribute('data-act','')
 
     def test_12_idle_does_not_interrupt_typing_or_drawing(self):

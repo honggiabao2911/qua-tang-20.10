@@ -82,7 +82,7 @@ class GuideTests(rs.RecipientStudioTests):
         self.page.clock.install();self.page.goto(rs.bbtests.BASE_URL);self.page.clock.fast_forward(2500);expect(self.page.locator('.helper-nudge')).to_be_visible();expect(self.page.locator('.helper-nudge')).to_contain_text('Hello!')
         self.assertTrue(self.page.locator('#background-music').evaluate('a=>a.paused'));self.page.clock.fast_forward(5600);self.page.clock.fast_forward(3100);expect(self.page.locator('#studio-helper')).to_have_attribute('data-outfit','glasses')
         self.page.locator('.helper-nudge-close').click();self.page.clock.fast_forward(120000);expect(self.page.locator('.helper-nudge')).not_to_be_visible()
-        self.open_chat();self.chat('chán quá đeo kính đi');expect(self.page.locator('#studio-helper')).to_have_attribute('data-outfit','glasses');expect(self.page.locator('#studio-helper-log>p').last).to_contain_text('Kính đen')
+        self.open_chat();self.chat('chán quá đeo kính đi');expect(self.page.locator('#studio-helper')).to_have_attribute('data-outfit','glasses');expect(self.page.locator('#studio-helper-log>p').last).to_contain_text('Thấy tớ ngầu hông?')
         self.page.evaluate("Object.defineProperty(document,'hidden',{configurable:true,value:true});document.dispatchEvent(new Event('visibilitychange'))");expect(self.page.locator('#studio-helper')).to_have_attribute('data-outfit','')
 
     def test_26_vietnamese_co_does_not_confuse_can_with_teacher(self):

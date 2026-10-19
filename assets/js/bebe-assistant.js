@@ -51,6 +51,8 @@
     const preview=document.createElement('section');preview.className='helper-draft-preview';preview.id='helper-draft-preview';preview.hidden=true;preview.setAttribute('aria-label','Thiệp nháp đang tạo');
     preview.innerHTML='<div class="helper-draft-art" aria-hidden="true"></div><div class="helper-preview-paper"><p class="helper-preview-kicker">THIỆP NHÁP · CHƯA ÁP DỤNG</p><strong class="helper-preview-recipient"></strong><p class="helper-preview-body"></p><p class="helper-preview-message"></p><em class="helper-preview-signature"></em><p class="helper-preview-meta"></p></div><details class="helper-preview-details"><summary>Đọc đủ lời trên thiệp nháp</summary><p></p></details>';
     log.before(preview);const picture=preview.querySelector('.helper-draft-art');let pictured='';
+    const progress=document.createElement('p');progress.className='helper-step-title';progress.hidden=true;progress.setAttribute('role','status');preview.before(progress);
+    const submit=$('studio-helper-chat').querySelector('button[type=submit],button:not([type])');
     const nudge=document.createElement('div');nudge.className='helper-nudge';nudge.hidden=true;
     const greeting=document.createElement('button');greeting.type='button';greeting.className='helper-nudge-message';
     const dismiss=document.createElement('button');dismiss.type='button';dismiss.className='helper-nudge-close';dismiss.textContent='×';dismiss.setAttribute('aria-label','Ẩn lời chào và trò vui chủ động của bé B');nudge.append(greeting,dismiss);host.append(nudge);
@@ -58,10 +60,14 @@
       const glasses=document.createElementNS('http://www.w3.org/2000/svg','svg');glasses.classList.add('helper-glasses');glasses.setAttribute('viewBox','0 0 100 60');glasses.setAttribute('aria-hidden','true');
       glasses.innerHTML='<path class="helper-shade-frame" d="M3 13Q23 8 44 13L50 17 56 13Q77 8 97 13L95 20H91L86 36Q70 44 59 34L55 21Q50 18 45 21L41 34Q28 44 13 36L8 20H4Z"/><path class="helper-shade-glint" d="m15 17 10 15m-3-16 10 15m32-15 10 15"/>';
       const ball=document.createElement('span');ball.className='helper-toy-ball';ball.setAttribute('aria-hidden','true');ball.innerHTML='<svg viewBox="0 0 40 40"><circle cx="20" cy="20" r="18" fill="#f2b3c6" stroke="#fff3d5" stroke-width="2"/><path d="M3 20h34M20 2c-13 10-13 26 0 36M20 2c13 10 13 26 0 36" fill="none" stroke="#fff3d5" stroke-width="2"/><ellipse cx="14" cy="10" rx="7" ry="3" fill="#fff" opacity=".45"/></svg>';
-      const stars=document.createElement('span');stars.className='helper-dizzy-stars';stars.textContent='✦  ✧';stars.setAttribute('aria-hidden','true');face.append(glasses,ball,stars);
+      const stars=document.createElement('span');stars.className='helper-dizzy-stars';stars.textContent='✦  ✧';stars.setAttribute('aria-hidden','true');const phone=document.createElement('span');phone.className='helper-selfie-phone';phone.setAttribute('aria-hidden','true');
+      phone.innerHTML='<svg viewBox="0 0 90 110"><path d="M3 89Q19 68 36 75" fill="none" stroke="#86ecd7" stroke-width="8" stroke-linecap="round"/><g transform="rotate(-9 57 49)"><rect x="33" y="6" width="47" height="83" rx="9" fill="#bda9d0" stroke="#efe1f9" stroke-width="2"/><rect x="37" y="10" width="39" height="75" rx="6" fill="#d7c6e2"/><rect x="39" y="14" width="18" height="24" rx="5" fill="#9987b2"/><circle cx="45" cy="21" r="4" fill="#27344d"/><circle cx="51" cy="31" r="4" fill="#27344d"/><circle cx="53" cy="18" r="2" fill="#fff0b2"/><path d="M57 66C37 54 46 43 57 52C68 43 77 54 57 66Z" fill="#fbebed"/><path d="M44 80h25" stroke="#a38db7" stroke-width="2" stroke-linecap="round"/></g><ellipse cx="34" cy="76" rx="7" ry="10" fill="#b1ffe7"/></svg>';
+      const flash=document.createElement('span');flash.className='helper-selfie-flash';flash.setAttribute('aria-hidden','true');
+      const sparkle=document.createElement('span');sparkle.className='helper-selfie-sparkle';sparkle.textContent='✧';sparkle.setAttribute('aria-hidden','true');face.append(glasses,ball,stars,phone,flash,sparkle);
     }
     let opened=false,visible=false,expression=0,idle=0,nudgeTimer=0,nudges=0,acts=0,dismissed=false,draft=null,step=0,lastApplied=false,applying=false,baseTarget='',otherMusic=false,drawing=false;
-    const stages=['recipient','recipientName','senderName','theme','words','message','arrival','music','signature'];
+    const fullStages=['recipient','recipientName','senderName','theme','words','message','arrival','music','signature'];
+    const quickStages=['recipient','senderName','theme','message'];let stages=fullStages,quick=false,startOffset=0,composing=false,logFrame=0;
     const moods=['happy','curious','shy','love','wink','sleep'];let moodIndex=0;
     const labelFor=target=>groups[CardRecommendations.groupFor(target)]||'người nhận';
     const scopedTarget=()=>draft?.target||getContext().target||'mom';
@@ -71,7 +77,25 @@
     }
     function choices(items){
       replies.replaceChildren();replies.scrollLeft=0;
-      for(const [label,fn] of items){const b=document.createElement('button');b.type='button';b.textContent=label;b.addEventListener('click',fn);replies.append(b);}
+      const answers=document.createElement('div');answers.className='helper-answer-options';
+      const tools=document.createElement('div');tools.className='helper-step-tools';
+      for(const [label,fn] of items){
+        const button=document.createElement('button');button.type='button';button.textContent=label;button.addEventListener('click',fn);
+        if(['Bỏ qua','Quay lại','Hủy bản nháp'].includes(label)){
+          button.dataset.stepAction=label==='Bỏ qua'?'skip':label==='Quay lại'?'back':'cancel';tools.append(button);
+        }else answers.append(button);
+      }
+      if(answers.children.length)replies.append(answers);if(tools.children.length)replies.append(tools);updateStep();scrollConversation();
+    }
+    function scrollConversation(){
+      if(logFrame)cancelAnimationFrame(logFrame);logFrame=requestAnimationFrame(()=>{log.scrollTop=log.scrollHeight;logFrame=0;});
+    }
+    function updateStep(){
+      progress.hidden=!draft;
+      if(!draft){submit.textContent='Gửi';submit.setAttribute('aria-label','Gửi câu hỏi cho bé B');input.enterKeyHint='send';return;}
+      const key=stages[step],first=startOffset,total=stages.length-first;
+      progress.textContent=key?`${quick?'Tạo nhanh':'Cùng tạo thiệp'} · ${Math.max(1,step-first+1)} / ${total}`:'Xem lại thiệp · sẵn sàng gửi';
+      submit.textContent=key?'Tiếp':'Gửi';submit.setAttribute('aria-label',key?'Tiếp tục tạo thiệp':'Gửi yêu cầu chỉnh bản nháp');input.enterKeyHint=key?'next':'send';
     }
     function contextExample(){
       const data=onAction('preview-draft',{target:scopedTarget(),variant:draft?.variant||getContext().variant});
@@ -100,36 +124,36 @@
       if(visible&&!document.hidden)expression=setTimeout(()=>{clearPose();expression=0;},5500);
     }
     function play(kind){
-      react(kind==='ball'?'shy':kind==='heart'?'love':'wink');host.dataset.outfit=kind==='glasses'?'glasses':'';host.dataset.act=kind;
-      return kind==='ball'?'Mình tung bóng nè… úi, trúng đầu rồi! May mà vẫn còn đáng yêu ♡':kind==='heart'?'Tặng bạn một trái tim nhỏ. Hôm nay bạn cũng xứng đáng được yêu thương ♡':'Kính đen lên rồi 😎 Mình đẹp quá, cho mình tự khen một chút nha!';
+      react(kind==='ball'?'shy':kind==='heart'?'love':kind==='selfie'?'happy':'wink');host.dataset.outfit=kind==='glasses'?'glasses':'';host.dataset.act=kind;
+      return kind==='selfie'?'Một, hai, ba… cười xinh nè! 📸 Tớ chụp một tấm làm kỷ niệm nha!':kind==='ball'?'Tớ tung bóng nè… úi, trúng đầu rồi! Vẫn ngầu, vẫn ngầu mà!':kind==='heart'?'Tặng bạn một trái tim nhỏ. Hôm nay bạn cũng xứng đáng được yêu thương ♡':'Thấy tớ ngầu hông? 😎';
     }
     function syncViewport(){
       const v=window.visualViewport,inset=opened&&visible&&v?Math.max(0,innerHeight-v.height-v.offsetTop):0;
-      host.style.setProperty('--helper-keyboard',`${inset}px`);host.style.setProperty('--helper-visible-height',`${v?.height||innerHeight}px`);host.dataset.keyboard=String(inset>100);
+      host.style.setProperty('--helper-keyboard',`${inset}px`);host.style.setProperty('--helper-visible-height',`${v?.height||innerHeight}px`);const keyboard=String(inset>100),compact=String(Boolean(opened&&v&&v.height<360)),changed=host.dataset.keyboard!==keyboard||host.dataset.compact!==compact;host.dataset.keyboard=keyboard;host.dataset.compact=compact;if(opened&&changed)scrollConversation();
     }
     function eligible(){return visible&&!document.hidden&&!opened&&!draft&&!drawing&&!dismissed&&acts<6&&!/INPUT|TEXTAREA|SELECT|CANVAS/.test(document.activeElement?.tagName||'');}
-    function stopTimers(){clearTimeout(idle);clearTimeout(expression);clearTimeout(nudgeTimer);idle=expression=nudgeTimer=0;nudge.hidden=true;clearPose();}
+    function stopTimers(){if(logFrame)cancelAnimationFrame(logFrame);logFrame=0;clearTimeout(idle);clearTimeout(expression);clearTimeout(nudgeTimer);idle=expression=nudgeTimer=0;nudge.hidden=true;clearPose();}
     function schedule(){
       clearTimeout(idle);idle=0;if(!eligible())return;
       idle=setTimeout(()=>{
         idle=0;if(!eligible())return;
-        const line=acts===0?'Hello! Mình là bé B. Mình có thể giúp gì cho bạn?':play(acts%2?'glasses':'ball');
+        const line=acts===0?'Hello! Mình là bé B. Mình có thể giúp gì cho bạn?':play(['glasses','selfie','ball','heart','selfie'][acts-1]);
         if(acts===0)react('happy');acts++;
-        if(nudges<3){greeting.textContent=line;nudge.hidden=false;nudges++;}
+        if(nudges<4){greeting.textContent=line;nudge.hidden=false;nudges++;}
         nudgeTimer=setTimeout(()=>{nudge.hidden=true;nudgeTimer=0;schedule();},5500);
-      },acts===0?2400:acts<3?3000:12000);
+      },acts===0?2400:acts<4?3000:12000);
     }
     function setOpen(value,focus=false){
       opened=value;nudge.hidden=true;clearTimeout(idle);idle=0;clearTimeout(nudgeTimer);nudgeTimer=0;
       panel.hidden=!value;host.classList.toggle('helper-open',value);toggle.setAttribute('aria-expanded',String(value));syncViewport();
       if(value){react('happy');log.scrollTop=log.scrollHeight;if(focus)input.focus({preventScroll:true});}
-      else{if(focus)toggle.focus({preventScroll:true});schedule();}
+      else{if(panel.contains(document.activeElement))document.activeElement.blur();if(focus)toggle.focus({preventScroll:true});schedule();}
     }
     function navigate(topic){setOpen(false);onAction('focus',topic);}
-    function starter(){setExample('','Ví dụ: giúp tạo thiệp cho '+labelFor(scopedTarget()).toLocaleLowerCase('vi')+'…');choices([['Cùng tạo thiệp',()=>start('')],['Các mục trên web',()=>info('hướng dẫn toàn bộ')],['Chơi với bé B',toys]]);}
+    function starter(){setExample('','Ví dụ: giúp tạo thiệp cho '+labelFor(scopedTarget()).toLocaleLowerCase('vi')+'…');choices([['Tạo nhanh',()=>startQuick('')],['Cùng tạo thiệp',()=>start('')],['Các mục trên web',()=>info('hướng dẫn toàn bộ')],['Chơi với bé B',toys]]);}
     function toys(){
       append('Bạn chọn một trò nhé. Mình không bật âm thanh đâu, chỉ nghịch một chút thôi ♡');
-      choices([['Kính đen 😎',()=>append(play('glasses'))],['Tung bóng',()=>append(play('ball'))],['Thả tim ♡',()=>append(play('heart'))],['Làm thiệp tiếp',()=>draft?ask():starter()]]);
+      choices([['Kính đen 😎',()=>append(play('glasses'))],['Tự sướng 📸',()=>append(play('selfie'))],['Tung bóng',()=>append(play('ball'))],['Thả tim ♡',()=>append(play('heart'))],['Làm thiệp tiếp',()=>draft?ask():starter()]]);
     }
     function info(text,quick=false){
       const q=clean(text),context={...getContext(),target:scopedTarget()},match=faq.find(([r])=>r.test(q));
@@ -139,11 +163,14 @@
       if(topic==='themes'&&quick)onAction('themes',targetFor(q)||context.target);
       if(!draft)choices([[topic==='help'?'Cùng tạo thiệp':'Đến mục này',()=>topic==='help'?start(''):navigate(topic)],['Cùng tạo thiệp',()=>start('')]]);
     }
-    function start(text){
+    function startQuick(text){setOpen(true);start(text,{fast:true});}
+    function start(text,{fast=false}={}){
       const q=clean(text),context=getContext(),target=targetFor(q)||(context.screen==='editor'?context.target:'');
+      quick=fast;stages=fast?quickStages:fullStages;
       draft={target:target||'',variant:/em gai/.test(q)?'younger':/ban nu|ban be/.test(q)?'friend':target===context.target?context.variant||'':'',recipientName:'',senderName:'',theme:'',body:'',message:'',arrival:'growing',musicGroup:'',track:0,signatureText:''};
-      step=target?1:0;baseTarget=`${context.target}:${context.variant||''}`;lastApplied=false;otherMusic=false;host.dataset.wizard='true';
-      append('Mình cùng tạo thiệp nhé! Thiệp nháp ngay phía trên sẽ đổi theo câu trả lời, chưa sửa thiệp chính. Bạn có thể bỏ qua, quay lại, nhờ mình sửa một mục hoặc hủy bất cứ lúc nào.');ask();
+      if(fast){draft.recipientName=target===context.target?context.recipientName||'':'';draft.tone=target==='lover'?'romantic':'warm';}
+      step=target?1:0;startOffset=step;input.value='';baseTarget=`${context.target}:${context.variant||''}`;lastApplied=false;otherMusic=false;host.dataset.wizard='true';
+      append(fast?'Tớ lo phần phối thiệp nhé! Bạn chỉ cần tên người gửi, chọn cảnh và thêm một lời riêng nếu muốn. Thiệp nháp ở phía trên, xong rồi vẫn sửa được mọi chi tiết.':'Mình cùng tạo thiệp nhé! Thiệp nháp ngay phía trên sẽ đổi theo câu trả lời, chưa sửa thiệp chính. Bạn có thể bỏ qua, quay lại, nhờ mình sửa một mục hoặc hủy bất cứ lúc nào.');ask();
     }
     function musicOptions(){
       const target=draft.musicGroup||draft.target,label=labelFor(target);
@@ -158,27 +185,29 @@
       const examples={mom:{name:'Mẹ',signature:'Thương mẹ, An'},grandma:{name:'Ngoại',signature:'Cháu thương bà · An'},teacher:{name:'Cô Lan',signature:'Học trò của cô · An'},sister:{name:draft?.variant==='younger'?'Em Linh':'Chị Linh',signature:'Thương thật nhiều · An'},women:{name:draft?.variant==='group'?'Những người bạn quý mến':'Linh',signature:'Gửi một chút niềm vui · An'},lover:{name:'Em thương',signature:'Thương em · An'}}[CardRecommendations.groupFor(target)];
       if(key==='recipient'){prompt='Bạn muốn làm thiệp cho ai?';hint='Ví dụ: “Mẹ”, “Bà”, “Cô giáo”, “Em gái” hoặc “Người thương”.';options=Object.entries(groups).map(([,name])=>[name,()=>receive(name)]);}
       else if(key==='recipientName'){prompt=`Thiệp dành cho ${label}. Bạn muốn ghi tên hoặc gọi thân mật thế nào?`;hint=`Ví dụ: “${examples.name}”. Bỏ qua để giữ cách gọi theo nhóm.`;placeholder=`Ví dụ: ${examples.name}`;}
-      else if(key==='senderName'){prompt='Bạn muốn ghi tên người gửi là gì?';hint='Ví dụ: “An” hoặc “Hai chị em”. Bỏ qua nếu không muốn ghi tên.';placeholder='Ví dụ: An';}
+      else if(key==='senderName'){prompt=quick?'Tớ nên ghi tên người gửi là gì?':'Bạn muốn ghi tên người gửi là gì?';hint='Ví dụ: “An” hoặc “Hai chị em”. Bỏ qua nếu không muốn ghi tên.';placeholder='Ví dụ: An';}
       else if(key==='theme'){
         const themes=CardRecommendations.idsFor(target).slice(0,3);prompt=`Bạn thích khung cảnh nào cho ${small}?`;
         hint=`Ví dụ: “${CardThemes.catalog[themes[0]].name}”, “màu xanh dịu dàng” hoặc “nền đen ngân hà”.`;placeholder='Ví dụ: nền đen ngân hà';
         options=themes.map(id=>[CardThemes.catalog[id].name,()=>receive(CardThemes.catalog[id].name)]);
       }
       else if(key==='words'){prompt='Bạn tự viết lời chúc hay để mình chọn lời phù hợp?';hint=`Ví dụ: “${contextExample().greeting.slice(0,110)}…” Hoặc chọn lời gợi ý đúng cách xưng hô.`;placeholder='Viết lời chúc hoặc gõ “gợi ý”';options=[['Để bé B chọn lời gợi ý',()=>receive('gợi ý')]];}
-      else if(key==='message'){prompt=`Có điều riêng muốn nhắn thêm cho ${small} không?`;hint=`Ví dụ: “Cảm ơn ${draft.target==='grandma'?'bà':draft.target==='teacher'?'cô':draft.target==='mom'?'mẹ':'người nhận'} đã luôn ở bên và lắng nghe.” Bỏ qua nếu đã đủ ý.`;placeholder='Một điều bạn muốn gửi riêng…';}
+      else if(key==='message'){prompt=quick?`Thêm một lời riêng cho ${small}, hay dùng lời tớ đã chọn nhé?`:`Có điều riêng muốn nhắn thêm cho ${small} không?`;if(quick)options=[['Dùng lời bé B đã chọn',()=>receive('gợi ý')]];hint=`Ví dụ: “Cảm ơn ${draft.target==='grandma'?'bà':draft.target==='teacher'?'cô':draft.target==='mom'?'mẹ':'người nhận'} đã luôn ở bên và lắng nghe.” Bỏ qua nếu đã đủ ý.`;placeholder='Một điều bạn muốn gửi riêng…';}
       else if(key==='arrival'){prompt='Bạn muốn bó hoa xuất hiện theo kiểu nào?';hint='Hạt sáng: các đốm sáng hội tụ thành hoa. Mọc nở: cành lớn dần rồi hoa hé cánh. Sau đó mới mở cảnh và lời chúc.';options=[['Hoa từ hạt sáng',()=>receive('hạt sáng')],['Hoa mọc rồi nở',()=>receive('mọc lên')]];}
       else if(key==='music'){const musicLabel=labelFor(draft.musicGroup||target);prompt=`Chọn một trong sáu bài nhạc cho ${musicLabel.toLocaleLowerCase('vi')} nhé.`;hint=`Ví dụ: “bài 3”. Mặc định dùng nhạc ${small}; mở “Chọn nhóm nhạc khác” nếu muốn lấy bài từ nhóm khác.`;placeholder='Ví dụ: bài 3';options=musicOptions();}
       else if(key==='signature'){prompt='Bạn muốn ký lời gì cuối thiệp?';hint=`Ví dụ: “${examples.signature}” (tối đa 80 ký tự). Có thể bỏ qua và ký tay sau.`;placeholder=`Ví dụ: ${examples.signature}`;}
       else return review();
+      if(['recipient','theme','arrival','music'].includes(key)&&matchMedia('(max-width:620px)').matches)input.blur();
       append(prompt);setExample(hint,placeholder||'Nhập câu trả lời hoặc chọn bên dưới…');
       choices([...options,['Bỏ qua',()=>receive('bỏ qua')],...(step?[['Quay lại',back]]:[]),['Hủy bản nháp',cancel]]);syncPreview();
     }
-    function back(){if(step>0){step--;ask();}}
+    function back(){if(step>0){step--;startOffset=Math.min(startOffset,step);ask();}}
     function cancel(){draft=null;preview.hidden=true;host.dataset.wizard='false';append('Mình đã bỏ bản nháp. Tấm thiệp đang làm vẫn được giữ. Cứ gọi mình khi cần nhé.');react('shy');starter();}
     function review(){
+      if(matchMedia('(max-width:620px)').matches)input.blur();
       draft.theme=draft.theme||CardRecommendations.idsFor(draft.target)[0];const effective=draft.musicGroup||draft.target;
-      append(`BẢN NHÁP CỦA BẠN\nGửi: ${labelFor(draft.target)}${draft.recipientName?' · '+draft.recipientName:''}\nNgười gửi: ${draft.senderName||'(để trống)'}\nMẫu: ${CardThemes.catalog[draft.theme].name}\nLời chúc: ${draft.body||'Gợi ý đúng cách xưng hô của nhóm'}\nLời thêm: ${draft.message||'(không)'}\nNhạc: ${labelFor(effective)} · bài ${draft.track+1}\nChữ ký: ${draft.signatureText||'(chưa ký)'}\nChưa đổi thiệp chính. Áp dụng sẽ tạo thiệp theo bản nháp; bạn có thể hoàn tác.`);
-      setExample('Muốn sửa một mục, gõ ví dụ “đổi mẫu sang ngân hà” hoặc “đổi nhạc bài 2”.');choices([['Áp dụng bản nháp',apply],['Quay lại',back],['Hủy bản nháp',cancel]]);syncPreview();react('love');
+      append(`BẢN NHÁP CỦA BẠN\nGửi: ${labelFor(draft.target)}${draft.recipientName?' · '+draft.recipientName:''}\nNgười gửi: ${draft.senderName||'(để trống)'}\nMẫu: ${CardThemes.catalog[draft.theme].name}\nLời chúc: ${draft.body||'Gợi ý đúng cách xưng hô của nhóm'}\nLời thêm: ${draft.message||'(không)'}\nNhạc: ${labelFor(effective)} · bài ${draft.track+1}\nChữ ký: ${draft.signatureText||draft.senderName||'(không ký)'}\nChưa đổi thiệp chính. Áp dụng sẽ tạo thiệp theo bản nháp; bạn có thể hoàn tác.`);
+      setExample('Muốn sửa một mục, gõ ví dụ “đổi mẫu sang ngân hà” hoặc “đổi nhạc bài 2”.');choices([[quick?'Dùng thiệp này':'Áp dụng bản nháp',apply],...(quick?[['Chỉnh thêm nhạc / chữ ký',()=>{quick=false;stages=fullStages;step=stages.indexOf('music');ask();}]]:[]),['Quay lại',back],['Hủy bản nháp',cancel]]);syncPreview();react('love');
     }
     function apply(){
       if(!draft)return;applying=true;let ok;try{ok=onAction('apply-draft',{...draft});}finally{applying=false;}
@@ -223,10 +252,10 @@
       if(key==='recipient'){
         const target=targetFor(q)||Object.keys(groups).find(id=>clean(groups[id])===q);
         if(!target&&!skip){append('Bạn chọn một trong sáu nhóm bên dưới nhé.');return;}
-        draft.target=target||getContext().target||'mom';draft.variant=/em gai/.test(q)?'younger':/ban nu|ban be/.test(q)?'friend':draft.variant;
+        draft.target=target||getContext().target||'mom';if(quick)draft.tone=draft.target==='lover'?'romantic':'warm';draft.variant=/em gai/.test(q)?'younger':/ban nu|ban be/.test(q)?'friend':draft.variant;
       }else if(key==='theme'){
         const theme=skip?CardRecommendations.idsFor(draft.target)[0]:resolveTheme(text,draft.target);
-        if(!theme){append('Mình chưa nhận ra khung cảnh đó. Bạn thử tên mẫu, màu sắc hoặc cảm xúc trong ví dụ phía dưới nhé.');return;}draft.theme=theme;
+        if(!theme){append('Mình chưa nhận ra khung cảnh đó. Bạn thử tên mẫu, màu sắc hoặc cảm xúc trong ví dụ phía dưới nhé.');return;}draft.theme=theme;if(quick)draft.arrival=['galaxy','lovegalaxy','aurora','moonlake','ocean','lantern','lightbridge','crystal','lotusmoon'].includes(theme)?'stardust':'growing';
       }else if(key==='arrival')draft.arrival=/hat|sao|lap lanh/.test(q)?'stardust':'growing';
       else if(key==='music'){
         const target=targetFor(q),num=q.match(/(?:bai\s*|^)([1-6])\b/);
@@ -243,13 +272,14 @@
     function answer(text){
       const q=clean(text);
       if(/hoan tac/.test(q)&&lastApplied)return undo();
+      if(/tu suong|selfie|chup anh|chup hinh|lay dien thoai/.test(q)){append(play('selfie'));return;}
       if(/tung bong|choi bong|nem bong/.test(q)){append(play('ball'));return;}
       if(/deo kinh|kinh den|dep trai|dep gai/.test(q)){append(play('glasses'));return;}
       if(/chan qua|lam tro|choi|choc|vui vui/.test(q)){toys();return;}
       if(/ngu ngon|buon ngu/.test(q)){react('sleep');append('Mình chợp mắt một chút thôi… bạn cứ thong thả viết nhé.');return;}
       if(/trai tim|thuong be/.test(q)&&!/hieu ung/.test(q)){append(play('heart'));return;}
       if(editCommand(text))return;
-      if(/(?:tao|lam|can|muon).*(?:web|thiep)|(?:web|thiep).*giup/.test(q)&&!/cach |la gi|nhac|lien ket|hieu ung/.test(q))return start(text);
+      if(/(?:tao|lam|can|muon).*(?:web|thiep)|(?:web|thiep).*giup/.test(q)&&!/cach |la gi|nhac|lien ket|hieu ung/.test(q))return /nhanh|don gian|de nhat/.test(q)?startQuick(text):start(text);
       if(/^(chao|hello|hi\b)/.test(q)){append(`Chào bạn! Hello, mình có thể giúp gì cho bạn? ${getContext().screen==='editor'?'Mình đang cùng bạn làm thiệp cho '+labelFor(scopedTarget())+'.':'Cùng chọn người nhận rồi làm thiệp nhé.'}`);react('happy');starter();return;}
       const target=targetFor(q);
       if(target&&target!==getContext().target&&/loi chuc|xung ho/.test(q)){append(`Bạn đang làm thiệp cho ${labelFor(getContext().target)}. Đổi người nhận ở đầu trang nếu muốn dùng lời chúc và cách xưng hô cho ${labelFor(target)}; lời riêng của bạn được giữ. Hoặc nhắn “Tạo thiệp cho ${labelFor(target)}” để mình hỏi từng bước.`);react('curious');return;}
@@ -259,25 +289,27 @@
       if(applying)return;
       const context=getContext();
       if(draft&&baseTarget!==`${context.target}:${context.variant||''}`&&context.screen==='editor'){
-        append(`Bạn vừa chuyển sang ${labelFor(context.target)}. Mình bắt đầu lại phần hỏi cho đúng nhóm; thiệp chính và nội dung bạn đã nhập trên trang vẫn được giữ.`);start('');return;
+        append(`Bạn vừa chuyển sang ${labelFor(context.target)}. Mình bắt đầu lại phần hỏi cho đúng nhóm; thiệp chính và nội dung bạn đã nhập trên trang vẫn được giữ.`);start('',{fast:quick});return;
       }
       if(!draft&&!lastApplied)input.placeholder='Ví dụ: giúp tạo thiệp cho '+labelFor(context.target).toLocaleLowerCase('vi')+'…';
     }
     toggle.addEventListener('click',()=>setOpen(!opened));$('studio-helper-close').addEventListener('click',()=>setOpen(false,true));greeting.addEventListener('click',()=>setOpen(true));dismiss.addEventListener('click',()=>{dismissed=true;stopTimers();});
     host.addEventListener('click',e=>{
       const b=e.target.closest('[data-helper-topic]');if(!b)return;const topic=b.dataset.helperTopic;
-      if(topic==='create')return start('');if(topic==='play'){react(moods[moodIndex++%moods.length]);toys();return;}
+      if(topic==='quick')return startQuick('');if(topic==='create')return start('');if(topic==='play'){react(moods[moodIndex++%moods.length]);toys();return;}
       const queries={themes:'mẫu gợi ý',words:'lời chúc',music:'nhạc làm thiệp',welcome:'lời thoại bé B',signature:'chữ ký'};info(queries[topic]||'hướng dẫn',true);if(topic!=='themes')onAction(topic);
     });
     input.addEventListener('input',()=>{if(draft)syncPreview(true);});
-    $('studio-helper-chat').addEventListener('submit',e=>{e.preventDefault();const text=input.value.normalize('NFC').trim();if(!text)return;input.value='';if(draft)receive(text);else{append(text,true);answer(text);}});
+    input.addEventListener('compositionstart',()=>{composing=true;});input.addEventListener('compositionend',()=>{composing=false;});
+    input.addEventListener('keydown',event=>{if(event.key==='Enter'&&(event.isComposing||composing))event.preventDefault();});
+    $('studio-helper-chat').addEventListener('submit',e=>{e.preventDefault();if(composing)return;const text=input.value.normalize('NFC').trim();if(draft){const key=stages[step],limit={recipientName:100,senderName:100,words:1000,message:1000,signature:80}[key];if(limit&&text.length>limit){append(`Phần này tối đa ${limit} ký tự. Bạn rút ngắn rồi bấm Tiếp nhé.`);return;}}if(!text){if(draft&&stages[step]){if(stages[step]==='recipient')append('Bạn chọn người nhận bằng một nút bên trên nhé.');else receive('bỏ qua');}return;}input.value='';if(draft)receive(text);else{append(text,true);answer(text);}});
     host.addEventListener('keydown',e=>{if(e.key==='Escape'&&opened){e.preventDefault();setOpen(false,true);}});
     document.addEventListener('pointerdown',e=>{drawing=Boolean(e.target.closest('#signature-pad'));if(!host.contains(e.target)){nudge.hidden=true;clearTimeout(nudgeTimer);nudgeTimer=0;schedule();}},{passive:true});document.addEventListener('keydown',()=>{if(!opened)schedule();});
     for(const type of ['pointerup','pointercancel','lostpointercapture'])document.addEventListener(type,()=>{if(drawing){drawing=false;schedule();}},{passive:true});
     document.addEventListener('focusin',()=>{if(!opened)schedule();});document.addEventListener('focusout',()=>queueMicrotask(()=>{if(!opened)schedule();}));
     document.addEventListener('visibilitychange',()=>{if(document.hidden){drawing=false;stopTimers();}else schedule();});window.addEventListener('pagehide',stopTimers);
     window.visualViewport?.addEventListener('resize',syncViewport);window.visualViewport?.addEventListener('scroll',syncViewport);window.addEventListener('resize',syncViewport);starter();
-    return {show(value){visible=value;host.hidden=!value;syncViewport();if(value){contextChanged();schedule();}else stopTimers();},contextChanged,react,close:()=>setOpen(false),metrics:()=>({timers:Number(Boolean(idle))+Number(Boolean(expression))+Number(Boolean(nudgeTimer)),draft:Boolean(draft),nudges,acts,opened,otherMusic})};
+    return {show(value){visible=value;host.hidden=!value;syncViewport();if(value){contextChanged();schedule();}else stopTimers();},contextChanged,createQuick:()=>startQuick(''),react,close:()=>setOpen(false),metrics:()=>({timers:Number(Boolean(idle))+Number(Boolean(expression))+Number(Boolean(nudgeTimer)),draft:Boolean(draft),nudges,acts,opened,otherMusic})};
   }
   window.BebeAssistant=Object.freeze({mount,targetFor,topics:faq.length});
 })();

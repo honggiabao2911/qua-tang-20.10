@@ -16,6 +16,10 @@ GitHub Pages: trong **Settings → Pages**, chọn **Deploy from a branch → ma
 
 ## Tạo một món quà riêng
 
+Để làm nhanh trên điện thoại: sau khi chọn người nhận, bấm **Tạo nhanh cùng bé B** ở đầu màn tạo thiệp. Bé B chỉ hỏi **tên người gửi → khung cảnh → lời nhắn riêng**. Có thể để trống rồi bấm **Tiếp** hoặc **Bỏ qua** để dùng mặc định theo đúng nhóm. Lời chúc ấm áp (lãng mạn cho người thương), tên người nhận đã điền, nhạc của nhóm và chữ ký theo tên người gửi xuất hiện ngay trong thiệp nháp. Cảnh đêm gợi ý hoa từ hạt sáng; cảnh sáng dùng hoa mọc nở.
+
+Ở bước xem lại, chọn **Dùng thiệp này**; **Chỉnh thêm nhạc / chữ ký** mở tiếp các mục tùy chọn. **Cùng tạo thiệp** vẫn giữ luồng hỏi đầy đủ. Khi bắt đầu từ trò chuyện ở trang chủ, bé B hỏi thêm người nhận trước ba câu trên. Nhắn “giúp tạo thiệp nhanh cho bà” cũng mở đúng luồng tạo nhanh. Thiệp chính chỉ đổi khi áp dụng; vẫn có hoàn tác.
+
 1. Chọn một trong đúng 6 nhóm: **Mẹ, Bà, Cô giáo, Chị/em gái, Bạn nữ/nhóm phụ nữ, Người thương**. Chọn chị hay em, bạn nữ hay nhóm phụ nữ ở phần quan hệ bên trong, thay vì thêm nhóm ngoài trang chủ. Mỗi quan hệ có ít nhất 6 lời gợi ý; sắc thái gồm ngắn gọn, ấm áp, vui vẻ, xúc động, thêm ngọt ngào và lãng mạn cho người thương.
 2. Chọn cặp xưng hô hoặc sửa cả cách xưng và cách gọi. Khi đổi quan hệ, cặp xưng hô và lời mẫu cập nhật cùng nhau. Lời tự viết được giữ kèm lựa chọn **Giữ lời tôi viết / Dùng mẫu mới**.
 3. Tên người gửi mặc định trống. Nếu không có tên, toàn bộ chữ ký được ẩn. Không lưu bản nháp vào bộ nhớ trình duyệt và không tự điền tên chủ dự án.
@@ -156,7 +160,7 @@ Bé B ở cố định góc phải dưới màn trang chủ và tạo thiệp. M
 
 Nhắn **“Tôi cần web cho mẹ, giúp tôi với”**, **“Tạo thiệp cho cô”** hoặc bấm **Cùng tạo thiệp**: bé B dùng ngay nhóm người nhận đã chọn trên màn tạo thiệp (ở trang chủ mới hỏi chọn nhóm), rồi hỏi tên hai bên, mẫu/cảm xúc, lời chúc, lời thêm, kiểu hoa, bài nhạc và chữ ký. Mỗi câu hỏi có dòng ví dụ nhỏ, cách gọi và ví dụ ký tên theo đúng nhóm. Bước nhạc hiện sáu bài của nhóm đó; **Chọn nhóm nhạc khác** mới mở các nhóm còn lại. Có nút trả lời nhanh, bỏ qua, quay lại, hủy. Phía trên trò chuyện có thiệp nháp và hình cảnh đã chọn; tên, lời chúc và chữ ký cập nhật ngay khi nhập, dùng cùng hàm tạo nội dung với thiệp thật. Có **Đọc đủ lời trên thiệp nháp** để kiểm tra toàn bộ chữ. Nội dung vẫn là bản nháp cho tới khi bấm **Áp dụng bản nháp** ở bước xem lại; sau đó có **Xem thiệp vừa tạo** và **Hoàn tác bản nháp** (phục hồi cả chữ ký vẽ của thiệp trước). Bé B tạo thiệp trong ứng dụng này; không tạo website tùy ý hoặc tự gửi link ra ngoài. Câu hỏi về cách dùng trong lúc đang trả lời được giải thích mà không chuyển bước. Tự viết lời chúc qua trò chuyện tối đa 1.000 ký tự; ô soạn chính vẫn cho 3.000.
 
-Khi chưa mở trợ giúp và không đang nhập/vẽ, bé B tự chào sau khoảng 2,4 giây rảnh; kính đen và câu tự khen xuất hiện sau khoảng 11 giây, rồi tung bóng rơi trúng đầu sau khoảng 19 giây nếu không có thao tác mới. Có tối đa sáu hoạt cảnh nhỏ mỗi lần xem. Nút **Bé B làm trò** cho chọn kính đen, tung bóng hoặc thả tim ngay, không cần chờ. Tối đa ba lời nhắc mỗi lần tải trang, có nút tắt; không tự mở khung, lấy tiêu điểm hoặc phát nhạc. Sáu biểu cảm, kính đen có tròng đặc, bóng bật nhẹ và sao quanh đầu tôn trọng giảm chuyển động. Nhân vật ẩn và hủy bộ hẹn giờ khi nhận hoa/đọc thiệp hoặc ẩn tab. Khung hội thoại và nút trả lời nằm trên vùng bàn phím điện thoại; đóng bằng × hoặc Escape.
+Khi chưa mở trợ giúp và không đang nhập/vẽ, bé B tự chào sau khoảng 2,4 giây rảnh; kính đen và câu tự khen xuất hiện sau khoảng 11 giây, lấy điện thoại tự sướng sau khoảng 19 giây và tung bóng rơi trúng đầu sau khoảng 28 giây nếu không có thao tác mới. Có tối đa sáu hoạt cảnh nhỏ mỗi lần xem. Nút **Bé B làm trò** cho chọn kính đen, tự sướng, tung bóng hoặc thả tim ngay, không cần chờ. Kính đen nói “Thấy tớ ngầu hông? 😎”. Khi tự sướng, bé B lấy điện thoại tím, nghiêng đầu cười và có hai lần lóe sáng nhỏ; đây là hoạt cảnh SVG, không truy cập camera hay chụp ảnh người dùng. Tối đa bốn lời nhắc mỗi lần tải trang, có nút tắt; không tự mở khung, lấy tiêu điểm hoặc phát nhạc. Sáu biểu cảm, kính đen có tròng đặc, bóng bật nhẹ và sao quanh đầu tôn trọng giảm chuyển động. Nhân vật ẩn và hủy bộ hẹn giờ khi nhận hoa/đọc thiệp hoặc ẩn tab. Khung hội thoại và nút trả lời nằm trên vùng bàn phím điện thoại; đóng bằng × hoặc Escape.
 
 Bốn cảnh được bổ sung ở bản trước: **Bồ công anh gửi ước**, **Tách trà nở hoa**, **Lọ thư giữa biển sao**, **Hạc giấy chở ngàn sao**. Mỗi cảnh có bố cục SVG, chuyển động mở và chuyển động nhẹ lúc đọc riêng. Thêm ba lựa chọn **Đom đóm**, **Trái tim**, **Bọt ngọc**; tất cả bảy lựa chọn (kể cả tĩnh) dùng được cho mọi chủ đề. Thư viện tự tính số mẫu và đặt bốn mẫu mới lên đầu.
 
@@ -260,4 +264,11 @@ Bản mặc định theo người nhận / thiệp nháp trực tiếp / bé B k
 
 ```bash
 BASE_URL=http://127.0.0.1:8000/ python3 tests/test_scoped_companion.py
+```
+
+
+Bản selfie / tạo nhanh trên điện thoại: **85 ca trình duyệt đạt** (quick_selfie 12, scoped_companion 15, assistant_guide 12, recipient_studio 14, welcome_studio 12, collection 20), cùng **576 kiểm tra codec**. Ca mới kiểm tra sáu nhóm tạo thiệp sau ba câu, nhận tên đã điền, chọn cảnh theo mô tả và đúng giọng lời chúc; mở thêm nhạc/chữ ký, chia sẻ đúng snapshot sang trình duyệt khác, quay lại/hoàn tác; nút Tiếp với ô tùy chọn trống, giữ tên quá dài để sửa, không chuyển câu khi đang ghép dấu tiếng Việt; selfie có điện thoại/flash thật bằng SVG/CSS nhưng không gọi camera/khởi động nhạc, hoạt cảnh khi rảnh và giảm chuyển động; điều khiển 320/360/390 px với vùng bàn phím 390/300 px. Câu hỏi mới tự cuộn vào vùng trò chuyện; thao tác tự lấy tiêu điểm trễ không chen vào khi người dùng đã bắt đầu nhập. Kiểm tra cú pháp 20 tệp JavaScript, 254 ID HTML duy nhất, 35 tham chiếu JS/CSS và `git diff --check` đạt. Thiết bị kiểm thử là Chromium mô phỏng; chưa xác minh Safari/iPhone thật.
+
+```bash
+BASE_URL=http://127.0.0.1:8000/ python3 tests/test_quick_selfie.py
 ```
