@@ -133,7 +133,7 @@ class WelcomeStudioTests(unittest.TestCase):
             self.script(['Thương em rất nhiều. '*8,'Mỗi ngày có em là một ngày thật đẹp.','Món quà nhỏ dành cho em, người thương của anh.'])
             self.assert_layout(self.page)
             count=self.page.evaluate('Object.keys(CardThemes.catalog).length')
-            self.assertEqual(38,count);expect(self.page.locator('#theme-filter option[value=all]')).to_have_text(f'Tất cả {count} không gian')
+            self.assertEqual(41,count);expect(self.page.locator('#theme-filter option[value=all]')).to_have_text(f'Tất cả {count} không gian')
             self.welcome();self.assert_layout(self.page);self.receive();self.assert_layout(self.page)
 
     def test_09_empty_sentence_is_not_silently_dropped(self):

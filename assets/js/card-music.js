@@ -46,7 +46,7 @@ const CardMusic = (() => {
   let welcomeEnabled=false,welcomeDesired=false,welcomePending=false,welcomeUserPaused=false,welcomeStatusOverride='',welcomeHiddenPause=false;
   let studioTrack = null;
   let studioDiscovery = null;
-  let groupDiscovery = Promise.resolve([]);
+  let creatorGroup=null,creatorTracks=[],creatorDiscovery=Promise.resolve([]),creatorScan=0;
   let studioTrackTitle = '';
   const studioFailed = new Set();
   const groupLabels={mom:'mẹ',grandma:'bà',teacher:'cô giáo',sister:'chị/em gái',friend:'bạn nữ',women:'bạn nữ/nhóm phụ nữ',lover:'người thương'};
@@ -199,8 +199,8 @@ const CardMusic = (() => {
   function studioStatus() {
     if (studioStatusOverride) return studioStatusOverride;
     if (studioLoading) return 'Đang tìm nhạc cho lúc làm thiệp…';
-    if (!studioTrack) return group?`Chưa có bản nhạc dùng được cho ${groupLabels[group]}. Thêm nhạc vào ${MUSIC_ROOT} theo tên 0${definitions[group].stem}.mp3 đến 5${definitions[group].stem}.mp3 rồi kiểm tra lại nhạc.`:'Chọn người nhận để nghe ngẫu nhiên nhạc của nhóm đó.';
-    if (studioPlaying()) return `Đang nghe ngẫu nhiên cho ${groupLabels[group]} · ${studioTrackTitle}.`;
+    if (!studioTrack) return creatorGroup?`Chưa có bản nhạc dùng được cho ${groupLabels[creatorGroup]}. Thêm nhạc vào ${MUSIC_ROOT} theo tên 0${definitions[creatorGroup].stem}.mp3 đến 5${definitions[creatorGroup].stem}.mp3 rồi kiểm tra lại nhạc.`:'Chọn người nhận để nghe ngẫu nhiên nhạc của nhóm đó.';
+    if (studioPlaying()) return `Đang nghe ngẫu nhiên cho ${groupLabels[creatorGroup]} · ${studioTrackTitle}.`;
     if (studioPending && studioDesired) return 'Đang mở nhạc làm thiệp…';
     if (mode !== 'studio') return 'Nhạc làm thiệp sẽ phát riêng khi bạn quay lại thiết kế.';
     if (studioUserPaused) return 'Nhạc làm thiệp đã tạm dừng.';
@@ -260,7 +260,7 @@ const CardMusic = (() => {
 
   function studioState() {
     return { active: mode === 'studio', available: Boolean(studioTrack), loading: studioLoading,
-      playing: studioPlaying(), pending: studioPending, file: studioTrack, volume: studioVolume, group, title:studioTrackTitle, count:studioCandidates().length,
+      playing: studioPlaying(), pending: studioPending, file: studioTrack, volume: studioVolume, group:creatorGroup, title:studioTrackTitle, count:studioCandidates().length,
       status: studioStatus() };
   }
 
@@ -407,13 +407,13 @@ const CardMusic = (() => {
     return studioVolume;
   }
 
-  function studioCandidates(){return tracks.filter(track=>track.index<6&&track.available&&!studioFailed.has(track.url));}
+  function studioCandidates(){return creatorTracks.filter(track=>track.index<6&&track.available&&!studioFailed.has(track.url));}
   function discoverStudio() {
     if (!studioDiscovery) {
-      const target=group,generation=scanId;
+      const target=creatorGroup,generation=creatorScan;
       studioLoading = true;
-      const task=Promise.resolve(groupDiscovery).then(()=>{
-        if(target!==group||generation!==scanId)return null;
+      const task=Promise.resolve(creatorDiscovery).then(()=>{
+        if(target!==creatorGroup||generation!==creatorScan)return null;
         const available=studioCandidates(),others=available.filter(track=>track.url!==studioTrack);
         const choices=others.length?others:available;
         const chosen=choices[Math.floor(Math.random()*choices.length)];
@@ -629,20 +629,32 @@ const CardMusic = (() => {
     return true;
   }
 
+  function setStudioGroup(target,{refresh=false}={}){
+    if(!definitions[target])target='women';
+    if(creatorGroup===target&&!refresh)return creatorDiscovery;
+    creatorGroup=target;studioStatusOverride='';const generation=++creatorScan;
+    studioRevision++;studioTrack=null;studioTrackTitle='';studioFailed.clear();studioDiscovery=null;studioLoading=false;
+    if(mode==='studio'){requestId++;studioDesired=false;studioPending=false;if(audio)audio.pause();}
+    creatorTracks=[];
+    creatorDiscovery=(async()=>{
+      await loadCatalogue();
+      const found=await Promise.all(Array.from({length:6},(_,i)=>findTrack(target,i)));
+      if(generation!==creatorScan)return [];
+      creatorTracks=found;syncUI();return found;
+    })();
+    return creatorDiscovery;
+  }
   function setGroup(target,requestedId){
-    groupDiscovery=scanGroup(target,requestedId);
-    return groupDiscovery;
+    if(!creatorGroup)setStudioGroup(target);
+    return scanGroup(target,requestedId);
   }
   async function scanGroup(target, requestedId) {
     if (!definitions[target]) target = 'women';
     const changed = group !== target;
     const generation = ++scanId;
-    studioDiscovery=null;studioLoading=false;
     if (changed) {
-      studioRevision++;studioTrack=null;studioTrackTitle='';studioFailed.clear();studioLoading=false;
-      if(mode==='studio'){requestId++;studioDesired=false;studioPending=false;if(audio)audio.pause();}
       openingIntent = null;
-      pause(false);
+      if(mode==='card')pause(false);
       autoAttempted = false;
     }
     group = target;
@@ -694,6 +706,7 @@ const CardMusic = (() => {
     studioFailed.clear();studioDiscovery=null;
     metadata.clear();
     catalogueRequest = null;
+    if(creatorGroup)void setStudioGroup(creatorGroup,{refresh:true});
     const result = await setGroup(group, selectedId);
     if (result.length) notice(`Đã quét lại: tìm thấy ${result.filter(track => track.available).length} bản nhạc.`);
     return result;
@@ -854,6 +867,7 @@ const CardMusic = (() => {
     enterWelcome,leaveWelcome,toggleWelcome,welcomeState,
     greetWelcome:()=>mode==='welcome'&&!welcomePlaying()&&!welcomePending?toggleWelcome():Promise.resolve(false),
     setGroup,
+    setStudioGroup,
     setVolume,
     currentVolume: () => volume,
     enterStudio,

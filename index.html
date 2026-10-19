@@ -831,13 +831,14 @@ body[data-card-theme="champagne"] #petal-burst { --effect-pink: #dfc49b; --effec
 <link rel="stylesheet" href="assets/css/gift-art-c.css">
 <link rel="stylesheet" href="assets/css/gift-art-d.css">
 <link rel="stylesheet" href="assets/css/gift-art-e.css">
-<link rel="stylesheet" href="assets/css/gift-art-f.css">
+<link rel="stylesheet" href="assets/css/gift-art-f.css?v=20261019-guide">
+<link rel="stylesheet" href="assets/css/gift-art-g.css?v=20261019-guide">
 <link rel="stylesheet" href="assets/css/gift-scenes.css">
 <link rel="stylesheet" href="assets/css/bouquet-arrival.css">
 <link rel="stylesheet" href="assets/css/reception.css">
 <link rel="stylesheet" href="assets/css/bebe-welcome.css">
 <link rel="stylesheet" href="assets/css/card-signature.css">
-<link rel="stylesheet" href="assets/css/welcome-studio.css?v=20261019-stories">
+<link rel="stylesheet" href="assets/css/welcome-studio.css?v=20261019-guide">
 </head>
 <body>
   <a class="skip-link" href="#main-content">Đến nội dung chính</a>
@@ -977,7 +978,7 @@ body[data-card-theme="champagne"] #petal-burst { --effect-pink: #dfc49b; --effec
   <div class="field"><label for="custom-greeting">Tự viết toàn bộ lời chúc <span class="optional">(không bắt buộc)</span></label><textarea id="custom-greeting" rows="5" maxlength="3000" placeholder="Để trống để dùng mẫu gợi ý, hoặc viết một lá thư hoàn toàn của bạn…" aria-describedby="custom-greeting-help custom-greeting-count custom-greeting-error"></textarea><div class="field-foot"><span class="field-help" id="custom-greeting-help">Nội dung bạn viết sẽ thay phần lời chúc gợi ý và được gửi cùng liên kết.</span><output class="char-count" id="custom-greeting-count">0 / 3.000</output></div><p id="custom-greeting-error" class="field-error" hidden></p><button type="button" class="text-button" id="use-template">Quay về lời chúc gợi ý</button></div>
   <button type="button" class="text-button" id="reset-design"><svg class="icon" aria-hidden="true"><use href="#i-replay"/></svg>Đặt lại kiểu thiệp · giữ lời bạn viết</button>
 </div></details>
-<section class="music-library" id="music-library" aria-labelledby="music-library-title"><h2 class="music-heading" id="music-library-title"><svg class="icon" aria-hidden="true"><use href="#i-volume"/></svg>04 · Nhạc cho người nhận</h2><p class="music-hint" id="music-catalog-status" role="status">Đang tìm những bản nhạc dành cho người nhận…</p><div id="track-list" aria-busy="true"></div><div class="editor-volume volume-wrap"><label for="editor-volume-control">Âm lượng khi mở thiệp</label><input type="range" id="editor-volume-control" min="0" max="100" value="30"><output id="editor-volume-value" for="editor-volume-control">30%</output></div><details class="music-guide" id="music-guide"><summary>Bổ sung bài nhạc cho tấm thiệp</summary><p>Mỗi nhóm có 6 vị trí, từ 0 đến 5. Chỉ tệp có thật mới phát được. Nhạc cũ được giữ nguyên.</p><ul id="music-missing-files"></ul><p>Thêm tệp vào <code>assets/music/</code> rồi bấm kiểm tra lại. Bạn nữ và nhóm phụ nữ cùng dùng <code>0nu.mp3</code> đến <code>5nu.mp3</code>.</p></details><button type="button" class="text-button" id="rescan-music"><svg class="icon" aria-hidden="true"><use href="#i-replay"/></svg>Kiểm tra lại các bài nhạc</button></section>
+<section class="music-library" id="music-library" aria-labelledby="music-library-title"><h2 class="music-heading" id="music-library-title"><svg class="icon" aria-hidden="true"><use href="#i-volume"/></svg>04 · Nhạc cho người nhận</h2><p class="music-hint" id="music-catalog-status" role="status">Đang tìm những bản nhạc dành cho người nhận…</p><div class="recipient-music-group"><label for="recipient-music-group">Chọn nhóm nhạc cho tấm thiệp</label><select id="recipient-music-group"><option value="">Theo người nhận</option><option value="mom">Nhạc cho Mẹ</option><option value="grandma">Nhạc cho Bà</option><option value="teacher">Nhạc cho Cô giáo</option><option value="sister">Nhạc cho Chị / Em gái</option><option value="women">Nhạc cho Bạn nữ / Nhóm phụ nữ</option><option value="lover">Nhạc cho Người thương</option></select><p>Đổi nhóm để tìm bài khác; người nhận và lời chúc của bạn vẫn được giữ.</p></div><div id="track-list" aria-busy="true"></div><div class="editor-volume volume-wrap"><label for="editor-volume-control">Âm lượng khi mở thiệp</label><input type="range" id="editor-volume-control" min="0" max="100" value="30"><output id="editor-volume-value" for="editor-volume-control">30%</output></div><details class="music-guide" id="music-guide"><summary>Bổ sung bài nhạc cho tấm thiệp</summary><p>Mỗi nhóm có 6 vị trí, từ 0 đến 5. Chỉ tệp có thật mới phát được. Nhạc cũ được giữ nguyên.</p><ul id="music-missing-files"></ul><p>Thêm tệp vào <code>assets/music/</code> rồi bấm kiểm tra lại. Bạn nữ và nhóm phụ nữ cùng dùng <code>0nu.mp3</code> đến <code>5nu.mp3</code>.</p></details><button type="button" class="text-button" id="rescan-music"><svg class="icon" aria-hidden="true"><use href="#i-replay"/></svg>Kiểm tra lại các bài nhạc</button></section>
 <div class="form-actions"><button class="text-button" id="preview-button" type="button"><svg class="icon" aria-hidden="true"><use href="#i-eye"/></svg>Xem trước lời chúc</button><button class="button" id="open-card-button" type="submit">Mở thiệp yêu thương <svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></button></div><p class="local-note"><svg class="icon" aria-hidden="true"><use href="#i-lock"/></svg>Thông tin bạn nhập không được gửi đến máy chủ.</p></form>
         <aside class="preview-column" aria-label="Bản xem trước"><div class="preview-overline"><span>Bản xem trước</span><span><i class="live-dot"></i>Đang cập nhật cùng bạn</span></div><article class="paper" id="preview-card" tabindex="-1"><span class="paper-corner top-left" aria-hidden="true"><svg viewBox="0 0 100 170"><use href="#art-sprig"/></svg></span><span class="paper-corner bottom-right" aria-hidden="true"><svg viewBox="0 0 100 170"><use href="#art-sprig"/></svg></span><div class="paper-heading"><svg class="paper-flower" aria-hidden="true"><use href="#i-flower"/></svg><p class="paper-kicker">Chúc mừng Ngày Phụ nữ Việt Nam</p><div class="paper-date">20.10</div><div class="paper-line" aria-hidden="true">✧</div></div><p class="paper-dedication" id="preview-dedication"></p><h2 class="paper-salutation" id="preview-recipient"></h2><p class="paper-body" id="preview-greeting"></p><p class="paper-message" id="preview-message"></p><div class="paper-sign"><span>Gửi bằng cả tấm lòng,</span><strong id="preview-sender"></strong></div></article><p class="preview-caption">Mỗi lời chân thành đều xứng đáng được giữ gìn.</p></aside>
       </div>
@@ -1024,27 +1025,29 @@ body[data-card-theme="champagne"] #petal-burst { --effect-pink: #dfc49b; --effec
 <section class="studio-helper-panel" id="studio-helper-copy" aria-labelledby="studio-helper-title" hidden>
 <header class="helper-chat-header"><div class="helper-portrait helper-face" aria-hidden="true"><span class="studio-helper-eye left" aria-hidden="true"><i class="helper-iris"></i></span><span class="studio-helper-eye right" aria-hidden="true"><i class="helper-iris"></i></span><span class="studio-helper-smile" aria-hidden="true"></span><span class="helper-blush left" aria-hidden="true"></span><span class="helper-blush right" aria-hidden="true"></span><span class="helper-mini-star" aria-hidden="true">✦</span></div><div><h2 id="studio-helper-title">Bé B ở đây nè</h2><p>Bạn đồng hành tạo thiệp</p></div><button type="button" id="studio-helper-close" class="studio-helper-close" aria-label="Thu gọn lời chào của bé B">×</button></header>
 <div class="helper-chat-log" id="studio-helper-log" role="log" aria-live="polite" aria-relevant="additions" aria-label="Trò chuyện với bé B"><p id="studio-helper-message" class="helper-bubble">Chào bạn! Mình là bé B. Cùng làm một tấm thiệp thật riêng nhé.</p></div>
-<div class="helper-quick-actions" aria-label="Chọn điều cần bé B giúp"><button type="button" data-helper-topic="themes">Gợi ý mẫu</button><button type="button" data-helper-topic="words">Viết lời chúc</button><button type="button" data-helper-topic="music">Nhạc làm thiệp</button><button type="button" data-helper-topic="welcome">Lời nhân vật</button><button type="button" data-helper-topic="signature">Chữ ký</button><button type="button" data-helper-topic="play">Chọc bé B ♡</button></div>
-<form id="studio-helper-chat" class="helper-chat-form"><label class="sr-only" for="studio-helper-input">Hỏi bé B về cách tạo thiệp</label><input id="studio-helper-input" maxlength="160" placeholder="Ví dụ: mẫu thiệp cho mẹ…" autocomplete="off"><button type="submit" aria-label="Gửi câu hỏi cho bé B">Gửi</button></form><p class="helper-local-note">Mẹo có sẵn ngay trên trang · không gửi câu hỏi đi</p>
+<div class="helper-quick-actions" aria-label="Chọn điều cần bé B giúp"><button type="button" data-helper-topic="create">Cùng tạo thiệp</button><button type="button" data-helper-topic="themes">Gợi ý mẫu</button><button type="button" data-helper-topic="words">Viết lời chúc</button><button type="button" data-helper-topic="music">Nhạc làm thiệp</button><button type="button" data-helper-topic="welcome">Lời nhân vật</button><button type="button" data-helper-topic="signature">Chữ ký</button><button type="button" data-helper-topic="play">Chọc bé B ♡</button></div>
+<form id="studio-helper-chat" class="helper-chat-form"><label class="sr-only" for="studio-helper-input">Hỏi bé B về cách tạo thiệp</label><input id="studio-helper-input" maxlength="1000" placeholder="Ví dụ: giúp tôi tạo thiệp cho mẹ…" autocomplete="off"><button type="submit" aria-label="Gửi câu hỏi cho bé B">Gửi</button></form><p class="helper-local-note">Hướng dẫn trên trang · không gửi câu hỏi tới AI</p>
 </section><button type="button" class="studio-helper-character helper-face" id="studio-helper-toggle" aria-label="Bé B: mở trợ giúp tạo thiệp" aria-expanded="false" aria-controls="studio-helper-copy"><span class="studio-helper-eye left" aria-hidden="true"><i class="helper-iris"></i></span><span class="studio-helper-eye right" aria-hidden="true"><i class="helper-iris"></i></span><span class="studio-helper-smile" aria-hidden="true"></span><span class="helper-blush left" aria-hidden="true"></span><span class="helper-blush right" aria-hidden="true"></span><span class="helper-mini-star" aria-hidden="true">✦</span><span class="helper-launcher-label">Bé B</span></button></aside>
-  <script src="assets/js/card-links.js?v=20261019-stories"></script>
-<script src="assets/js/card-music.js?v=20261019-stories"></script>
+  <script src="assets/js/card-links.js?v=20261019-guide"></script>
+<script src="assets/js/card-music.js?v=20261019-guide"></script>
 <script src="assets/js/legacy-greetings.js"></script>
 <script src="assets/js/greetings.js"></script>
 <script src="assets/js/gift-art-a.js"></script>
 <script src="assets/js/gift-art-b.js"></script>
 <script src="assets/js/gift-art-c.js"></script>
 <script src="assets/js/gift-art-d.js"></script>
-<script src="assets/js/gift-art-e.js?v=20261019-stories"></script>
-<script src="assets/js/gift-art-f.js"></script>
-<script src="assets/js/gift-scenes.js"></script>
+<script src="assets/js/gift-art-e.js?v=20261019-guide"></script>
+<script src="assets/js/gift-art-f.js?v=20261019-guide"></script>
+<script src="assets/js/gift-art-g.js?v=20261019-guide"></script>
+<script src="assets/js/gift-scenes.js?v=20261019-guide"></script>
 <script src="assets/js/themes.js"></script>
 <script src="assets/js/theme-recommendations.js"></script>
 <script src="assets/js/bouquet-arrival.js"></script>
 <script src="assets/js/bebe-welcome.js"></script>
 <script src="assets/js/card-signature.js"></script>
-<script src="assets/js/welcome-studio.js?v=20261019-stories"></script>
-<script src="assets/js/app.js?v=20261019-stories"></script>
+<script src="assets/js/bebe-assistant.js?v=20261019-guide"></script>
+<script src="assets/js/welcome-studio.js?v=20261019-guide"></script>
+<script src="assets/js/app.js?v=20261019-guide"></script>
 
 </body>
 </html>

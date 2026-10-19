@@ -47,6 +47,7 @@
     return {render(source,nextSettings,active){value=source;settings=nextSettings;enabled=active;draw();},validate(){if(!value)return true;try{scriptFor(value);return true;}catch(_){const fields=[...list.querySelectorAll('textarea')];(fields.find(f=>!f.value.trim()||f.value.length>160)||fields[0])?.focus();return false;}}};
   }
   function helper({getContext=()=>({}),onAction=()=>{}}={}){
+    if(window.BebeAssistant)return BebeAssistant.mount({getContext,onAction});
     const host=$('studio-helper'),panel=$('studio-helper-copy'),toggle=$('studio-helper-toggle'),log=$('studio-helper-log');
     let opened=false,visible=false,expression=0;
     const moods=['happy','curious','shy','love','wink','sleep'];let moodIndex=0;

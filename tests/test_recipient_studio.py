@@ -4,7 +4,7 @@ import unittest
 from playwright.sync_api import expect
 import test_bebe as bbtests
 
-NEW={'mom':'motherhug','grandma':'grandmatea','teacher':'classroom','sister':'sisterswing','women':'friendpicnic','lover':'lovewaltz'}
+NEW={'mom':'motherhug','grandma':'grandmatea','teacher':'teacherbloom','sister':'sisterswing','women':'friendpicnic','lover':'lovewaltz'}
 STEMS={'mom':'me','grandma':'ba','teacher':'co','sister':'chi','women':'nu','lover':'yeu'}
 class RecipientStudioTests(unittest.TestCase):
     setUpClass=classmethod(bbtests.BebeBrowserTests.setUpClass.__func__)
@@ -71,13 +71,13 @@ class RecipientStudioTests(unittest.TestCase):
             self.editor(target);expect(self.page.locator('[data-theme-preset]').first).to_have_attribute('data-theme-preset',scene)
             self.page.locator('#theme-filter').select_option('recipient')
             ids=self.page.locator('.theme-entry:not([hidden])').evaluate_all('els=>els.map(e=>e.dataset.entryId)')
-            self.assertIn(scene,ids);self.assertGreater(len(ids),5);self.assertLess(len(ids),38);union.update(ids)
-        self.assertEqual(38,len(union))
+            self.assertIn(scene,ids);self.assertGreater(len(ids),5);self.assertLess(len(ids),41);union.update(ids)
+        self.assertEqual(41,len(union))
         self.editor('mom');self.page.locator('#sender-name').fill('An');self.page.locator('#personal-message').fill('Mẹ giữ thật nhiều niềm vui nhé.')
         greeting=self.page.locator('#preview-greeting').inner_text();selected=self.page.evaluate('CardMusic.currentId()')
         self.page.locator('#theme-filter').select_option('for-grandma');expect(self.page.locator('[data-theme-preset]:visible').first).to_have_attribute('data-theme-preset','grandmatea')
         expect(self.page.locator('#preview-greeting')).to_have_text(greeting);expect(self.page.locator('#personal-message')).to_have_value('Mẹ giữ thật nhiều niềm vui nhé.')
-        self.assertEqual(selected,self.page.evaluate('CardMusic.currentId()'));self.page.locator('#theme-filter').select_option('all');expect(self.page.locator('[data-theme-preset]:visible')).to_have_count(38)
+        self.assertEqual(selected,self.page.evaluate('CardMusic.currentId()'));self.page.locator('#theme-filter').select_option('all');expect(self.page.locator('[data-theme-preset]:visible')).to_have_count(41)
 
     def test_06_new_stories_really_open_and_keep_motion_words_and_selected_song(self):
         for target,scene in NEW.items():
@@ -89,7 +89,7 @@ class RecipientStudioTests(unittest.TestCase):
                 stage=self.page.locator('#theme-stage .gift-scene');expect(stage).to_have_attribute('data-gift',scene)
                 expect(stage).to_have_attribute('data-phase','opening',timeout=4000)
                 self.assertGreater(stage.evaluate("e=>e.getAnimations({subtree:true}).filter(a=>a.playState==='running').length"),0)
-                foreground={'motherhug':'.gf-mother','grandmatea':'.gf-tea-family','classroom':'.gf-chalk-flower','sisterswing':'.gf-reveal','friendpicnic':'.gf-friends','lovewaltz':'.gf-heart'}[scene]
+                foreground={'teacherbloom':'.gg-tree','motherhug':'.gf-mother','grandmatea':'.gf-tea-family','classroom':'.gf-chalk-flower','sisterswing':'.gf-reveal','friendpicnic':'.gf-friends','lovewaltz':'.gf-heart'}[scene]
                 self.assertTrue(stage.locator(foreground).first.evaluate("e=>e.getAnimations().some(a=>a.playState==='running')"),scene)
                 expect(self.page.locator('#letter-screen')).to_be_visible(timeout=6000);expect(self.page.locator('#letter-greeting')).to_have_text(greeting)
                 expect(self.page.locator('#theme-backdrop .gift-scene')).to_have_attribute('data-gift',scene)
